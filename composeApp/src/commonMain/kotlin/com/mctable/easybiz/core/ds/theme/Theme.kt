@@ -26,7 +26,7 @@ private val LightColors = lightColorScheme(
 )
 
 @Composable
-fun PetFinderTheme(
+fun EasyBizTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
