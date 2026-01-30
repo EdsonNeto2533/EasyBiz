@@ -26,14 +26,15 @@ sealed class ButtonType {
 fun ButtonAtom(
     text: String,
     buttonType: ButtonType = ButtonType.Primary,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     when (buttonType) {
         ButtonType.Primary -> {
             Button(
                 onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
+                modifier = Modifier.fillMaxWidth().then(modifier),
+                shape = MaterialTheme.shapes.medium,
             ) {
                 Text(text = text)
             }
@@ -42,7 +43,7 @@ fun ButtonAtom(
         ButtonType.Secondary -> {
             Button(
                 onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().then(modifier),
                 shape = MaterialTheme.shapes.medium,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
