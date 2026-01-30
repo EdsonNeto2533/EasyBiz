@@ -12,6 +12,9 @@ private val LightColors = lightColorScheme(
     secondary = md_light_secondary,
     onSecondary = md_light_onSecondary,
 
+    tertiary = md_light_tertiary,
+    onTertiary = md_light_onTertiary,
+
     background = md_light_background,
     onBackground = md_light_onBackground,
 
