@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.ktor.plugin.logging)
             implementation(libs.ktor.plugin.content.negotiation)
             implementation(libs.ktor.serialization)
+            implementation(libs.bundles.navigation)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
