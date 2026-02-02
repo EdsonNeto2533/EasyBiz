@@ -9,8 +9,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
 
 class EasyBizNetworkingImpl(
     private val httpClient: HttpClient
@@ -41,7 +39,6 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.post {
-            contentType(ContentType.Application.Json)
             url(url)
             params.forEach {
                 parameter(it.key, it.value)
@@ -61,7 +58,6 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.put {
-            contentType(ContentType.Application.Json)
             url(url)
             params.forEach {
                 parameter(it.key, it.value)

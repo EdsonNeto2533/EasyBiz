@@ -53,7 +53,9 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.serialization)
-            implementation(libs.google.gson)
+            implementation(libs.ktor.plugin.logging)
+            implementation(libs.ktor.plugin.content.negotiation)
+            implementation(libs.ktor.serialization)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
