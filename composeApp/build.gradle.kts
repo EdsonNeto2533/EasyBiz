@@ -52,6 +52,8 @@ kotlin {
             implementation(libs.bundles.coil)
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.serialization)
+            implementation(libs.google.gson)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
