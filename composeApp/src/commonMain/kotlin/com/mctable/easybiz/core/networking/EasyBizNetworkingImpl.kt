@@ -15,13 +15,14 @@ class EasyBizNetworkingImpl(
 ) : EasyBizNetworking {
 
     override suspend fun <T> get(
-        url: String,
+        host: String,
+        path: String,
         headers: Map<String, String>,
         params: Map<String, String>,
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.get {
-            url(url)
+            url(getUrl(host,path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -32,14 +33,15 @@ class EasyBizNetworkingImpl(
     }
 
     override suspend fun <T> post(
-        url: String,
+        host: String,
+        path: String,
         body: Any?,
         headers: Map<String, String>,
         params: Map<String, String>,
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.post {
-            url(url)
+            url(getUrl(host,path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -51,14 +53,15 @@ class EasyBizNetworkingImpl(
     }
 
     override suspend fun <T> put(
-        url: String,
+        host: String,
+        path: String,
         body: Any?,
         headers: Map<String, String>,
         params: Map<String, String>,
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.put {
-            url(url)
+            url(getUrl(host,path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -70,13 +73,14 @@ class EasyBizNetworkingImpl(
     }
 
     override suspend fun <T> delete(
-        url: String,
+        host: String,
+        path: String,
         headers: Map<String, String>,
         params: Map<String, String>,
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.delete {
-            url(url)
+            url(getUrl(host,path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -86,4 +90,8 @@ class EasyBizNetworkingImpl(
 
         }.mapTo(responseMapper)
     }
+    
+    private fun getUrl(host: String, path: String) = "$host$path"
+
+    
 }

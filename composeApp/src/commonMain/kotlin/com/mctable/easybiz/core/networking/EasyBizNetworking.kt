@@ -3,14 +3,16 @@ package com.mctable.easybiz.core.networking
 interface EasyBizNetworking {
 
     suspend fun <T> get(
-        url: String,
+        host: String,
+        path: String,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         responseMapper: (String) -> T
     ): Result<T>
 
     suspend fun <T> post(
-        url: String,
+        host: String,
+        path: String,
         body: Any? = null,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
@@ -18,7 +20,8 @@ interface EasyBizNetworking {
     ): Result<T>
 
     suspend fun <T> put(
-        url: String,
+        host: String,
+        path: String,
         body: Any? = null,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
@@ -26,7 +29,8 @@ interface EasyBizNetworking {
     ): Result<T>
 
     suspend fun <T> delete(
-        url: String,
+        host: String,
+        path: String,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         responseMapper: (String) -> T
