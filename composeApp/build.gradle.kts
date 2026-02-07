@@ -1,5 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrainsKotlinSerialization)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -15,7 +18,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -25,7 +28,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -61,6 +64,53 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.bundles.koinIos)
+        }
+    }
+}
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+fun localProp(key: String): String =
+    localProperties.getProperty(key)
+        ?: error("Missing property '$key' in local.properties")
+
+buildkonfig {
+    packageName = "com.mctable.easybiz"
+
+    defaultConfigs {
+        buildConfigField(
+            type = STRING,
+            name = "API_HOST",
+            value = "\"__UNDEFINED__\""
+        )
+    }
+
+    targetConfigs {
+        create("debug") {
+            buildConfigField(STRING, "API_HOST", "\"${localProp("API_HML_HOST")}\"")
+        }
+        create("release") {
+            buildConfigField(STRING, "API_HOST", "\"${localProp("API_PRD_HOST")}\"")
+        }
+        create("iosArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "API_HOST",
+                value = "\"${localProp("API_PRD_HOST")}\""
+            )
+        }
+
+        create("iosSimulatorArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "API_HOST",
+                value = "\"${localProp("API_HML_HOST")}\""
+            )
         }
     }
 }
