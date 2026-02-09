@@ -4,12 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     var state by mutableStateOf(initialLoginState())
@@ -29,15 +34,47 @@ class LoginViewModel(
     }
 
     private fun onLoginClick() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            if (state.email != null && state.password != null) {
+                loginUseCase.execute(state.email!!, state.password!!)
+                    .fold(
+                        onSuccess = ::handleLoginSuccess,
+                        onFailure = ::handleLoginError
+                    )
+            }
+        }
+
+    }
+
+    private fun handleLoginSuccess(loginEntity: LoginEntity) {
+        //navigator.navigate()
+    }
+
+    private fun handleLoginError(exception: Throwable) {
+
     }
 
     private fun onEmailTyped(email: String) {
-        state = state.copy(email = email)
+        state = state.copy(email = email, enableButton = validateFields())
     }
 
     private fun onPasswordTyped(password: String) {
-        state = state.copy(password = password)
+        state = state.copy(password = password, enableButton = validateFields())
+    }
+
+    private fun validateFields(): Boolean =
+        isValidEmail(state.email) && isValidPassword(state.password)
+
+
+    private fun isValidEmail(email: String?): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return email?.matches(emailRegex.toRegex()) ?: false
+    }
+
+    private fun isValidPassword(password: String?): Boolean {
+        val passwordRegex =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$"
+        return password?.matches(passwordRegex.toRegex()) ?: false
     }
 
 
