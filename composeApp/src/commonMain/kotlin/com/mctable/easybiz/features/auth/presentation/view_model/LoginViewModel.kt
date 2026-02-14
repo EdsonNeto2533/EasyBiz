@@ -47,11 +47,11 @@ class LoginViewModel(
     }
 
     private fun handleLoginSuccess(loginEntity: LoginEntity) {
-        //navigator.navigate()
+        println(loginEntity)
     }
 
     private fun handleLoginError(exception: Throwable) {
-
+        println(exception.message)
     }
 
     private fun onEmailTyped(email: String) {

@@ -86,22 +86,22 @@ buildkonfig {
         buildConfigField(
             type = STRING,
             name = "API_HOST",
-            value = "\"__UNDEFINED__\""
+            value = localProp("API_HML_HOST")
         )
     }
 
     targetConfigs {
         create("debug") {
-            buildConfigField(STRING, "API_HOST", "\"${localProp("API_HML_HOST")}\"")
+            buildConfigField(STRING, "API_HOST", localProp("API_HML_HOST"))
         }
         create("release") {
-            buildConfigField(STRING, "API_HOST", "\"${localProp("API_PRD_HOST")}\"")
+            buildConfigField(STRING, "API_HOST", localProp("API_HML_HOST"))
         }
         create("iosArm64") {
             buildConfigField(
                 type = STRING,
                 name = "API_HOST",
-                value = "\"${localProp("API_PRD_HOST")}\""
+                value = localProp("API_HML_HOST")
             )
         }
 
@@ -109,7 +109,7 @@ buildkonfig {
             buildConfigField(
                 type = STRING,
                 name = "API_HOST",
-                value = "\"${localProp("API_HML_HOST")}\""
+                value = localProp("API_HML_HOST")
             )
         }
     }

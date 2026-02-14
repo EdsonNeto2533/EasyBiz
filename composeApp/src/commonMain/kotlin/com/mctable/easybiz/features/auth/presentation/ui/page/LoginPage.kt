@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -29,6 +31,7 @@ import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.theme.Neutral200
 import com.mctable.easybiz.core.ds.theme.Neutral300
+import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
 
@@ -38,6 +41,8 @@ fun LoginPage(
     state: LoginState,
     onEvent: (LoginEvent) -> Unit
 ) {
+
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -65,7 +70,7 @@ fun LoginPage(
                 .padding(it)
                 .background(color = Neutral200)
                 .padding(16.dp)
-                .fillMaxHeight(),
+                .fillMaxHeight().verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(24.dp))
@@ -101,6 +106,7 @@ fun LoginPage(
             TextInputAtom(
                 label = state.inputLabel,
                 placeHolder = state.inputPlaceholder,
+                icon = AppIcons.ContactEmail(),
                 onChanged = { email ->
                     onEvent.invoke(LoginEvent.OnEmailTyped(email))
                 }
@@ -109,6 +115,7 @@ fun LoginPage(
             TextInputAtom(
                 label = state.passwordInputLabel,
                 placeHolder = state.passwordInputLabel,
+                icon = AppIcons.VisibilityOn(),
                 onChanged = { password ->
                     onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                 }
