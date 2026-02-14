@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonType
+import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.theme.Neutral200
 import com.mctable.easybiz.core.ds.theme.Neutral300
@@ -50,10 +51,13 @@ fun LoginPage(
         bottomBar = {
             ButtonAtom(
                 state.loginButtonLabel,
+                isEnabled = state.enableButton,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-            ) {}
+            ) {
+                onEvent.invoke(LoginEvent.LoginClick)
+            }
         }
     ) {
         Column(
@@ -93,6 +97,22 @@ fun LoginPage(
                     buttonType = ButtonType.Ghost
                 )
             }
+            Spacer(modifier = Modifier.height(24.dp))
+            TextInputAtom(
+                label = state.inputLabel,
+                placeHolder = state.inputPlaceholder,
+                onChanged = { email ->
+                    onEvent.invoke(LoginEvent.OnEmailTyped(email))
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextInputAtom(
+                label = state.passwordInputLabel,
+                placeHolder = state.passwordInputLabel,
+                onChanged = { password ->
+                    onEvent.invoke(LoginEvent.OnPasswordTyped(password))
+                }
+            )
         }
     }
 }
@@ -112,6 +132,7 @@ fun LoginPagePreview() {
                 passwordInputPlaceholder = "Sua senha de acesso",
                 forgotPasswordLabel = "Esqueci minha senha",
                 loginButtonLabel = "Entrar",
+                enableButton = true
             )
         ) {}
     }

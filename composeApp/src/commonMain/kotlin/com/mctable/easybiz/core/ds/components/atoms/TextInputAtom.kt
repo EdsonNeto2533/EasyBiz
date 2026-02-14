@@ -1,5 +1,6 @@
 package com.mctable.easybiz.core.ds.components.atoms
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -62,6 +64,9 @@ fun TextInputAtom(
             },
             shape = RoundedCornerShape(16.dp),
             colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
                 unfocusedBorderColor = Neutral400,
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
             ),
@@ -84,7 +89,6 @@ private fun TextInputAtomPreview() {
                     label = "WhatsApp ou E-mail",
                     placeHolder = "Ex: (11) 99999-9999",
                     onChanged = {},
-                    icon = AppIcons.ContactEmail(),
                     keyboardType = KeyboardType.Phone,
                     mask = "(##) #####-####"
                 )

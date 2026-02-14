@@ -30,7 +30,8 @@ fun ButtonAtom(
     text: String,
     buttonType: ButtonType = ButtonType.Primary,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    isEnabled: Boolean = true,
+    onClick: () -> Unit,
 ) {
     when (buttonType) {
         ButtonType.Primary -> {
@@ -38,6 +39,7 @@ fun ButtonAtom(
                 onClick = onClick,
                 modifier = Modifier.then(modifier),
                 shape = MaterialTheme.shapes.medium,
+                enabled = isEnabled
             ) {
                 Text(text = text)
             }
@@ -48,8 +50,12 @@ fun ButtonAtom(
                 onClick = onClick,
                 modifier = Modifier.then(modifier),
                 shape = MaterialTheme.shapes.medium,
-                colors = ButtonDefaults.buttonColors(
+                enabled = isEnabled,
+                colors = if (isEnabled) ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ) else ButtonDefaults.buttonColors(
+                    containerColor = Neutral300,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 border = BorderStroke(
@@ -66,6 +72,7 @@ fun ButtonAtom(
                 onClick = onClick,
                 modifier = Modifier.then(modifier),
                 shape = MaterialTheme.shapes.medium,
+                enabled = isEnabled,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Neutral300,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant
