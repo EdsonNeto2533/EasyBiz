@@ -1,0 +1,118 @@
+package com.mctable.easybiz.features.auth.presentation.ui.page
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
+import com.mctable.easybiz.core.ds.components.atoms.ButtonType
+import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.Neutral200
+import com.mctable.easybiz.core.ds.theme.Neutral300
+import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
+import com.mctable.easybiz.features.auth.presentation.state.LoginState
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun LoginPage(
+    state: LoginState,
+    onEvent: (LoginEvent) -> Unit
+) {
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(title = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) { Text("EasyBiz") }
+            })
+        },
+        bottomBar = {
+            ButtonAtom(
+                state.loginButtonLabel,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {}
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .background(color = Neutral200)
+                .padding(16.dp)
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(state.title, style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                state.subTitle,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Neutral300, RoundedCornerShape(16.dp))
+                    .padding(horizontal = 6.dp)
+            ) {
+                ButtonAtom(
+                    "Entrar",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    buttonType = ButtonType.Secondary
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                ButtonAtom(
+                    "Criar conta",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    buttonType = ButtonType.Ghost
+                )
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun LoginPagePreview() {
+    EasyBizTheme {
+        LoginPage(
+            LoginState(
+                title = "Bem vindo ao EasyBiz",
+                subTitle = "Encontre serviços perto de você de forma simples e rápida",
+                inputLabel = "E-mail",
+                inputPlaceholder = "ex: easybiz@gmail.com",
+                passwordInputLabel = "Senha",
+                passwordInputPlaceholder = "Sua senha de acesso",
+                forgotPasswordLabel = "Esqueci minha senha",
+                loginButtonLabel = "Entrar",
+            )
+        ) {}
+    }
+}

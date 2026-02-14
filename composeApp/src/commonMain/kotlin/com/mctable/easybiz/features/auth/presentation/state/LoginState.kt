@@ -11,5 +11,11 @@ data class LoginState(
     val loginButtonLabel: String,
     val email: String? = null,
     val password: String? = null,
-    val enableButton: Boolean = false
+    val enableButton: Boolean = false,
+    val operationType: OperationType = OperationType.Login
 )
+
+sealed class OperationType {
+    data object Register : OperationType()
+    data object Login : OperationType()
+}
