@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.auth.presentation.ui.page
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -109,6 +110,19 @@ fun LoginPage(
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
+            AnimatedVisibility(visible = state.operationType is OperationType.Register) {
+                Column {
+                    TextInputAtom(
+                        label = "Nome",
+                        placeHolder = "Exemplo nome",
+                        onChanged = { email ->
+                            onEvent.invoke(LoginEvent.OnEmailTyped(email))
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+            }
             TextInputAtom(
                 label = state.inputLabel,
                 placeHolder = state.inputPlaceholder,
@@ -146,7 +160,8 @@ fun LoginPagePreview() {
                 loginButtonLabel = "Entrar",
                 enableButton = true,
                 createAccountOptionButtonLabel = "Criar conta",
-                loginOptionButtonLabel = "Entrar"
+                loginOptionButtonLabel = "Entrar",
+                operationType = OperationType.Register
             )
         ) {}
     }

@@ -52,7 +52,7 @@ fun PasswordInputAtom(
                 onChanged(it)
             },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(placeHolder) },
+            placeholder = { Text(placeHolder, color = Neutral400) },
             trailingIcon = {
                 IconButton(
                     onClick = { isVisible = !isVisible }

@@ -54,7 +54,7 @@ fun TextInputAtom(
                 onChanged(newText)
             },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(placeHolder) },
+            placeholder = { Text(placeHolder, color = Neutral400) },
             trailingIcon = {
                 if (icon != null) {
                     Icon(painter = icon, contentDescription = label)
