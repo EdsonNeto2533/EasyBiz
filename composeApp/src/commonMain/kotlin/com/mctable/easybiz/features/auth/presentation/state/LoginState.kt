@@ -21,7 +21,11 @@ data class LoginState(
     val passwordErrorText: String? = null,
     val showNameError: Boolean = false,
     val showEmailError: Boolean = false,
-    val showPasswordError: Boolean = false
+    val showPasswordError: Boolean = false,
+    val showErrorDialog: Boolean = false,
+    val showLoadingDialog: Boolean = false,
+    //todo remover apos criar a tela principal
+    val showToast: Boolean = false
 )
 
 sealed class OperationType {

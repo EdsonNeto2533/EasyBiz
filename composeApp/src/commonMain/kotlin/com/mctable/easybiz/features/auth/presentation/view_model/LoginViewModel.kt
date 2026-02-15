@@ -31,6 +31,7 @@ class LoginViewModel(
             is LoginEvent.OnNameTyped -> onNameTyped(action.name)
             is LoginEvent.OnPasswordTyped -> onPasswordTyped(action.password)
             is LoginEvent.ChangeOperationType -> changeOperationType(action.currentOperationType)
+            LoginEvent.HideErrorDialog -> state = state.copy(showErrorDialog = false)
         }
     }
 
@@ -57,6 +58,7 @@ class LoginViewModel(
 
     private fun onLoginClick() {
         viewModelScope.launch {
+            state = state.copy(showLoadingDialog = true)
             when (state.operationType) {
                 OperationType.Login -> login()
                 OperationType.Register -> register()
@@ -86,11 +88,12 @@ class LoginViewModel(
     }
 
     private fun handleLoginSuccess(loginEntity: LoginEntity) {
+        state = state.copy(showLoadingDialog = false, showToast = true)
         println(loginEntity)
     }
 
     private fun handleLoginError(exception: Throwable) {
-        println(exception.message)
+        state = state.copy(showLoadingDialog = false, showErrorDialog = true)
     }
 
     private fun onEmailTyped(email: String) {

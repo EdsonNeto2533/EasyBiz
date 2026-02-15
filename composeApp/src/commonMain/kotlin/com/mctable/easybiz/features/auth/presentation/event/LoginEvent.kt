@@ -9,4 +9,5 @@ sealed class LoginEvent {
     data class OnPasswordTyped(val password: String) : LoginEvent()
     data object ForgetPasswordClick : LoginEvent()
     data class ChangeOperationType(val currentOperationType: OperationType) : LoginEvent()
+    data object HideErrorDialog : LoginEvent()
 }
