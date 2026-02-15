@@ -10,6 +10,7 @@ import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
+import com.mctable.easybiz.features.auth.presentation.state.OperationType
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -26,6 +27,16 @@ class LoginViewModel(
             LoginEvent.LoginClick -> onLoginClick()
             is LoginEvent.OnEmailTyped -> onEmailTyped(action.email)
             is LoginEvent.OnPasswordTyped -> onPasswordTyped(action.password)
+            is LoginEvent.ChangeOperationType -> changeOperationType(action.currentOperationType)
+        }
+    }
+
+    private fun changeOperationType(currentOperationType: OperationType) {
+        if (currentOperationType == state.operationType) return
+        state = if (state.operationType is OperationType.Login) {
+            state.copy(operationType = OperationType.Register)
+        } else {
+            state.copy(operationType = OperationType.Login)
         }
     }
 
@@ -87,6 +98,8 @@ class LoginViewModel(
         passwordInputPlaceholder = "Sua senha de acesso",
         forgotPasswordLabel = "Esqueci minha senha",
         loginButtonLabel = "Entrar",
+        createAccountOptionButtonLabel = "Criar conta",
+        loginOptionButtonLabel = "Entrar"
     )
 
 }

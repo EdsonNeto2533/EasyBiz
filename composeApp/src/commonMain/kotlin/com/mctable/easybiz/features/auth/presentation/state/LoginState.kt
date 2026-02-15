@@ -12,7 +12,9 @@ data class LoginState(
     val email: String? = null,
     val password: String? = null,
     val enableButton: Boolean = false,
-    val operationType: OperationType = OperationType.Login
+    val operationType: OperationType = OperationType.Login,
+    val createAccountOptionButtonLabel: String,
+    val loginOptionButtonLabel: String
 )
 
 sealed class OperationType {

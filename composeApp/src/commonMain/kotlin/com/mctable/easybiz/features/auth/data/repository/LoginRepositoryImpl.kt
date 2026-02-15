@@ -9,7 +9,7 @@ class LoginRepositoryImpl(
     private val remoteDataSource: LoginRemoteDataSource
 ) : LoginRepository {
 
-    override suspend fun login(email: String, password: String): Result<LoginEntity> {
+    override suspend fun login(email: String, password: String): Result<LoginEntity> = runCatching {
         return remoteDataSource.login(email, password).mapCatching { responseModel ->
             LoginMapper.toDomain(responseModel)
         }

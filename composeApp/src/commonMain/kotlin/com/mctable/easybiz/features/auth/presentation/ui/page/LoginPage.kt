@@ -35,6 +35,7 @@ import com.mctable.easybiz.core.ds.theme.Neutral300
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
+import com.mctable.easybiz.features.auth.presentation.state.OperationType
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -90,17 +91,21 @@ fun LoginPage(
                     .padding(horizontal = 6.dp)
             ) {
                 ButtonAtom(
-                    "Entrar",
-                    onClick = {},
+                    state.loginOptionButtonLabel,
+                    onClick = {
+                        onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Login))
+                    },
                     modifier = Modifier.weight(1f),
-                    buttonType = ButtonType.Secondary
+                    buttonType = if (state.operationType is OperationType.Login) ButtonType.Secondary else ButtonType.Ghost
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 ButtonAtom(
-                    "Criar conta",
-                    onClick = {},
+                    state.createAccountOptionButtonLabel,
+                    onClick = {
+                        onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Register))
+                    },
                     modifier = Modifier.weight(1f),
-                    buttonType = ButtonType.Ghost
+                    buttonType = if (state.operationType is OperationType.Register) ButtonType.Secondary else ButtonType.Ghost
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -139,7 +144,9 @@ fun LoginPagePreview() {
                 passwordInputPlaceholder = "Sua senha de acesso",
                 forgotPasswordLabel = "Esqueci minha senha",
                 loginButtonLabel = "Entrar",
-                enableButton = true
+                enableButton = true,
+                createAccountOptionButtonLabel = "Criar conta",
+                loginOptionButtonLabel = "Entrar"
             )
         ) {}
     }
