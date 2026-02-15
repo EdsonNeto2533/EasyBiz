@@ -55,15 +55,26 @@ class LoginViewModel(
 
     private fun onLoginClick() {
         viewModelScope.launch {
-            if (state.email != null && state.password != null) {
-                loginUseCase.execute(state.email!!, state.password!!)
-                    .fold(
-                        onSuccess = ::handleLoginSuccess,
-                        onFailure = ::handleLoginError
-                    )
+            when (state.operationType) {
+                OperationType.Login -> login()
+                OperationType.Register -> register()
             }
         }
 
+    }
+
+    private suspend fun register() {
+        //todo
+    }
+
+    private suspend fun login() {
+        if (state.email != null && state.password != null) {
+            loginUseCase.execute(state.email!!, state.password!!)
+                .fold(
+                    onSuccess = ::handleLoginSuccess,
+                    onFailure = ::handleLoginError
+                )
+        }
     }
 
     private fun handleLoginSuccess(loginEntity: LoginEntity) {
