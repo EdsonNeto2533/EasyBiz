@@ -35,9 +35,17 @@ class LoginViewModel(
     private fun changeOperationType(currentOperationType: OperationType) {
         if (currentOperationType == state.operationType) return
         state = if (state.operationType is OperationType.Login) {
-            state.copy(operationType = OperationType.Register, loginButtonLabel = "Cadastrar")
+            state.copy(
+                operationType = OperationType.Register,
+                loginButtonLabel = "Cadastrar",
+                enableButton = validateFields(currentOperationType)
+            )
         } else {
-            state.copy(operationType = OperationType.Login, loginButtonLabel = "Entrar")
+            state.copy(
+                operationType = OperationType.Login,
+                loginButtonLabel = "Entrar",
+                enableButton = validateFields(currentOperationType)
+            )
         }
     }
 
@@ -70,7 +78,7 @@ class LoginViewModel(
         state = state.copy(
             email = email,
             enableButton = validateFields(),
-            showEmailError = isValidEmail(email)
+            showEmailError = !isValidEmail(email)
         )
     }
 
@@ -78,7 +86,7 @@ class LoginViewModel(
         state = state.copy(
             name = name,
             enableButton = validateFields(),
-            showNameError = isValidName(name)
+            showNameError = !isValidName(name)
         )
     }
 
@@ -86,12 +94,13 @@ class LoginViewModel(
         state = state.copy(
             password = password,
             enableButton = validateFields(),
-            showPasswordError = isValidPassword(password)
+            showPasswordError = !isValidPassword(password)
         )
     }
 
-    private fun validateFields(): Boolean {
-        return if (state.operationType == OperationType.Login) {
+    private fun validateFields(currentOperationType: OperationType? = null): Boolean {
+        val operation = currentOperationType ?: state.operationType
+        return if (operation == OperationType.Login) {
             isValidEmail(state.email) && isValidPassword(
                 state.password
             )
@@ -135,7 +144,7 @@ class LoginViewModel(
         loginOptionButtonLabel = "Entrar",
         passwordErrorText = "Insira uma senha com 1 Letra maiuscula, 1 minuscula e 1 numero com 8 caracteres",
         nameErrorText = "Insira um nome válido",
-        email = "Insira um email válido"
+        emailErrorText = "Insira um email válido"
     )
 
 }
