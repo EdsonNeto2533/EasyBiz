@@ -16,10 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.Neutral300
+import com.mctable.easybiz.core.ds.theme.Neutral500
 
 sealed class ButtonType {
     object Primary : ButtonType()
     object Secondary : ButtonType()
+    object Ghost : ButtonType()
 }
 
 @Composable
@@ -27,14 +30,16 @@ fun ButtonAtom(
     text: String,
     buttonType: ButtonType = ButtonType.Primary,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    isEnabled: Boolean = true,
+    onClick: () -> Unit,
 ) {
     when (buttonType) {
         ButtonType.Primary -> {
             Button(
                 onClick = onClick,
-                modifier = Modifier.fillMaxWidth().then(modifier),
+                modifier = Modifier.then(modifier),
                 shape = MaterialTheme.shapes.medium,
+                enabled = isEnabled
             ) {
                 Text(text = text)
             }
@@ -43,15 +48,37 @@ fun ButtonAtom(
         ButtonType.Secondary -> {
             Button(
                 onClick = onClick,
-                modifier = Modifier.fillMaxWidth().then(modifier),
+                modifier = Modifier.then(modifier),
                 shape = MaterialTheme.shapes.medium,
-                colors = ButtonDefaults.buttonColors(
+                enabled = isEnabled,
+                colors = if (isEnabled) ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ) else ButtonDefaults.buttonColors(
+                    containerColor = Neutral300,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                )
             ) {
                 Text(text = text)
+            }
+        }
+
+        ButtonType.Ghost -> {
+            Button(
+                onClick = onClick,
+                modifier = Modifier.then(modifier),
+                shape = MaterialTheme.shapes.medium,
+                enabled = isEnabled,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Neutral300,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            ) {
+                Text(text = text, color = Neutral500)
             }
         }
     }
@@ -66,8 +93,17 @@ fun ButtonAtomPreview() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            ButtonAtom("Primary Action") {}
-            ButtonAtom("Secondary Action", buttonType = ButtonType.Secondary) {}
+            ButtonAtom("Primary Action", modifier = Modifier.fillMaxWidth()) {}
+            ButtonAtom(
+                "Secondary Action",
+                buttonType = ButtonType.Secondary,
+                modifier = Modifier.fillMaxWidth()
+            ) {}
+            ButtonAtom(
+                "Secondary Action",
+                buttonType = ButtonType.Ghost,
+                modifier = Modifier.fillMaxWidth()
+            ) {}
         }
     }
 

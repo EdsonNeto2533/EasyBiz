@@ -13,7 +13,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
+import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
+import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import org.koin.compose.getKoin
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavHost() {
@@ -31,16 +34,8 @@ fun AppNavHost() {
         startDestination = Destination.Login.route
     ) {
         composable(Destination.Login.route) {
-            Scaffold() {
-                Column(
-                    modifier = Modifier.padding(it),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("oi")
-                    ButtonAtom("ola") {}
-                }
-            }
+            val viewModel = koinViewModel<LoginViewModel>()
+            LoginPage(state = viewModel.state, onEvent = { viewModel.onEvent(it) })
         }
     }
 }
