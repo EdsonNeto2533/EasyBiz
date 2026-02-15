@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonType
+import com.mctable.easybiz.core.ds.components.atoms.PasswordInputAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.theme.Neutral200
@@ -112,10 +113,9 @@ fun LoginPage(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TextInputAtom(
+            PasswordInputAtom(
                 label = state.passwordInputLabel,
                 placeHolder = state.passwordInputLabel,
-                icon = AppIcons.VisibilityOn(),
                 onChanged = { password ->
                     onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                 }
