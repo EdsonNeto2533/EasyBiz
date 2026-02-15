@@ -14,4 +14,14 @@ class LoginRepositoryImpl(
             LoginMapper.toDomain(responseModel)
         }
     }
+
+    override suspend fun register(
+        email: String,
+        password: String,
+        name: String
+    ): Result<LoginEntity> = runCatching {
+        return remoteDataSource.register(email, password, name).mapCatching { responseModel ->
+            LoginMapper.toDomain(responseModel)
+        }
+    }
 }
