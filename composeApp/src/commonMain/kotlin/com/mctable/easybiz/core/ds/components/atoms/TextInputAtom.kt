@@ -37,7 +37,9 @@ fun TextInputAtom(
     modifier: Modifier = Modifier,
     icon: Painter? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    mask: String? = null
+    mask: String? = null,
+    showError: Boolean = false,
+    errorMessage: String? = null
 ) {
     var text by remember { mutableStateOf("") }
     val visualTransformation =
@@ -67,10 +69,19 @@ fun TextInputAtom(
                 disabledContainerColor = Color.White,
                 unfocusedBorderColor = Neutral400,
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
+                errorBorderColor = MaterialTheme.colorScheme.error,
             ),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             visualTransformation = visualTransformation,
             singleLine = true,
+            isError = showError,
+            supportingText = {
+                if (showError) {
+                    errorMessage?.let {
+                        Text(errorMessage)
+                    }
+                }
+            }
         )
     }
 }
@@ -95,6 +106,13 @@ private fun TextInputAtomPreview() {
                     label = "Your Name",
                     placeHolder = "Ex: John Doe",
                     onChanged = {}
+                )
+                TextInputAtom(
+                    label = "Your Name",
+                    placeHolder = "Ex: John Doe",
+                    onChanged = {},
+                    showError = true,
+                    errorMessage = "Nome invalido"
                 )
             }
         }
