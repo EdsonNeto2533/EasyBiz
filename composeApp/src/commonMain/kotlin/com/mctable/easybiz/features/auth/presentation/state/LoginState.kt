@@ -11,6 +11,7 @@ data class LoginState(
     val loginButtonLabel: String,
     val email: String? = null,
     val password: String? = null,
+    val name: String? = null,
     val enableButton: Boolean = false,
     val operationType: OperationType = OperationType.Login,
     val createAccountOptionButtonLabel: String,

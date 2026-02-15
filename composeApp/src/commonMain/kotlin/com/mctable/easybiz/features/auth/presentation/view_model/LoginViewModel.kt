@@ -26,6 +26,7 @@ class LoginViewModel(
             LoginEvent.ForgetPasswordClick -> onForgetPasswordClick()
             LoginEvent.LoginClick -> onLoginClick()
             is LoginEvent.OnEmailTyped -> onEmailTyped(action.email)
+            is LoginEvent.OnNameTyped -> onEmailTyped(action.name)
             is LoginEvent.OnPasswordTyped -> onPasswordTyped(action.password)
             is LoginEvent.ChangeOperationType -> changeOperationType(action.currentOperationType)
         }
@@ -34,9 +35,9 @@ class LoginViewModel(
     private fun changeOperationType(currentOperationType: OperationType) {
         if (currentOperationType == state.operationType) return
         state = if (state.operationType is OperationType.Login) {
-            state.copy(operationType = OperationType.Register)
+            state.copy(operationType = OperationType.Register, loginButtonLabel = "Cadastrar")
         } else {
-            state.copy(operationType = OperationType.Login)
+            state.copy(operationType = OperationType.Login, loginButtonLabel = "Entrar")
         }
     }
 
@@ -69,18 +70,38 @@ class LoginViewModel(
         state = state.copy(email = email, enableButton = validateFields())
     }
 
+    private fun onNameTyped(name: String) {
+        state = state.copy(name = name, enableButton = validateFields())
+    }
+
     private fun onPasswordTyped(password: String) {
         state = state.copy(password = password, enableButton = validateFields())
     }
 
-    private fun validateFields(): Boolean =
-        isValidEmail(state.email) && isValidPassword(state.password)
+    private fun validateFields(): Boolean {
+        return if (state.operationType == OperationType.Login) {
+            isValidEmail(state.email) && isValidPassword(
+                state.password
+            )
+        } else {
+            isValidName(state.name) && isValidEmail(state.email) && isValidPassword(state.password)
+        }
+    }
 
 
     private fun isValidEmail(email: String?): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
         return email?.matches(emailRegex.toRegex()) ?: false
     }
+
+    private fun isValidName(name: String?): Boolean {
+        val nameRegex = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(\\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+$"
+        return name
+            ?.trim()
+            ?.matches(nameRegex.toRegex())
+            ?: false
+    }
+
 
     private fun isValidPassword(password: String?): Boolean {
         val passwordRegex =

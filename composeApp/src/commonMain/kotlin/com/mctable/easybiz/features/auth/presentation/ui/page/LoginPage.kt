@@ -115,8 +115,8 @@ fun LoginPage(
                     TextInputAtom(
                         label = "Nome",
                         placeHolder = "Exemplo nome",
-                        onChanged = { email ->
-                            onEvent.invoke(LoginEvent.OnEmailTyped(email))
+                        onChanged = { name ->
+                            onEvent.invoke(LoginEvent.OnNameTyped(name))
                         }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
