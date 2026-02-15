@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
 import com.mctable.easybiz.features.auth.presentation.state.OperationType
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -64,7 +66,13 @@ class LoginViewModel(
     }
 
     private suspend fun register() {
-        //todo
+        if (state.email != null && state.password != null && state.name != null) {
+            registerUseCase.execute(state.email!!, state.password!!, state.name!!)
+                .fold(
+                    onSuccess = ::handleLoginSuccess,
+                    onFailure = ::handleLoginError
+                )
+        }
     }
 
     private suspend fun login() {

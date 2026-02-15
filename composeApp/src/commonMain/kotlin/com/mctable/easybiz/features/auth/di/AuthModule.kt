@@ -13,7 +13,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val authModule = module {
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
     single<LoginRemoteDataSource> {
         LoginRemoteDataSourceImpl(
             networking = get(),
