@@ -115,6 +115,8 @@ fun LoginPage(
                     TextInputAtom(
                         label = "Nome",
                         placeHolder = "Exemplo nome",
+                        showError = state.showNameError,
+                        errorMessage = state.nameErrorText,
                         onChanged = { name ->
                             onEvent.invoke(LoginEvent.OnNameTyped(name))
                         }
@@ -127,6 +129,8 @@ fun LoginPage(
                 label = state.inputLabel,
                 placeHolder = state.inputPlaceholder,
                 icon = AppIcons.ContactEmail(),
+                showError = state.showEmailError,
+                errorMessage = state.emailErrorText,
                 onChanged = { email ->
                     onEvent.invoke(LoginEvent.OnEmailTyped(email))
                 }
@@ -135,6 +139,8 @@ fun LoginPage(
             PasswordInputAtom(
                 label = state.passwordInputLabel,
                 placeHolder = state.passwordInputLabel,
+                showError = state.showPasswordError,
+                errorMessage = state.passwordErrorText,
                 onChanged = { password ->
                     onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                 }

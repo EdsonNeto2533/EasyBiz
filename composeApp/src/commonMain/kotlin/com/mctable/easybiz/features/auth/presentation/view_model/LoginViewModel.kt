@@ -26,7 +26,7 @@ class LoginViewModel(
             LoginEvent.ForgetPasswordClick -> onForgetPasswordClick()
             LoginEvent.LoginClick -> onLoginClick()
             is LoginEvent.OnEmailTyped -> onEmailTyped(action.email)
-            is LoginEvent.OnNameTyped -> onEmailTyped(action.name)
+            is LoginEvent.OnNameTyped -> onNameTyped(action.name)
             is LoginEvent.OnPasswordTyped -> onPasswordTyped(action.password)
             is LoginEvent.ChangeOperationType -> changeOperationType(action.currentOperationType)
         }
@@ -67,15 +67,27 @@ class LoginViewModel(
     }
 
     private fun onEmailTyped(email: String) {
-        state = state.copy(email = email, enableButton = validateFields())
+        state = state.copy(
+            email = email,
+            enableButton = validateFields(),
+            showEmailError = isValidEmail(email)
+        )
     }
 
     private fun onNameTyped(name: String) {
-        state = state.copy(name = name, enableButton = validateFields())
+        state = state.copy(
+            name = name,
+            enableButton = validateFields(),
+            showNameError = isValidName(name)
+        )
     }
 
     private fun onPasswordTyped(password: String) {
-        state = state.copy(password = password, enableButton = validateFields())
+        state = state.copy(
+            password = password,
+            enableButton = validateFields(),
+            showPasswordError = isValidPassword(password)
+        )
     }
 
     private fun validateFields(): Boolean {
@@ -120,7 +132,10 @@ class LoginViewModel(
         forgotPasswordLabel = "Esqueci minha senha",
         loginButtonLabel = "Entrar",
         createAccountOptionButtonLabel = "Criar conta",
-        loginOptionButtonLabel = "Entrar"
+        loginOptionButtonLabel = "Entrar",
+        passwordErrorText = "Insira uma senha com 1 Letra maiuscula, 1 minuscula e 1 numero com 8 caracteres",
+        nameErrorText = "Insira um nome válido",
+        email = "Insira um email válido"
     )
 
 }

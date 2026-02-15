@@ -15,7 +15,13 @@ data class LoginState(
     val enableButton: Boolean = false,
     val operationType: OperationType = OperationType.Login,
     val createAccountOptionButtonLabel: String,
-    val loginOptionButtonLabel: String
+    val loginOptionButtonLabel: String,
+    val nameErrorText: String? = null,
+    val emailErrorText: String? = null,
+    val passwordErrorText: String? = null,
+    val showNameError: Boolean = false,
+    val showEmailError: Boolean = false,
+    val showPasswordError: Boolean = false
 )
 
 sealed class OperationType {

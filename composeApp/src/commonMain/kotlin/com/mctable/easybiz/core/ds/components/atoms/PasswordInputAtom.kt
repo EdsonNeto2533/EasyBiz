@@ -32,6 +32,8 @@ fun PasswordInputAtom(
     placeHolder: String,
     onChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    showError: Boolean = false,
+    errorMessage: String? = null
 ) {
 
     var text by remember { mutableStateOf("") }
@@ -73,12 +75,21 @@ fun PasswordInputAtom(
                 disabledContainerColor = Color.White,
                 unfocusedBorderColor = Neutral400,
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
+                errorBorderColor = MaterialTheme.colorScheme.error,
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
             visualTransformation = visualTransformation,
             singleLine = true,
+            isError = showError,
+            supportingText = {
+                if (showError) {
+                    errorMessage?.let {
+                        Text(errorMessage)
+                    }
+                }
+            }
         )
     }
 }
