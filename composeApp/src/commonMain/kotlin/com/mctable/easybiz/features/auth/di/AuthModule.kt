@@ -23,7 +23,8 @@ val authModule = module {
 
     single<LoginRepository> {
         LoginRepositoryImpl(
-            remoteDataSource = get()
+            remoteDataSource = get(),
+            easyBizStorage = get()
         )
     }
 

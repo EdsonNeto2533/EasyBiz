@@ -8,7 +8,6 @@ object LoginMapper {
     fun toDomain(response: LoginResponseModel): LoginEntity {
         return LoginEntity(
             email = response.email ?: "",
-            password = ""  // Password is never returned from server
         )
     }
 
