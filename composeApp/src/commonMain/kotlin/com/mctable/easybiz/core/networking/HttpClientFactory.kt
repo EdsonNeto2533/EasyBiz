@@ -1,5 +1,7 @@
 package com.mctable.easybiz.core.networking
 
+import com.mctable.easybiz.core.local_storage.EasyBizStorage
+import com.mctable.easybiz.core.networking.plugins.AuthTokenPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -15,7 +17,9 @@ import kotlin.time.Duration.Companion.seconds
 
 object HttpClientFactory {
 
-    fun build(): HttpClient = HttpClient() {
+    fun build(
+        easyBizStorage: EasyBizStorage
+    ): HttpClient = HttpClient() {
         install(Logging) {
             level = LogLevel.ALL
             logger = object : Logger {
@@ -25,17 +29,21 @@ object HttpClientFactory {
             }
         }
 
+        install(AuthTokenPlugin) {
+            storage = easyBizStorage
+        }
+
         defaultRequest {
             contentType(ContentType.Application.Json)
         }
 
-        install(HttpTimeout){
+        install(HttpTimeout) {
             requestTimeoutMillis = 30.seconds.inWholeMilliseconds
             connectTimeoutMillis = 30.seconds.inWholeMilliseconds
             socketTimeoutMillis = 30.seconds.inWholeMilliseconds
         }
 
-        install(ContentNegotiation){
+        install(ContentNegotiation) {
             json(json = Json {
                 ignoreUnknownKeys = true
                 explicitNulls = true

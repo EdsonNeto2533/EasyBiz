@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val coreModule = module {
     single<EasyBizNetworking> {
-        EasyBizNetworkingImpl(HttpClientFactory.build())
+        EasyBizNetworkingImpl(HttpClientFactory.build(get()))
     }
     single<Navigator> { NavigatorImpl() }
     single<AppEnv> { AppEnvImpl() }
