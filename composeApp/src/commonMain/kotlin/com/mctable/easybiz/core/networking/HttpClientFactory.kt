@@ -33,8 +33,6 @@ object HttpClientFactory {
             storage = easyBizStorage
         }
 
-        install(ResponseExceptionPlugin)
-
         defaultRequest {
             contentType(ContentType.Application.Json)
         }
