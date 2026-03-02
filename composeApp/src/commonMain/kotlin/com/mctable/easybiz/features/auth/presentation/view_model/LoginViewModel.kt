@@ -1,6 +1,5 @@
 package com.mctable.easybiz.features.auth.presentation.view_model
 
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -66,9 +65,9 @@ class LoginViewModel(
             try {
                 permissionsController.providePermission(Permission.LOCATION)
                 permissionGranted()
-            } catch (deniedAlways: DeniedAlwaysException) {
+            } catch (_: DeniedAlwaysException) {
                 showDeniedForeverModal()
-            } catch (denied: DeniedException) {
+            } catch (_: DeniedException) {
                 showDeniedModal()
             }
         }
