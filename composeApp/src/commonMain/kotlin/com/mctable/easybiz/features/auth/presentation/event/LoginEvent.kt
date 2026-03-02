@@ -1,6 +1,8 @@
 package com.mctable.easybiz.features.auth.presentation.event
 
 import com.mctable.easybiz.features.auth.presentation.state.OperationType
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.PermissionsController
 
 sealed class LoginEvent {
     data object LoginClick : LoginEvent()
@@ -10,4 +12,6 @@ sealed class LoginEvent {
     data object ForgetPasswordClick : LoginEvent()
     data class ChangeOperationType(val currentOperationType: OperationType) : LoginEvent()
     data object HideErrorDialog : LoginEvent()
+    data class CheckPermission(val permissionState: PermissionState) : LoginEvent()
+    data class RequestPermission(val permissionController: PermissionsController): LoginEvent()
 }

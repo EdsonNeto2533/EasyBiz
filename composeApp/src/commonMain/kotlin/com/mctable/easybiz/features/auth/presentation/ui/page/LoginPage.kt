@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -44,6 +45,11 @@ import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
 import com.mctable.easybiz.features.auth.presentation.state.OperationType
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.icerock.moko.permissions.location.LOCATION
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -56,6 +62,23 @@ fun LoginPage(
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val permissionControllerFactory = rememberPermissionsControllerFactory()
+    val permissionController = remember(permissionControllerFactory) {
+        permissionControllerFactory.createPermissionsController()
+    }
+
+    BindEffect(permissionController)
+
+    LaunchedEffect(Unit) {
+        onEvent.invoke(
+            LoginEvent.CheckPermission(
+                permissionController.getPermissionState(
+                    Permission.LOCATION
+                )
+            )
+        )
+    }
+
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -68,7 +91,7 @@ fun LoginPage(
             })
         },
         bottomBar = {
-            if (!state.showErrorDialog)
+            if (!state.showErrorDialog && !state.showPermissionDeniedForeverScreen && !state.showPermissionDeniedScreen)
                 ButtonAtom(
                     state.loginButtonLabel,
                     isEnabled = state.enableButton,
@@ -170,11 +193,30 @@ fun LoginPage(
                 }
             }
 
-            if (state.showToast){
+            if (state.showToast) {
                 scope.launch {
                     snackbarHostState.showSnackbar("Login com sucesso")
                 }
+            }
 
+            AnimatedVisibility(state.showPermissionDeniedScreen) {
+                ErrorDialogMolecule(
+                    title = "Precisamos da permissão de localização",
+                    description = "Para oferecer a melhor experiência, precisamos acessar sua localização. Ative a permissão nas configurações do aplicativo.",
+                    buttonLabel = "Permitir"
+                ) {
+                    onEvent.invoke(LoginEvent.RequestPermission(permissionController))
+                }
+            }
+
+            AnimatedVisibility(state.showPermissionDeniedForeverScreen) {
+                ErrorDialogMolecule(
+                    title = "Permissão de localização desativada",
+                    description = "Você escolheu não permitir o acesso à localização. Para utilizar este recurso, é necessário habilitar a permissão manualmente nas configurações do aplicativo.",
+                    buttonLabel = "Ok entendi",
+                ) {
+                    onEvent.invoke(LoginEvent.RequestPermission(permissionController))
+                }
             }
 
         }

@@ -61,6 +61,8 @@ kotlin {
             implementation(libs.ktor.plugin.content.negotiation)
             implementation(libs.ktor.serialization)
             implementation(libs.bundles.navigation)
+            implementation(libs.moko.permissions.localization)
+            implementation(libs.moko.permissions.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

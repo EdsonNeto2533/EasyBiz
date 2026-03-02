@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.auth.presentation.view_model
 
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,12 @@ import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
 import com.mctable.easybiz.features.auth.presentation.state.OperationType
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -32,7 +39,47 @@ class LoginViewModel(
             is LoginEvent.OnPasswordTyped -> onPasswordTyped(action.password)
             is LoginEvent.ChangeOperationType -> changeOperationType(action.currentOperationType)
             LoginEvent.HideErrorDialog -> state = state.copy(showErrorDialog = false)
+            is LoginEvent.CheckPermission -> handleCheckPermission(action.permissionState)
+            is LoginEvent.RequestPermission -> requestPermission(action.permissionController)
         }
+    }
+
+    private fun handleCheckPermission(permissionState: PermissionState) {
+        when (permissionState) {
+            PermissionState.NotDetermined -> showDeniedModal()
+            PermissionState.NotGranted -> showDeniedModal()
+            PermissionState.Granted -> permissionGranted()
+            PermissionState.Denied -> showDeniedModal()
+            PermissionState.DeniedAlways -> showDeniedForeverModal()
+        }
+    }
+
+    private fun permissionGranted() {
+        state = state.copy(
+            showPermissionDeniedScreen = false,
+            showPermissionDeniedForeverScreen = false
+        )
+    }
+
+    private fun requestPermission(permissionsController: PermissionsController) {
+        viewModelScope.launch {
+            try {
+                permissionsController.providePermission(Permission.LOCATION)
+                permissionGranted()
+            } catch (deniedAlways: DeniedAlwaysException) {
+                showDeniedForeverModal()
+            } catch (denied: DeniedException) {
+                showDeniedModal()
+            }
+        }
+    }
+
+    private fun showDeniedForeverModal() {
+        state = state.copy(showPermissionDeniedForeverScreen = true)
+    }
+
+    private fun showDeniedModal() {
+        state = state.copy(showPermissionDeniedScreen = true)
     }
 
     private fun changeOperationType(currentOperationType: OperationType) {
