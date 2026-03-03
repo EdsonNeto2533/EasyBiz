@@ -9,8 +9,16 @@ class SearchBusinessRepositoryImpl(
     val businessDatasource: SearchBusinessDatasource
 ) : SearchBusinessRepository {
 
-    override suspend fun getBusiness(): Result<List<BusinessEntity>> = runCatching {
-        return businessDatasource.searchBusiness().mapCatching { responseModel ->
+    override suspend fun getBusiness(
+        latitude: Double,
+        longitude: Double,
+        name: String?
+    ): Result<List<BusinessEntity>> = runCatching {
+        return businessDatasource.searchBusiness(
+            latitude,
+            longitude,
+            name
+        ).mapCatching { responseModel ->
             BusinessMapper.toDomain(responseModel)
         }
     }

@@ -25,6 +25,7 @@ compose-multiplatform-lifecycle = "2.10.0-alpha05"
 buildKonfig = "0.17.1"
 dataStore = "1.1.1"
 moko = "0.20.1"
+mokoGeo = "0.8.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -65,6 +66,7 @@ jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.li
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 moko-permissions-localization = { module = "dev.icerock.moko:permissions-location", version.ref = "moko" }
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko" }
+moko-geolocalization-compose = { module = "dev.icerock.moko:geo-compose", version.ref = "mokoGeo" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
