@@ -23,6 +23,9 @@ object BusinessMapper {
     }
 
     fun parseResponse(jsonString: String): List<BusinessResponseModel> {
-        return Json.decodeFromString<List<BusinessResponseModel>>(jsonString)
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        return json.decodeFromString<List<BusinessResponseModel>>(jsonString)
     }
 }

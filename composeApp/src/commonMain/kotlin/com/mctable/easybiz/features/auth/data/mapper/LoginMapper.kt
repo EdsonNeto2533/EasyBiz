@@ -12,6 +12,9 @@ object LoginMapper {
     }
 
     fun parseResponse(jsonString: String): LoginResponseModel {
-        return Json.decodeFromString<LoginResponseModel>(jsonString)
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        return json.decodeFromString<LoginResponseModel>(jsonString)
     }
 }
