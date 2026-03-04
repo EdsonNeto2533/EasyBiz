@@ -18,8 +18,6 @@ val coreModule = module {
     single<Navigator> { NavigatorImpl() }
     single<AppEnv> { AppEnvImpl() }
     single<LocationProvider> {
-        LocationProviderImpl(
-            tracker = get()
-        )
+        LocationProviderImpl()
     }
 }

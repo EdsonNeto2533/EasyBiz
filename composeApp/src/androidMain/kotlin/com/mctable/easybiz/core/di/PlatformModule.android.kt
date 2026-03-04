@@ -11,9 +11,10 @@ actual fun platformModule(): Module = module {
     single<EasyBizStorage> {
         AndroidEasyBizStorage(get()) // Koin will provide the Android Context
     }
-    single {
+
+    factory { (permissionsController: PermissionsController) ->
         LocationTracker(
-            permissionsController = PermissionsController(get())
+            permissionsController = permissionsController
         )
     }
 }

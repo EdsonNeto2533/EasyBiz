@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.search_business.presentation.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,9 +19,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
+import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
+import com.mctable.easybiz.core.helpers.rememberLocationTracker
 import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
 import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 import com.mctable.easybiz.features.search_business.presentation.state.SearchBusinessState
@@ -33,7 +37,10 @@ fun SearchBusinessPage(
     onEvent: (SearchBusinessEvent) -> Unit
 ) {
 
+    val tracker = rememberLocationTracker()
+
     LaunchedEffect(Unit) {
+        onEvent.invoke(SearchBusinessEvent.SetPermissionController(tracker))
         onEvent.invoke(SearchBusinessEvent.SearchBusiness)
     }
     Scaffold(
@@ -75,6 +82,16 @@ fun SearchBusinessPage(
                         onChatClick = {},
                         modifier = Modifier.padding(8.dp)
                     )
+                }
+            }
+
+            if (state.showLoading) {
+                LoadingDialogMolecule()
+            }
+
+            AnimatedVisibility(state.showError) {
+                ErrorDialogMolecule {
+                    onEvent.invoke(SearchBusinessEvent.SearchBusiness)
                 }
             }
         }

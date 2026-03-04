@@ -12,9 +12,9 @@ actual fun platformModule(): Module = module {
         IosEasyBizStorage()
     }
 
-    single {
+    factory { (permissionsController: PermissionsController) ->
         LocationTracker(
-            permissionsController = PermissionsController()
+            permissionsController = permissionsController
         )
     }
 }

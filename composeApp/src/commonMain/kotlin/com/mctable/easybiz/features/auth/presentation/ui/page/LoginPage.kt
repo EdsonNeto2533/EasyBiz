@@ -58,7 +58,6 @@ fun LoginPage(
 
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val permissionControllerFactory = rememberPermissionsControllerFactory()
     val permissionController = remember(permissionControllerFactory) {
         permissionControllerFactory.createPermissionsController()

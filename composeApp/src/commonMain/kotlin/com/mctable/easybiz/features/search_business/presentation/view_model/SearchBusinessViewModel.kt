@@ -12,6 +12,8 @@ import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCase
 import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 import com.mctable.easybiz.features.search_business.presentation.state.SearchBusinessState
+import dev.icerock.moko.geo.LocationTracker
+import dev.icerock.moko.permissions.PermissionsController
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -29,41 +31,61 @@ class SearchBusinessViewModel(
             is SearchBusinessEvent.OnSearchValueChange -> handleOnSearchValueChange(event.value)
             SearchBusinessEvent.SearchBusiness -> handleSearchBusinessEvent()
             SearchBusinessEvent.SearchBusinessByName -> handleSearchBusinessByNameEvent()
+            is SearchBusinessEvent.SetPermissionController -> handleSetPermissionController(
+                event.tracker
+            )
         }
     }
 
+    private fun handleSetPermissionController(tracker: LocationTracker) {
+        locationProvider.setTracker(tracker)
+    }
+
     private fun handleSearchBusinessEvent() {
+        state = state.copy(showLoading = true)
         viewModelScope.launch {
-            val location = getLocation()
-            val result = searchBusinessUseCase.execute(location.latitude, location.longitude, null)
-            result.fold(::handleBusinessList, ::handleBusinessListError)
+            try {
+                val location = getLocation()
+                val result =
+                    searchBusinessUseCase.execute(
+                        location?.latitude ?: 0.0,
+                        location?.longitude ?: 0.0,
+                        null
+                    )
+                result.fold(::handleBusinessList, ::handleBusinessListError)
+            } catch (e: Exception) {
+                handleBusinessListError(e)
+                println(e)
+            }
+
         }
 
     }
 
     private fun handleBusinessList(businessList: List<BusinessEntity>) {
-        state = state.copy(businessList = businessList)
+        state = state.copy(businessList = businessList, showLoading = false)
     }
 
     private fun handleBusinessListError(e: Throwable) {
-        state = state.copy(showError = true)
+        state = state.copy(showError = true, showLoading = false)
     }
 
     private fun handleSearchBusinessByNameEvent() {
+        state = state.copy(showLoading = true)
         viewModelScope.launch {
             val location = getLocation()
             val result = searchBusinessUseCase.execute(
-                location.latitude,
-                location.longitude,
+                location?.latitude ?: 0.0,
+                location?.longitude ?: 0.0,
                 state.searchValue
             )
             result.fold(::handleBusinessList, ::handleBusinessListError)
         }
     }
 
-    private suspend fun getLocation(): SimpleLocation {
+    private suspend fun getLocation(): SimpleLocation? {
         locationProvider.start()
-        val result = locationProvider.observeLocation().first()
+        val result = locationProvider.observeLocation()?.first()
         locationProvider.stop()
         return result
     }
