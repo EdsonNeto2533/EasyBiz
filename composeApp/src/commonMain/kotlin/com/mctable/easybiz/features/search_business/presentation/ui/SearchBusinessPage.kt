@@ -39,7 +39,7 @@ fun SearchBusinessPage(
     Scaffold(
         topBar = {
             TopAppBarOrganism("EasyBiz", showBackArrow = false)
-        }) { it ->
+        }) {
         Column(
             modifier = Modifier
                 .padding(it)
