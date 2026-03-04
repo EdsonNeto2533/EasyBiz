@@ -7,10 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
 
@@ -26,11 +26,11 @@ fun ProfessionalCardOrganism(
 ) {
 
     Card(
-        modifier = modifier.fillMaxWidth().clickable(
+        modifier = Modifier.fillMaxWidth().clickable(
             true,
             "Conversar",
             onClick = onChatClick
-        ),
+        ).then(modifier),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -47,7 +47,8 @@ fun ProfessionalCardOrganism(
                         Icon(
                             painter = AppIcons.LocationOn(),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
+                            tint = Color.Blue
                         )
 
                         Spacer(Modifier.width(4.dp))
@@ -73,7 +74,8 @@ fun ProfessionalCardOrganism(
                         Icon(
                             painter = AppIcons.Star(),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
+                            tint = Color.Yellow.copy(alpha = 0.7f)
                         )
 
                         Spacer(Modifier.width(4.dp))

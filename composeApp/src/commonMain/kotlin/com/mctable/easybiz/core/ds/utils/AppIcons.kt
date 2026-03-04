@@ -8,6 +8,7 @@ import easybiz.composeapp.generated.resources.account_circle
 import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
 import easybiz.composeapp.generated.resources.location_on
+import easybiz.composeapp.generated.resources.search
 import easybiz.composeapp.generated.resources.star
 import easybiz.composeapp.generated.resources.visibility_off
 import easybiz.composeapp.generated.resources.visibility_on
@@ -48,5 +49,10 @@ object AppIcons {
     @Composable
     fun Star(): Painter {
         return painterResource(Res.drawable.star)
+    }
+
+    @Composable
+    fun Search(): Painter {
+        return painterResource(Res.drawable.search)
     }
 }
