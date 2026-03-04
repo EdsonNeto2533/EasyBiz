@@ -13,9 +13,6 @@ import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusines
 import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 import com.mctable.easybiz.features.search_business.presentation.state.SearchBusinessState
 import dev.icerock.moko.geo.LocationTracker
-import dev.icerock.moko.permissions.PermissionsController
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
