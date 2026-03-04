@@ -14,7 +14,7 @@ actual fun platformModule(): Module = module {
 
     factory { (permissionsController: PermissionsController) ->
         LocationTracker(
-            permissionsController = permissionsController
+            permissionsController = permissionsController,
         )
     }
 }

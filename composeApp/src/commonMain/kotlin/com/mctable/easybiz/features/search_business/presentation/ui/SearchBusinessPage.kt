@@ -24,6 +24,7 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
+import com.mctable.easybiz.core.helpers.BindLocationTracker
 import com.mctable.easybiz.core.helpers.rememberLocationTracker
 import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
 import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
@@ -38,6 +39,8 @@ fun SearchBusinessPage(
 ) {
 
     val tracker = rememberLocationTracker()
+
+    BindLocationTracker(tracker)
 
     LaunchedEffect(Unit) {
         onEvent.invoke(SearchBusinessEvent.SetPermissionController(tracker))

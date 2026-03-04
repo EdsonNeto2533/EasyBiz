@@ -14,6 +14,8 @@ import com.mctable.easybiz.features.search_business.presentation.event.SearchBus
 import com.mctable.easybiz.features.search_business.presentation.state.SearchBusinessState
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.permissions.PermissionsController
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -85,9 +87,14 @@ class SearchBusinessViewModel(
 
     private suspend fun getLocation(): SimpleLocation? {
         locationProvider.start()
-        val result = locationProvider.observeLocation()?.first()
-        locationProvider.stop()
-        return result
+        return try {
+            locationProvider
+                .observeLocation()
+                ?.first()
+        } finally {
+            locationProvider.stop()
+        }
+
     }
 
     private fun handleOnSearchValueChange(name: String) {

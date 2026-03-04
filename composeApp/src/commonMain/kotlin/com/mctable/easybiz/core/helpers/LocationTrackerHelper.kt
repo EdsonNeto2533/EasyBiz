@@ -14,3 +14,6 @@ fun rememberLocationTracker(): LocationTracker {
         parameters = { parametersOf(permissionsController) }
     )
 }
+
+@Composable
+expect fun BindLocationTracker(tracker: LocationTracker)
