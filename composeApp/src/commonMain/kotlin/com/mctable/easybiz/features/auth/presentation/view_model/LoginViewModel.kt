@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
@@ -134,8 +135,8 @@ class LoginViewModel(
     }
 
     private fun handleLoginSuccess(loginEntity: LoginEntity) {
-        state = state.copy(showLoadingDialog = false, showToast = true)
-        println(loginEntity)
+        state = state.copy(showLoadingDialog = false)
+        navigator.navigate(Destination.SearchBusiness)
     }
 
     private fun handleLoginError(exception: Throwable) {

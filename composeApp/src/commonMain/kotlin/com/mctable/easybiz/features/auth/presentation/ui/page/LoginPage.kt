@@ -188,12 +188,6 @@ fun LoginPage(
                 }
             }
 
-            if (state.showToast) {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Login com sucesso")
-                }
-            }
-
             AnimatedVisibility(state.showPermissionDeniedScreen) {
                 ErrorDialogMolecule(
                     title = "Precisamos da permissão de localização",

@@ -6,6 +6,8 @@ import com.mctable.easybiz.features.search_business.data.repository.SearchBusine
 import com.mctable.easybiz.features.search_business.domain.repository.SearchBusinessRepository
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCase
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCaseImpl
+import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val searchBusinessModule = module {
@@ -19,5 +21,9 @@ val searchBusinessModule = module {
 
     factory<SearchBusinessUseCase> {
         SearchBusinessUseCaseImpl(get())
+    }
+
+    viewModel {
+        SearchBusinessViewModel(get(), get(), get())
     }
 }
