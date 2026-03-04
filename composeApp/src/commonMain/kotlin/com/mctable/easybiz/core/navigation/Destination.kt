@@ -8,5 +8,9 @@ sealed interface Destination {
         override val route = "/login"
     }
 
+    data object SearchBusiness : Destination {
+        override val route = "/search-business"
+    }
+
 
 }

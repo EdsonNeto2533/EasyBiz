@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginResponseModel(
-    @SerialName("token")
+    @SerialName("accessToken")
     val token: String,
     @SerialName("user_id")
     val userId: String? = null,

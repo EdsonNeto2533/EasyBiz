@@ -24,8 +24,6 @@ data class LoginState(
     val showPasswordError: Boolean = false,
     val showErrorDialog: Boolean = false,
     val showLoadingDialog: Boolean = false,
-    //todo remover apos criar a tela principal
-    val showToast: Boolean = false,
     val showPermissionDeniedScreen: Boolean = false,
     val showPermissionDeniedForeverScreen: Boolean = false
 )

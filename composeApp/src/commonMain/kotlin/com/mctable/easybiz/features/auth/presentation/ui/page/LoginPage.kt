@@ -2,7 +2,6 @@ package com.mctable.easybiz.features.auth.presentation.ui.page
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +47,6 @@ import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import dev.icerock.moko.permissions.location.LOCATION
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -60,7 +57,6 @@ fun LoginPage(
 
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val permissionControllerFactory = rememberPermissionsControllerFactory()
     val permissionController = remember(permissionControllerFactory) {
         permissionControllerFactory.createPermissionsController()
@@ -83,10 +79,7 @@ fun LoginPage(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) { Text("EasyBiz") }
+                Text("EasyBiz")
             })
         },
         bottomBar = {
@@ -189,12 +182,6 @@ fun LoginPage(
             AnimatedVisibility(state.showErrorDialog) {
                 ErrorDialogMolecule {
                     onEvent.invoke(LoginEvent.HideErrorDialog)
-                }
-            }
-
-            if (state.showToast) {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Login com sucesso")
                 }
             }
 

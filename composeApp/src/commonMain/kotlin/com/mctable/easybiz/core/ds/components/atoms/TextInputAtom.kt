@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,10 +38,13 @@ fun TextInputAtom(
     onChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
+    leadingIcon: Painter? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     mask: String? = null,
     showError: Boolean = false,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Next
 ) {
     var text by remember { mutableStateOf("") }
     val visualTransformation =
@@ -50,6 +55,7 @@ fun TextInputAtom(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = text,
+            keyboardActions = keyboardActions,
             onValueChange = {
                 val newText = if (mask != null) it.take(mask.count { c -> c == '#' }) else it
                 text = newText
@@ -57,6 +63,9 @@ fun TextInputAtom(
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text(placeHolder, color = Neutral400) },
+            leadingIcon = leadingIcon?.let {
+                { Icon(painter = leadingIcon, contentDescription = label, tint = Neutral400) }
+            },
             trailingIcon = {
                 if (icon != null) {
                     Icon(painter = icon, contentDescription = label)
@@ -71,7 +80,7 @@ fun TextInputAtom(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 errorBorderColor = MaterialTheme.colorScheme.error,
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
             visualTransformation = visualTransformation,
             singleLine = true,
             isError = showError,
