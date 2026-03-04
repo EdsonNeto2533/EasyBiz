@@ -7,6 +7,8 @@ import easybiz.composeapp.generated.resources.Res
 import easybiz.composeapp.generated.resources.account_circle
 import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
+import easybiz.composeapp.generated.resources.location_on
+import easybiz.composeapp.generated.resources.star
 import easybiz.composeapp.generated.resources.visibility_off
 import easybiz.composeapp.generated.resources.visibility_on
 import org.jetbrains.compose.resources.painterResource
@@ -36,5 +38,15 @@ object AppIcons {
     @Composable
     fun ArrowBack(): Painter {
         return painterResource(Res.drawable.arrow_back)
+    }
+
+    @Composable
+    fun LocationOn(): Painter {
+        return painterResource(Res.drawable.location_on)
+    }
+
+    @Composable
+    fun Star(): Painter {
+        return painterResource(Res.drawable.star)
     }
 }
