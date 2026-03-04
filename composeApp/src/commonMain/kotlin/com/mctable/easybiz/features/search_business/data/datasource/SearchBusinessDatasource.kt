@@ -24,17 +24,21 @@ class SearchBusinessDatasourceImpl(
         longitude: Double,
         name: String?
     ): Result<List<BusinessResponseModel>> {
+        val params = mutableMapOf(
+            "lat" to latitude.toString(),
+            "lon" to longitude.toString(),
+        )
+
+        name?.let {
+            params["busca"] = name
+        }
         return networking.get(
             host = appEnv.host,
             path = "/negocios/busca",
             responseMapper = { jsonString ->
                 BusinessMapper.parseResponse(jsonString)
             },
-            params = mapOf(
-                "lat" to latitude.toString(),
-                "lon" to longitude.toString(),
-                "busca" to name.toString()
-            )
+            params = params
         )
     }
 

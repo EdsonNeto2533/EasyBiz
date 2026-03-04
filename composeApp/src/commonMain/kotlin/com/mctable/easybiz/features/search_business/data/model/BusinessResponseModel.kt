@@ -25,5 +25,5 @@ data class BusinessResponseModel(
     @SerialName("notaMedia")
     val averageRating: Double,
     @SerialName("logoUrl")
-    val logo: String,
+    val logo: String?,
 )

@@ -11,5 +11,5 @@ data class BusinessEntity(
     val longitude: Double,
     val completeAddress: String,
     val averageRating: Double,
-    val logo: String,
+    val logo: String?,
 )

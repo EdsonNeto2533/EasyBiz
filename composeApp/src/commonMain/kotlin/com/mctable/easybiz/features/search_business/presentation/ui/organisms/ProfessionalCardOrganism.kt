@@ -20,7 +20,7 @@ fun ProfessionalCardOrganism(
     profession: String,
     rating: Double,
     distance: String,
-    imageUrl: String,
+    imageUrl: String?,
     onChatClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -87,13 +87,14 @@ fun ProfessionalCardOrganism(
             },
 
             trailingContent = {
-
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = name,
-                    modifier = Modifier
-                        .size(72.dp)
-                )
+                imageUrl?.let {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = name,
+                        modifier = Modifier
+                            .size(72.dp)
+                    )
+                }
             }
         )
     }
