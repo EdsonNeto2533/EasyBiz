@@ -2,7 +2,6 @@ package com.mctable.easybiz.core.ds.components.molecules
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,14 +44,13 @@ fun TopAppBarOrganism(
                     Box(
                         modifier = Modifier
                             .size(36.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFF1E6F7A)),
+                            .clip(CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = AppIcons.accountCircle(),
-                            contentDescription = "User",
-                            tint = Color.White
+                            painter = AppIcons.menu(),
+                            contentDescription = "Abrir menu",
+                            tint = Color.Black
                         )
                     }
                 }

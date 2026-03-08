@@ -156,7 +156,7 @@ fun LoginPage(
                 TextInputAtom(
                     label = state.inputLabel,
                     placeHolder = state.inputPlaceholder,
-                    icon = AppIcons.ContactEmail(),
+                    icon = AppIcons.contactEmail(),
                     showError = state.showEmailError,
                     errorMessage = state.emailErrorText,
                     onChanged = { email ->
