@@ -45,7 +45,7 @@ fun ProfessionalCardOrganism(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = AppIcons.LocationOn(),
+                            painter = AppIcons.locationOn(),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = Color.Blue
@@ -72,7 +72,7 @@ fun ProfessionalCardOrganism(
                         Spacer(Modifier.width(6.dp))
 
                         Icon(
-                            painter = AppIcons.Star(),
+                            painter = AppIcons.star(),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = Color.Yellow.copy(alpha = 0.7f)

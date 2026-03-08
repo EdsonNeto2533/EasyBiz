@@ -61,9 +61,9 @@ fun PasswordInputAtom(
                 ) {
                     Icon(
                         painter = if (isVisible)
-                            AppIcons.VisibilityOn()
+                            AppIcons.visibilityOn()
                         else
-                            AppIcons.VisibilityOff(),
+                            AppIcons.visibilityOff(),
                         contentDescription = if (isVisible) "Hide password" else "Show password"
                     )
                 }

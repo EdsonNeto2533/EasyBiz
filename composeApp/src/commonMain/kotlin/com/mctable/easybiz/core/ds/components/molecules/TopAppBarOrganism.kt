@@ -26,6 +26,7 @@ fun TopAppBarOrganism(
     title: String,
     showBackArrow: Boolean,
     onBackClick: () -> Unit = {},
+    onMenuClick: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
@@ -35,24 +36,25 @@ fun TopAppBarOrganism(
             if (showBackArrow) {
                 IconButton(onClick = onBackClick) {
                     Icon(
-                        painter = AppIcons.ArrowBack(),
+                        painter = AppIcons.arrowBack(),
                         contentDescription = "Back"
                     )
                 }
             } else {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 12.dp, end = 12.dp)
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF1E6F7A)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = AppIcons.AccountCircle(),
-                        contentDescription = "User",
-                        tint = Color.White
-                    )
+                IconButton(onClick = onMenuClick) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF1E6F7A)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = AppIcons.accountCircle(),
+                            contentDescription = "User",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }

@@ -35,7 +35,8 @@ import com.mctable.easybiz.features.search_business.presentation.ui.organisms.Pr
 @Composable
 fun SearchBusinessPage(
     state: SearchBusinessState,
-    onEvent: (SearchBusinessEvent) -> Unit
+    onEvent: (SearchBusinessEvent) -> Unit,
+    onOpenDrawer: () -> Unit = {}
 ) {
 
     val tracker = rememberLocationTracker()
@@ -48,7 +49,11 @@ fun SearchBusinessPage(
     }
     Scaffold(
         topBar = {
-            TopAppBarOrganism("EasyBiz", showBackArrow = false)
+            TopAppBarOrganism(
+                title = "EasyBiz", 
+                showBackArrow = false,
+                onMenuClick = onOpenDrawer
+            )
         }) {
         Column(
             modifier = Modifier
@@ -66,7 +71,7 @@ fun SearchBusinessPage(
                 }),
                 imeAction = ImeAction.Search,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                leadingIcon = AppIcons.Search()
+                leadingIcon = AppIcons.search()
             )
             Text(
                 state.title,
@@ -152,7 +157,8 @@ fun SearchBusinessPagePreview() {
                         logo = "https://picsum.photos/200/200?3"
                     )
                 )
-            )
-        ) {}
+            ),
+            onEvent = {}
+        )
     }
 }

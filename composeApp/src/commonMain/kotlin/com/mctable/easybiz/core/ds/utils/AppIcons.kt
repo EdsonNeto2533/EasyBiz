@@ -8,6 +8,7 @@ import easybiz.composeapp.generated.resources.account_circle
 import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
 import easybiz.composeapp.generated.resources.location_on
+import easybiz.composeapp.generated.resources.menu
 import easybiz.composeapp.generated.resources.search
 import easybiz.composeapp.generated.resources.star
 import easybiz.composeapp.generated.resources.visibility_off
@@ -17,42 +18,47 @@ import org.jetbrains.compose.resources.painterResource
 object AppIcons {
 
     @Composable
-    fun ContactEmail(): Painter {
+    fun contactEmail(): Painter {
         return painterResource(Res.drawable.contact_mail)
     }
 
     @Composable
-    fun VisibilityOff(): Painter {
+    fun visibilityOff(): Painter {
         return painterResource(Res.drawable.visibility_off)
     }
 
     @Composable
-    fun VisibilityOn(): Painter {
+    fun visibilityOn(): Painter {
         return painterResource(Res.drawable.visibility_on)
     }
 
     @Composable
-    fun AccountCircle(): Painter {
+    fun accountCircle(): Painter {
         return painterResource(Res.drawable.account_circle)
     }
 
     @Composable
-    fun ArrowBack(): Painter {
+    fun arrowBack(): Painter {
         return painterResource(Res.drawable.arrow_back)
     }
 
     @Composable
-    fun LocationOn(): Painter {
+    fun locationOn(): Painter {
         return painterResource(Res.drawable.location_on)
     }
 
     @Composable
-    fun Star(): Painter {
+    fun star(): Painter {
         return painterResource(Res.drawable.star)
     }
 
     @Composable
-    fun Search(): Painter {
+    fun search(): Painter {
         return painterResource(Res.drawable.search)
+    }
+
+    @Composable
+    fun menu(): Painter {
+        return painterResource(Res.drawable.menu)
     }
 }
