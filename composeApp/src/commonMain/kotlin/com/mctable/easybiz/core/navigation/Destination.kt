@@ -1,5 +1,9 @@
 package com.mctable.easybiz.core.navigation
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
+import com.mctable.easybiz.core.ds.utils.AppIcons
+
 sealed interface Destination {
 
     val route: String
@@ -23,6 +27,14 @@ sealed interface Destination {
                 Login.route -> Login
                 SearchBusiness.route -> SearchBusiness
                 else -> Login
+            }
+        }
+
+        @Composable
+        fun iconFromRoute(route: String?): Painter {
+            return when (route) {
+                SearchBusiness.route -> AppIcons.contactEmail()
+                else -> AppIcons.arrowBack()
             }
         }
 
