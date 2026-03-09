@@ -50,7 +50,7 @@ fun SearchBusinessPage(
     Scaffold(
         topBar = {
             TopAppBarOrganism(
-                title = "EasyBiz", 
+                title = "EasyBiz",
                 showBackArrow = false,
                 onMenuClick = onOpenDrawer
             )
@@ -85,7 +85,7 @@ fun SearchBusinessPage(
                         name = business.name,
                         profession = business.category,
                         rating = business.averageRating,
-                        distance = "2km de você",
+                        distance = "${business.distance}km de você",
                         imageUrl = business.logo,
                         onChatClick = {},
                         modifier = Modifier.padding(8.dp)
@@ -128,7 +128,8 @@ fun SearchBusinessPagePreview() {
                         longitude = -38.5267,
                         completeAddress = "Av. Dom Luís, 1200 - Aldeota, Fortaleza - CE",
                         averageRating = 4.8,
-                        logo = "https://picsum.photos/200/200?1"
+                        logo = "https://picsum.photos/200/200?1",
+                        distance = 2.0
                     ),
                     BusinessEntity(
                         id = 2,
@@ -141,7 +142,8 @@ fun SearchBusinessPagePreview() {
                         longitude = -38.5215,
                         completeAddress = "Rua Barbosa de Freitas, 890 - Meireles, Fortaleza - CE",
                         averageRating = 4.6,
-                        logo = "https://picsum.photos/200/200?2"
+                        logo = "https://picsum.photos/200/200?2",
+                        distance = 1.0
                     ),
                     BusinessEntity(
                         id = 3,
@@ -154,7 +156,8 @@ fun SearchBusinessPagePreview() {
                         longitude = -38.5152,
                         completeAddress = "Rua Silva Paulet, 450 - Meireles, Fortaleza - CE",
                         averageRating = 4.9,
-                        logo = "https://picsum.photos/200/200?3"
+                        logo = "https://picsum.photos/200/200?3",
+                        distance = 2.6
                     )
                 )
             ),

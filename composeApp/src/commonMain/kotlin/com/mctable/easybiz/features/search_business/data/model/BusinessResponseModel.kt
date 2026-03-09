@@ -26,4 +26,6 @@ data class BusinessResponseModel(
     val averageRating: Double,
     @SerialName("logoUrl")
     val logo: String?,
+    @SerialName("distanciaKm")
+    val distance: Double
 )
