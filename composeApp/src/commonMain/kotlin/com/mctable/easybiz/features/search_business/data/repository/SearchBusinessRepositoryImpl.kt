@@ -18,7 +18,7 @@ class SearchBusinessRepositoryImpl(
             latitude,
             longitude,
             name
-        ).mapCatching { responseModel ->
+        ).map { responseModel ->
             BusinessMapper.toDomain(responseModel)
         }
     }
