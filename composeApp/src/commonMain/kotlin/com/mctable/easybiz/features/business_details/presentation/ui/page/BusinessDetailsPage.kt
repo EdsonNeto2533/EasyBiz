@@ -80,13 +80,23 @@ fun BusinessDetailsPage(
                 contentAlignment = Alignment.Center
             ) {
 
-                AsyncImage(
-                    model = business?.logoUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .clip(CircleShape)
-                )
+                business?.logoUrl?.let {
+                    AsyncImage(
+                        model = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                    )
+                } ?: run {
+                    Icon(
+                        AppIcons.contactEmail(),
+                        null,
+                        modifier = Modifier
+                            .size(120.dp),
+                    )
+                }
+
 
                 if (business?.active == true) {
 
@@ -236,7 +246,7 @@ fun BusinessDetailsPagePreview() {
             longitude = 0.0,
             completeAddress = "Av. Paulista, 1500 - Bela Vista - São Paulo - SP",
             averageRating = 4.9,
-            logoUrl = "https://randomuser.me/api/portraits/men/32.jpg",
+            logoUrl = null,
             description = "Somos um profissional de mecânica com mais de 4 anos no mercado fazendo coisas e mais coisas",
             minimalValue = 100.0,
             yearsOfExperience = 5,
