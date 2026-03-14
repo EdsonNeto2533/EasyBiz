@@ -90,6 +90,26 @@ class EasyBizNetworkingImpl(
 
         }.mapTo(responseMapper)
     }
+
+    override suspend fun <T> patch(
+        host: String,
+        path: String,
+        body: Any?,
+        headers: Map<String, String>,
+        params: Map<String, String>,
+        responseMapper: (String) -> T
+    ): Result<T> = safeRequest {
+        httpClient.post {
+            url(getUrl(host,path))
+            params.forEach {
+                parameter(it.key, it.value)
+            }
+            headers.forEach {
+                header(it.key, it.value)
+            }
+            setBody(body)
+        }.mapTo(responseMapper)
+    }
     
     private fun getUrl(host: String, path: String) = "$host$path"
 
