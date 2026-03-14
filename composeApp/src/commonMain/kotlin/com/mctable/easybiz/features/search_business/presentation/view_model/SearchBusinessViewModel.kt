@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.location.LocationProvider
 import com.mctable.easybiz.core.location.SimpleLocation
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCase
@@ -33,8 +34,14 @@ class SearchBusinessViewModel(
             is SearchBusinessEvent.SetPermissionController -> handleSetPermissionController(
                 event.tracker
             )
+            is SearchBusinessEvent.OnBusinessClick -> handleOnBusinessClick(event.id)
         }
     }
+
+    private fun handleOnBusinessClick(id: Int) {
+        navigator.navigate(Destination.BusinessDetails(id))
+    }
+
 
     private fun handleSetPermissionController(tracker: LocationTracker) {
         locationProvider.setTracker(tracker)
