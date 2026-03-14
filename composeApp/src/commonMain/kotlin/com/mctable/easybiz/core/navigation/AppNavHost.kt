@@ -11,8 +11,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
+import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
+import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
 import com.mctable.easybiz.features.search_business.presentation.ui.SearchBusinessPage
 import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
 import kotlinx.coroutines.launch
@@ -51,14 +54,14 @@ fun AppNavHost() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = Destination.Login.route
+            startDestination = Destination.Login
         ) {
-            composable(Destination.Login.route) {
+            composable<Destination.Login> {
                 val viewModel = koinViewModel<LoginViewModel>()
                 LoginPage(state = viewModel.state, onEvent = { viewModel.onEvent(it) })
             }
 
-            composable(Destination.SearchBusiness.route) {
+            composable<Destination.SearchBusiness> {
                 val viewModel = koinViewModel<SearchBusinessViewModel>()
                 SearchBusinessPage(
                     state = viewModel.state,
@@ -68,6 +71,18 @@ fun AppNavHost() {
                             drawerState.open()
                         }
                     }
+                )
+            }
+
+            composable<Destination.BusinessDetails> { backStackEntry ->
+                val route: Destination.BusinessDetails = backStackEntry.toRoute()
+
+                val viewModel = koinViewModel<BusinessDetailsViewModel>()
+
+                BusinessDetailsPage(
+                    state = viewModel.state,
+                    onEvent = { viewModel.onEvent(it) },
+                    id = route.id
                 )
             }
         }

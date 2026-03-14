@@ -64,6 +64,7 @@ kotlin {
             implementation(libs.moko.permissions.localization)
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.geolocalization.compose)
+            implementation(libs.jetbrains.navigation.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

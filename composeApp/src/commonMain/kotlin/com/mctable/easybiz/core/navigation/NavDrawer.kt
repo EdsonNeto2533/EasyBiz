@@ -39,7 +39,7 @@ fun NavDrawer(
                     Column(modifier = Modifier.padding(16.dp)) {
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(painter = AppIcons.accountCircle(), "")
+                            Icon(painter = AppIcons.accountCircle(), contentDescription = null)
                             Column(
                                 modifier = Modifier.padding(start = 12.dp)
                             ) {
@@ -54,9 +54,9 @@ fun NavDrawer(
 
                         Destination.drawerDestinations.forEach { destination ->
                             NavigationDrawerItem(
-                                label = { Text(text = destination.title ?: destination.route) },
-                                icon = { Icon(Destination.iconFromRoute(destination.route), null) },
-                                selected = currentDestination == destination,
+                                label = { Text(text = destination.title ?: "") },
+                                icon = { Icon(painter = Destination.getIcon(destination), contentDescription = null) },
+                                selected = currentDestination::class == destination::class,
                                 onClick = {
                                     scope.launch { drawerState.close() }
                                     onDestinationClicked(destination)

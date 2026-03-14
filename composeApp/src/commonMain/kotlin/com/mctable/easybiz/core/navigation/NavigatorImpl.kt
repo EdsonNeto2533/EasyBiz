@@ -17,7 +17,7 @@ class NavigatorImpl() : Navigator {
     ): Result<Unit> = runCatching {
         val controller = navController
 
-        controller?.navigate(destination.route) {
+        controller?.navigate(destination) {
             if (clearBackStack) {
                 popUpTo(0) { inclusive = true }
             }
@@ -26,8 +26,7 @@ class NavigatorImpl() : Navigator {
 
     override fun pop(): Result<Unit> = runCatching {
         val controller = navController
-
-        controller?.popBackStack()
+        controller?.navigateUp()
     }
 
     override fun popTo(
@@ -36,6 +35,6 @@ class NavigatorImpl() : Navigator {
     ): Result<Unit> = runCatching {
         val controller = navController
 
-        controller?.popBackStack(destination.route, inclusive)
+        controller?.popBackStack(destination, inclusive)
     }
 }

@@ -7,10 +7,12 @@ import easybiz.composeapp.generated.resources.Res
 import easybiz.composeapp.generated.resources.account_circle
 import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
+import easybiz.composeapp.generated.resources.credit_card
 import easybiz.composeapp.generated.resources.location_on
 import easybiz.composeapp.generated.resources.menu
 import easybiz.composeapp.generated.resources.search
 import easybiz.composeapp.generated.resources.star
+import easybiz.composeapp.generated.resources.verified_user
 import easybiz.composeapp.generated.resources.visibility_off
 import easybiz.composeapp.generated.resources.visibility_on
 import org.jetbrains.compose.resources.painterResource
@@ -60,5 +62,15 @@ object AppIcons {
     @Composable
     fun menu(): Painter {
         return painterResource(Res.drawable.menu)
+    }
+
+    @Composable
+    fun creditCard(): Painter {
+        return painterResource(Res.drawable.credit_card)
+    }
+
+    @Composable
+    fun verified(): Painter {
+        return painterResource(Res.drawable.verified_user)
     }
 }

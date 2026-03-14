@@ -87,7 +87,9 @@ fun SearchBusinessPage(
                         rating = business.averageRating,
                         distance = "${business.distance}km de você",
                         imageUrl = business.logo,
-                        onChatClick = {},
+                        onChatClick = {
+                            onEvent.invoke(SearchBusinessEvent.OnBusinessClick(business.id))
+                        },
                         modifier = Modifier.padding(8.dp)
                     )
                 }
