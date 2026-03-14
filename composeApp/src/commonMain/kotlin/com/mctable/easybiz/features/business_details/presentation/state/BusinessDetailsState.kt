@@ -4,6 +4,12 @@ import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetai
 
 data class BusinessDetailsState(
     val businessDetails: BusinessDetailsEntity? = null,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false
+    val showLoading: Boolean = false,
+    val showError: Boolean = false,
+    val pageTitle: String = "",
+    val availableLabel: String = "",
+    val ratingReviewsLabel: String = "",
+    val addressTitle: String = "",
+    val startChatLabel: String = "",
+    val descriptionLabel: String = ""
 )

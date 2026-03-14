@@ -23,23 +23,33 @@ class BusinessDetailsViewModel(
         when (event) {
             is BusinessDetailsEvent.GetBusinessDetails -> handleGetBusinessDetails(event.id)
             BusinessDetailsEvent.StartChat -> handleStartChat()
+            BusinessDetailsEvent.OnBackClick -> handleBackClick()
         }
     }
 
+    private fun handleBackClick(){
+        navigator.pop()
+    }
+
     private fun handleGetBusinessDetails(id: Int) {
-        state = state.copy(isLoading = true, isError = false)
+        state = state.copy(showLoading = true, showError = false)
         viewModelScope.launch {
             getBusinessDetailsUseCase.execute(id).fold(
                 onSuccess = { details ->
                     state = state.copy(
+                        pageTitle = "Perfil do Prestador",
+                        availableLabel = "Disponível",
+                        addressTitle = "Endereço",
+                        startChatLabel = "Iniciar chat",
+                        descriptionLabel = "Sobre",
                         businessDetails = details,
-                        isLoading = false
+                        showLoading = false
                     )
                 },
                 onFailure = {
                     state = state.copy(
-                        isLoading = false,
-                        isError = true
+                        showLoading = false,
+                        showError = true
                     )
                 }
             )

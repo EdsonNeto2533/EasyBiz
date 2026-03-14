@@ -23,7 +23,11 @@ object BusinessDetailsMapper {
             longitude = model.longitude,
             completeAddress = model.completeAddress,
             averageRating = model.averageRating,
-            logoUrl = model.logoUrl
+            logoUrl = model.logoUrl,
+            description = model.description,
+            minimalValue = model.minimalValue,
+            yearsOfExperience = model.yearsOfExperience,
+            totalRatings = model.totalRatings
         )
     }
 }

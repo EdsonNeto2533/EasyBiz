@@ -26,8 +26,7 @@ class NavigatorImpl() : Navigator {
 
     override fun pop(): Result<Unit> = runCatching {
         val controller = navController
-
-        controller?.popBackStack()
+        controller?.navigateUp()
     }
 
     override fun popTo(

@@ -25,5 +25,13 @@ data class BusinessDetailsResponseModel(
     @SerialName("notaMedia")
     val averageRating: Double,
     @SerialName("logoUrl")
-    val logoUrl: String?
+    val logoUrl: String?,
+    @SerialName("descricao")
+    val description: String?,
+    @SerialName("precoMinimo")
+    val minimalValue: Double?,
+    @SerialName("anosExperiencia")
+    val yearsOfExperience: Int?,
+    @SerialName("totalAvaliacoes")
+    val totalRatings: Int?,
 )

@@ -11,5 +11,9 @@ data class BusinessDetailsEntity(
     val longitude: Double,
     val completeAddress: String,
     val averageRating: Double,
-    val logoUrl: String?
+    val logoUrl: String?,
+    val description: String?,
+    val minimalValue: Double?,
+    val yearsOfExperience: Int?,
+    val totalRatings: Int?,
 )
