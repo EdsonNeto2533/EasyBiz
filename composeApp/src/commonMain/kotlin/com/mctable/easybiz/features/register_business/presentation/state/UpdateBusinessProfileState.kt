@@ -8,5 +8,6 @@ data class UpdateBusinessProfileState(
     val image: ByteArray? = null,
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val success: Boolean = false
+    val success: Boolean = false,
+    val enableButton: Boolean = false
 )

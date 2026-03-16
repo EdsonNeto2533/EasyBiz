@@ -26,22 +26,33 @@ class UpdateBusinessProfileViewModel(
             is UpdateBusinessProfileEvent.UpdateBusiness -> handleUpdateBusiness(event.id)
             UpdateBusinessProfileEvent.OnBackPressed -> navigator.pop()
             is UpdateBusinessProfileEvent.DescriptionChanged -> {
-                state = state.copy(description = event.description)
+                state = state.copy(description = event.description, enableButton = validateFields())
             }
+
             is UpdateBusinessProfileEvent.CellphoneChanged -> {
-                state = state.copy(cellphone = event.cellphone)
+                state = state.copy(cellphone = event.cellphone, enableButton = validateFields())
             }
+
             is UpdateBusinessProfileEvent.MinimalPriceChanged -> {
-                state = state.copy(minimalPrice = event.price)
+                state = state.copy(minimalPrice = event.price, enableButton = validateFields())
             }
+
             is UpdateBusinessProfileEvent.YearsOfExperienceChanged -> {
-                state = state.copy(yearsOfExperience = event.years)
+                state = state.copy(yearsOfExperience = event.years, enableButton = validateFields())
             }
+
             is UpdateBusinessProfileEvent.ImageChanged -> {
                 state = state.copy(image = event.image)
             }
+
+            UpdateBusinessProfileEvent.DismissErrorModal -> {
+                state = state.copy(isError = false)
+            }
         }
     }
+
+    private fun validateFields(): Boolean =
+        state.description.isNotBlank() && state.cellphone.isNotBlank() && state.minimalPrice.isNotBlank() && state.yearsOfExperience.isNotBlank()
 
     private fun handleUpdateBusiness(id: Int) {
         state = state.copy(isLoading = true, isError = false)

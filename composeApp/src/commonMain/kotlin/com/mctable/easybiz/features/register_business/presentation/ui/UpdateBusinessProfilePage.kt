@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.register_business.presentation.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,8 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
+import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
 import com.mctable.easybiz.features.register_business.presentation.event.UpdateBusinessProfileEvent
 import com.mctable.easybiz.features.register_business.presentation.state.UpdateBusinessProfileState
 
@@ -54,7 +58,7 @@ fun UpdateBusinessProfilePage(
             ButtonAtom(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 text = "Salvar alterações",
-                isEnabled = !state.isLoading,
+                isEnabled = state.enableButton,
                 onClick = { onEvent(UpdateBusinessProfileEvent.UpdateBusiness(id)) }
             )
         }
@@ -142,6 +146,16 @@ fun UpdateBusinessProfilePage(
             )
 
             Spacer(Modifier.height(40.dp))
+
+            if (state.isLoading) {
+                LoadingDialogMolecule()
+            }
+
+            AnimatedVisibility(state.isError) {
+                ErrorDialogMolecule {
+                    onEvent.invoke(UpdateBusinessProfileEvent.DismissErrorModal)
+                }
+            }
         }
     }
 }
