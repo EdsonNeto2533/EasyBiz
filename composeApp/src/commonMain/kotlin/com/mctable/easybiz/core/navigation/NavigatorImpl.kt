@@ -19,7 +19,9 @@ class NavigatorImpl() : Navigator {
 
         controller?.navigate(destination) {
             if (clearBackStack) {
-                popUpTo(0) { inclusive = true }
+                navController?.currentDestination?.id?.let { currentId ->
+                    popUpTo(currentId) { inclusive = true }
+                }
             }
         }
     }

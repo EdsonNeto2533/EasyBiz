@@ -26,6 +26,11 @@ sealed interface Destination {
         override val isLoggedArea = true
     }
 
+    @Serializable
+    data object RegisterBusiness : Destination {
+        override val isLoggedArea = true
+    }
+
     companion object {
         @Composable
         fun getIcon(destination: Destination): Painter {
@@ -39,12 +44,14 @@ sealed interface Destination {
             return when {
                 route?.contains("SearchBusiness") == true -> SearchBusiness
                 route?.contains("BusinessDetails") == true -> BusinessDetails(0)
+                route?.contains("RegisterBusiness") == true -> RegisterBusiness
                 else -> Login
             }
         }
 
         val drawerDestinations = listOf<Destination>(
-            SearchBusiness
+            SearchBusiness,
+            RegisterBusiness
         )
     }
 }
