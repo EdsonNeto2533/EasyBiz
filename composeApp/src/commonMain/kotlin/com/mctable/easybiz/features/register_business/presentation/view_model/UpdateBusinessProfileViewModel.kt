@@ -68,13 +68,26 @@ class UpdateBusinessProfileViewModel(
 
             updateResult.onSuccess {
                 state.image?.let { imageBytes ->
-                    addLogoUseCase.execute(id, imageBytes)
+                    updateUserImage(id, imageBytes)
+                } ?: run {
+                    state = state.copy(isLoading = false, success = true)
+                    navigator.pop()
                 }
-                state = state.copy(isLoading = false, success = true)
-                // navigator.pop() or next screen
             }.onFailure {
                 state = state.copy(isLoading = false, isError = true)
             }
         }
+    }
+
+    private suspend fun updateUserImage(id: Int, imageBytes: ByteArray){
+        addLogoUseCase.execute(id, imageBytes).fold(
+            onSuccess = {
+                state = state.copy(isLoading = false, success = true)
+                navigator.pop()
+            },
+            onFailure = {
+                state = state.copy(isLoading = false, isError = true)
+            }
+        )
     }
 }

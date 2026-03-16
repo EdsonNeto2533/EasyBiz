@@ -17,13 +17,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
@@ -32,6 +35,8 @@ import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.features.register_business.presentation.event.UpdateBusinessProfileEvent
 import com.mctable.easybiz.features.register_business.presentation.state.UpdateBusinessProfileState
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 
 @Composable
 fun UpdateBusinessProfilePage(
@@ -41,6 +46,18 @@ fun UpdateBusinessProfilePage(
 ) {
 
     val scrollState = rememberScrollState()
+
+    val scope = rememberCoroutineScope()
+
+    val singleImagePicker = rememberImagePickerLauncher(
+        selectionMode = SelectionMode.Single,
+        scope = scope,
+        onResult = { byteArrays ->
+            byteArrays.firstOrNull()?.let {
+                onEvent(UpdateBusinessProfileEvent.ImageChanged(it))
+            }
+        }
+    )
 
     Scaffold(
 
@@ -88,16 +105,25 @@ fun UpdateBusinessProfilePage(
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable {
-                        // Placeholder click
+                        singleImagePicker.launch()
                     },
                 contentAlignment = Alignment.Center
             ) {
 
-                Text(
-                    text = "Adicionar imagem",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (state.image != null) {
+                    AsyncImage(
+                        model = state.image,
+                        contentDescription = "Business Logo",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Text(
+                        text = "Adicionar imagem",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             Spacer(Modifier.height(24.dp))
