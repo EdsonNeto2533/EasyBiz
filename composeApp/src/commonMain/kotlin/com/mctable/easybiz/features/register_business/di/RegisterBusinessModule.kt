@@ -10,11 +10,12 @@ import com.mctable.easybiz.features.register_business.domain.usecase.AddLogoUseC
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
 import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val registerBusinessModule = module {
     single<RegisterBusinessDatasource> {
-        RegisterBusinessDatasourceImpl(get(), get())
+        RegisterBusinessDatasourceImpl(get(), get(named("multiPart")), get())
     }
 
     single<RegisterBusinessRepository> {

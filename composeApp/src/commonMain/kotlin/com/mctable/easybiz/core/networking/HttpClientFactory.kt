@@ -51,4 +51,32 @@ object HttpClientFactory {
         }
 
     }
+
+    fun buildMultiPart(
+        easyBizStorage: EasyBizStorage
+    ): HttpClient = HttpClient() {
+        install(Logging) {
+            level = LogLevel.ALL
+            logger = object : Logger {
+                override fun log(message: String) {
+                    println(message)
+                }
+            }
+        }
+
+        install(AuthTokenPlugin) {
+            storage = easyBizStorage
+        }
+
+        defaultRequest {
+            contentType(ContentType.MultiPart.FormData)
+        }
+
+        install(HttpTimeout) {
+            requestTimeoutMillis = 30.seconds.inWholeMilliseconds
+            connectTimeoutMillis = 30.seconds.inWholeMilliseconds
+            socketTimeoutMillis = 30.seconds.inWholeMilliseconds
+        }
+
+    }
 }
