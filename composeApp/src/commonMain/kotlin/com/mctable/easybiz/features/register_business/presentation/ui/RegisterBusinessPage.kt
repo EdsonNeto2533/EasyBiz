@@ -28,7 +28,6 @@ import com.mctable.easybiz.core.helpers.BindLocationTracker
 import com.mctable.easybiz.core.helpers.rememberLocationTracker
 import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
 import com.mctable.easybiz.features.register_business.presentation.state.RegisterBusinessState
-import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 
 @Composable
 fun RegisterBusinessPage(
