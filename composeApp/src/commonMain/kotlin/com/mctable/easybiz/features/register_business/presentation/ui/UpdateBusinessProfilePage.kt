@@ -145,16 +145,16 @@ fun UpdateBusinessProfilePage(
             )
 
             Spacer(Modifier.height(40.dp))
+        }
+    }
 
-            if (state.isLoading) {
-                LoadingDialogMolecule()
-            }
+    if (state.isLoading) {
+        LoadingDialogMolecule()
+    }
 
-            AnimatedVisibility(state.isError) {
-                ErrorDialogMolecule {
-                    onEvent.invoke(UpdateBusinessProfileEvent.DismissErrorModal)
-                }
-            }
+    AnimatedVisibility(state.isError) {
+        ErrorDialogMolecule {
+            onEvent.invoke(UpdateBusinessProfileEvent.DismissErrorModal)
         }
     }
 }

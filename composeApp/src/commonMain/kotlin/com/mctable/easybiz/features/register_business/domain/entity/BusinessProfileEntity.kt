@@ -12,7 +12,7 @@ data class BusinessProfileEntity(
     val completeAddress: String,
     val averageRating: Double,
     val logoUrl: String?,
-    val distanceKm: Double,
+    val distanceKm: Double?,
     val description: String?,
     val telephone: String?,
     val minimumPrice: Double?,

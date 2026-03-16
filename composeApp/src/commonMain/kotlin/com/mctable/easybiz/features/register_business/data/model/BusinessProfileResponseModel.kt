@@ -16,7 +16,7 @@ data class BusinessProfileResponseModel(
     @SerialName("enderecoCompleto") val completeAddress: String,
     @SerialName("notaMedia") val averageRating: Double,
     val logoUrl: String? = null,
-    @SerialName("distanciaKm") val distanceKm: Double,
+    @SerialName("distanciaKm") val distanceKm: Double? = null,
     @SerialName("descricao") val description: String? = null,
     @SerialName("telefone") val telephone: String? = null,
     @SerialName("precoMinimo") val minimumPrice: Double? = null,
