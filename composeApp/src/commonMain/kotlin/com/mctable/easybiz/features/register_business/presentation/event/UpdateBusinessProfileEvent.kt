@@ -1,7 +1,7 @@
 package com.mctable.easybiz.features.register_business.presentation.event
 
 sealed class UpdateBusinessProfileEvent {
-    data object UpdateBusiness : UpdateBusinessProfileEvent()
+    data class UpdateBusiness(val id: Int) : UpdateBusinessProfileEvent()
     data object OnBackPressed : UpdateBusinessProfileEvent()
     data class DescriptionChanged(val description: String) : UpdateBusinessProfileEvent()
     data class CellphoneChanged(val cellphone: String) : UpdateBusinessProfileEvent()

@@ -6,5 +6,6 @@ data class RegisterBusinessState(
     val completeAddress: String = "",
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val success: Boolean = false
+    val success: Boolean = false,
+    val enableButton: Boolean = false
 )

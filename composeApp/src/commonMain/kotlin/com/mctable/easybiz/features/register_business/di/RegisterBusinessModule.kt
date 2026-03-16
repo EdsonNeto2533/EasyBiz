@@ -25,6 +25,6 @@ val registerBusinessModule = module {
     factory { UpdateBusinessProfileUseCase(get()) }
     factory { AddLogoUseCase(get()) }
 
-    viewModel { RegisterBusinessViewModel(get(), get()) }
-    viewModel { (businessId: Int) -> UpdateBusinessProfileViewModel(businessId, get(), get(), get()) }
+    viewModel { RegisterBusinessViewModel(get(), get(), get()) }
+    viewModel { (businessId: Int) -> UpdateBusinessProfileViewModel( get(), get(), get()) }
 }

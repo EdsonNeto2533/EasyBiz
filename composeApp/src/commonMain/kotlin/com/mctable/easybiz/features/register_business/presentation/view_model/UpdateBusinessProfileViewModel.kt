@@ -13,7 +13,6 @@ import com.mctable.easybiz.features.register_business.presentation.state.UpdateB
 import kotlinx.coroutines.launch
 
 class UpdateBusinessProfileViewModel(
-    private val businessId: Int,
     private val updateBusinessProfileUseCase: UpdateBusinessProfileUseCase,
     private val addLogoUseCase: AddLogoUseCase,
     private val navigator: Navigator
@@ -24,7 +23,7 @@ class UpdateBusinessProfileViewModel(
 
     fun onEvent(event: UpdateBusinessProfileEvent) {
         when (event) {
-            UpdateBusinessProfileEvent.UpdateBusiness -> handleUpdateBusiness()
+            is UpdateBusinessProfileEvent.UpdateBusiness -> handleUpdateBusiness(event.id)
             UpdateBusinessProfileEvent.OnBackPressed -> navigator.pop()
             is UpdateBusinessProfileEvent.DescriptionChanged -> {
                 state = state.copy(description = event.description)
@@ -44,11 +43,11 @@ class UpdateBusinessProfileViewModel(
         }
     }
 
-    private fun handleUpdateBusiness() {
+    private fun handleUpdateBusiness(id: Int) {
         state = state.copy(isLoading = true, isError = false)
         viewModelScope.launch {
             val updateResult = updateBusinessProfileUseCase.execute(
-                id = businessId,
+                id = id,
                 description = state.description,
                 telephone = state.cellphone,
                 minimumPrice = state.minimalPrice.toDoubleOrNull() ?: 0.0,
@@ -58,7 +57,7 @@ class UpdateBusinessProfileViewModel(
 
             updateResult.onSuccess {
                 state.image?.let { imageBytes ->
-                    addLogoUseCase.execute(businessId, imageBytes)
+                    addLogoUseCase.execute(id, imageBytes)
                 }
                 state = state.copy(isLoading = false, success = true)
                 // navigator.pop() or next screen

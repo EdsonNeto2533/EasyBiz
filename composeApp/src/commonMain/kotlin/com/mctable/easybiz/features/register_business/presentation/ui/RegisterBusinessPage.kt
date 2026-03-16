@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.register_business.presentation.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,12 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
+import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.helpers.BindLocationTracker
 import com.mctable.easybiz.core.helpers.rememberLocationTracker
 import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
 import com.mctable.easybiz.features.register_business.presentation.state.RegisterBusinessState
+import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 
 @Composable
 fun RegisterBusinessPage(
@@ -38,7 +42,7 @@ fun RegisterBusinessPage(
 
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         onEvent.invoke(RegisterBusinessEvent.SetPermissionController(tracker))
     }
 
@@ -57,7 +61,7 @@ fun RegisterBusinessPage(
             ButtonAtom(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 text = "Cadastrar empresa",
-                isEnabled = !state.isLoading,
+                isEnabled = state.enableButton,
                 onClick = { onEvent(RegisterBusinessEvent.CreateBusiness) }
             )
         }
@@ -112,6 +116,16 @@ fun RegisterBusinessPage(
             )
 
             Spacer(Modifier.height(40.dp))
+
+            if (state.isLoading) {
+                LoadingDialogMolecule()
+            }
+
+            AnimatedVisibility(state.isError) {
+                ErrorDialogMolecule {
+                    onEvent.invoke(RegisterBusinessEvent.DismissErrorModal)
+                }
+            }
         }
     }
 }

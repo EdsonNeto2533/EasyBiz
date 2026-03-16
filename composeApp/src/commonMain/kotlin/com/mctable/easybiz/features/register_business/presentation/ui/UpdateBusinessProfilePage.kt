@@ -32,6 +32,7 @@ import com.mctable.easybiz.features.register_business.presentation.state.UpdateB
 
 @Composable
 fun UpdateBusinessProfilePage(
+    id: Int,
     state: UpdateBusinessProfileState,
     onEvent: (UpdateBusinessProfileEvent) -> Unit
 ) {
@@ -54,7 +55,7 @@ fun UpdateBusinessProfilePage(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 text = "Salvar alterações",
                 isEnabled = !state.isLoading,
-                onClick = { onEvent(UpdateBusinessProfileEvent.UpdateBusiness) }
+                onClick = { onEvent(UpdateBusinessProfileEvent.UpdateBusiness(id)) }
             )
         }
 
@@ -161,7 +162,8 @@ fun UpdateBusinessProfilePagePreview() {
 
         UpdateBusinessProfilePage(
             state = state,
-            onEvent = {}
+            onEvent = {},
+            id = 1
         )
     }
 }

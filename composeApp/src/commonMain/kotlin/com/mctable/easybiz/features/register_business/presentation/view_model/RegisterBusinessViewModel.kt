@@ -29,18 +29,21 @@ class RegisterBusinessViewModel(
             RegisterBusinessEvent.CreateBusiness -> handleCreateBusiness()
             RegisterBusinessEvent.OnBackPressed -> navigator.pop()
             is RegisterBusinessEvent.BusinessNameChanged -> {
-                state = state.copy(businessName = event.name)
+                state = state.copy(businessName = event.name, enableButton = validateFields())
             }
 
             is RegisterBusinessEvent.CategoryNameChanged -> {
-                state = state.copy(category = event.category)
+                state = state.copy(category = event.category, enableButton = validateFields())
             }
 
             is RegisterBusinessEvent.CompleteAddressChanged -> {
-                state = state.copy(completeAddress = event.address)
+                state = state.copy(completeAddress = event.address, enableButton = validateFields())
             }
 
             is RegisterBusinessEvent.SetPermissionController -> handleSetPermissionController(event.tracker)
+            RegisterBusinessEvent.DismissErrorModal -> {
+                state = state.copy(isError = false)
+            }
         }
     }
 
@@ -82,5 +85,17 @@ class RegisterBusinessViewModel(
             locationProvider.stop()
         }
 
+    }
+
+    private fun validateFields(): Boolean {
+        return validateName(state.businessName) && validateName(state.completeAddress) && state.category.isNotBlank()
+    }
+
+    private fun validateName(name: String): Boolean {
+        val words = name.trim()
+            .split("\\s+".toRegex())
+            .filter { it.isNotBlank() }
+
+        return words.size >= 2
     }
 }
