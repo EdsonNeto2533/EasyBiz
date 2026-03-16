@@ -29,6 +29,7 @@ sealed interface Destination {
     @Serializable
     data object RegisterBusiness : Destination {
         override val isLoggedArea = true
+        override val title = "Cadastrar negócio"
     }
 
     companion object {
