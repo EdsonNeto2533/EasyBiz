@@ -32,6 +32,11 @@ sealed interface Destination {
         override val title = "Cadastrar negócio"
     }
 
+    @Serializable
+    data class UpdateBusiness(val id: Int) : Destination {
+        override val isLoggedArea = true
+    }
+
     companion object {
         @Composable
         fun getIcon(destination: Destination): Painter {
@@ -44,7 +49,6 @@ sealed interface Destination {
         fun fromRoute(route: String?): Destination {
             return when {
                 route?.contains("SearchBusiness") == true -> SearchBusiness
-                route?.contains("BusinessDetails") == true -> BusinessDetails(0)
                 route?.contains("RegisterBusiness") == true -> RegisterBusiness
                 else -> Login
             }

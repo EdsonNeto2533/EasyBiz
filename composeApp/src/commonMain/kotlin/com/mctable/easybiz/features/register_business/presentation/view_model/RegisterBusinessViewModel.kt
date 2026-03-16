@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.location.LocationProvider
 import com.mctable.easybiz.core.location.SimpleLocation
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.register_business.domain.usecase.CreateBusinessUseCase
 import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
@@ -65,7 +66,7 @@ class RegisterBusinessViewModel(
             result.fold(
                 onSuccess = {
                     state = state.copy(isLoading = false, success = true)
-                    // Navigate to next step or profile update
+                    navigator.navigate(Destination.UpdateBusiness(it.id), true)
                 },
                 onFailure = {
                     state = state.copy(isLoading = false, isError = true)

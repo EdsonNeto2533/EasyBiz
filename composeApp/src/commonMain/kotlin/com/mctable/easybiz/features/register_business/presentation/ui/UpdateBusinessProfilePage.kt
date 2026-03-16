@@ -30,7 +30,6 @@ import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
-import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
 import com.mctable.easybiz.features.register_business.presentation.event.UpdateBusinessProfileEvent
 import com.mctable.easybiz.features.register_business.presentation.state.UpdateBusinessProfileState
 
