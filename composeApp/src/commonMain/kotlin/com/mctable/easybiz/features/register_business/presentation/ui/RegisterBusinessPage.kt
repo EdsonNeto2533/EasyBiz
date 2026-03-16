@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +21,8 @@ import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.helpers.BindLocationTracker
+import com.mctable.easybiz.core.helpers.rememberLocationTracker
 import com.mctable.easybiz.features.register_business.presentation.event.RegisterBusinessEvent
 import com.mctable.easybiz.features.register_business.presentation.state.RegisterBusinessState
 
@@ -29,7 +32,15 @@ fun RegisterBusinessPage(
     onEvent: (RegisterBusinessEvent) -> Unit
 ) {
 
+    val tracker = rememberLocationTracker()
+
+    BindLocationTracker(tracker)
+
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit){
+        onEvent.invoke(RegisterBusinessEvent.SetPermissionController(tracker))
+    }
 
     Scaffold(
 
