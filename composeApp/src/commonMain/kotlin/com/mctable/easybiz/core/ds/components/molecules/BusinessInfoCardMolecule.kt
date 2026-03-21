@@ -32,12 +32,13 @@ fun BusinessInfoCardMolecule(
     logoUrl: String?,
     onClick: () -> Unit,
     onEditClick: (() -> Unit)? = null,
-    extraContent: (@Composable () -> Unit)? = null
+    extraContent: (@Composable () -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { onClick() }.then(modifier),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(

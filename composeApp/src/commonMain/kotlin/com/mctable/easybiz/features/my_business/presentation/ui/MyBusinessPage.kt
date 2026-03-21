@@ -37,7 +37,6 @@ fun MyBusinessPage(
     }
 
     Scaffold(
-
         topBar = {
             TopAppBarOrganism(
                 title = "Meus negócios",
@@ -45,7 +44,6 @@ fun MyBusinessPage(
                 onBackClick = { onEvent(MyBusinessEvent.OnBackPressed) }
             )
         }
-
     ) { padding ->
 
         Box(
@@ -53,11 +51,8 @@ fun MyBusinessPage(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-
             when {
-
                 state.myBusinessList.isEmpty() && !state.isLoading -> {
-
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -65,7 +60,6 @@ fun MyBusinessPage(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-
                         Text(
                             text = "Você ainda não possui negócios cadastrados",
                             style = MaterialTheme.typography.bodyLarge,
@@ -75,28 +69,19 @@ fun MyBusinessPage(
                 }
 
                 else -> {
-
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-
                         items(state.myBusinessList.size) { index ->
-
                             val business = state.myBusinessList[index]
-
-
                             MyBusinessCard(
                                 business = business,
                                 onClick = {
-                                    onEvent(
-                                        MyBusinessEvent.OnBusinessClicked(business.id)
-                                    )
+                                    onEvent(MyBusinessEvent.OnBusinessClicked(business.id))
                                 },
                                 onEditClick = {
-                                    onEvent(
-                                        MyBusinessEvent.OnEditBusinessClicked(business.id)
-                                    )
+                                    onEvent(MyBusinessEvent.OnEditBusinessClicked(business.id))
                                 }
                             )
                         }
@@ -104,12 +89,10 @@ fun MyBusinessPage(
                 }
             }
 
-            // Loading
             if (state.isLoading) {
                 LoadingDialogMolecule()
             }
 
-            // Error
             AnimatedVisibility(state.isError) {
                 ErrorDialogMolecule {
                     onEvent.invoke(MyBusinessEvent.GetMyBusiness)
@@ -122,62 +105,36 @@ fun MyBusinessPage(
 @Preview
 @Composable
 fun MyBusinessPagePreview() {
-
     val state = MyBusinessState(
         myBusinessList = listOf(
             MyBusinessEntity(
                 id = 1,
-                name = "Mecânica do Ricardo",
-                category = "Mecânico",
-                userId = 10,
-                userName = "Ricardo",
+                name = "Oficina do Ricardo",
+                category = "MECANICO",
+                userId = 1,
+                userName = "Ricardo Silva",
                 active = true,
-                latitude = -23.561684,
-                longitude = -46.625378,
-                completeAddress = "Av. Paulista, 1500 - Bela Vista - São Paulo - SP",
+                latitude = -23.5505,
+                longitude = -46.6333,
+                completeAddress = "Rua Teste, 123",
                 averageRating = 4.8,
-                logoUrl = "https://randomuser.me/api/portraits/men/32.jpg",
-                distanceKm = 2.5,
-                description = "Especialista em motores e revisão completa.",
-                telephone = "(11) 99999-9999",
-                minimumPrice = 150.0,
-                yearsOfExperience = 10,
-                workingHours = "08:00 - 18:00",
-                totalReviews = 124,
-                totalCompletedOrders = 320,
-                highlightReview = "Excelente atendimento!",
-                highlightReviewAuthor = "João Silva",
-                isFavorited = true
-            ),
-            MyBusinessEntity(
-                id = 2,
-                name = "Elétrica Silva",
-                category = "Eletricista",
-                userId = 11,
-                userName = "Carlos Silva",
-                active = false,
-                latitude = -23.55052,
-                longitude = -46.633308,
-                completeAddress = "Rua Augusta, 500 - Consolação - São Paulo - SP",
-                averageRating = 4.5,
-                logoUrl = "https://randomuser.me/api/portraits/men/45.jpg",
-                distanceKm = 5.2,
-                description = "Instalações elétricas residenciais e comerciais.",
-                telephone = "(11) 98888-7777",
-                minimumPrice = 100.0,
-                yearsOfExperience = 8,
-                workingHours = "09:00 - 17:00",
-                totalReviews = 89,
-                totalCompletedOrders = 210,
-                highlightReview = "Muito profissional!",
-                highlightReviewAuthor = "Maria Souza",
+                logoUrl = null,
+                distanceKm = 0.0,
+                description = null,
+                telephone = null,
+                minimumPrice = null,
+                yearsOfExperience = null,
+                workingHours = null,
+                totalReviews = null,
+                totalCompletedOrders = null,
+                highlightReview = null,
+                highlightReviewAuthor = null,
                 isFavorited = false
             )
         )
     )
 
     EasyBizTheme {
-
         MyBusinessPage(
             state = state,
             onEvent = {}

@@ -13,11 +13,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.molecules.BusinessInfoCardMolecule
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
 import com.mctable.easybiz.features.my_orders.presentation.state.MyOrderState
 
@@ -71,7 +74,8 @@ fun MyOrderPage(
                         onClick = { /* Do nothing for now */ },
                         extraContent = {
                            // Future info here
-                        }
+                        },
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     )
                 }
             }
@@ -86,5 +90,45 @@ fun MyOrderPage(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun MyOrderPagePreview() {
+    val state = MyOrderState(
+        orders = listOf(
+            MyOrderEntity(
+                id = 1,
+                clientId = 2,
+                clientName = "Ana Souza",
+                businessId = 1,
+                businessName = "Marcos Elétrica",
+                description = "Instalar chuveiro",
+                desiredDate = "2026-03-21T15:08:39.551Z",
+                status = "ABERTO",
+                createdAt = "2026-03-21T15:08:39.551Z",
+                businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
+            ),
+            MyOrderEntity(
+                id = 1,
+                clientId = 2,
+                clientName = "Ana Souza",
+                businessId = 1,
+                businessName = "Marcos Elétrica",
+                description = "Instalar chuveiro",
+                desiredDate = "2026-03-21T15:08:39.551Z",
+                status = "ABERTO",
+                createdAt = "2026-03-21T15:08:39.551Z",
+                businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
+            )
+        )
+    )
+
+    EasyBizTheme {
+        MyOrderPage(
+            state = state,
+            onEvent = {}
+        )
     }
 }
