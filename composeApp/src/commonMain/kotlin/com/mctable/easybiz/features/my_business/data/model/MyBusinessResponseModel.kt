@@ -16,15 +16,15 @@ data class MyBusinessResponseModel(
     @SerialName("enderecoCompleto") val completeAddress: String,
     @SerialName("notaMedia") val averageRating: Double,
     val logoUrl: String? = null,
-    @SerialName("distanciaKm") val distanceKm: Double,
+    @SerialName("distanciaKm") val distanceKm: Double? = null,
     @SerialName("descricao") val description: String? = null,
     @SerialName("telefone") val telephone: String? = null,
     @SerialName("precoMinimo") val minimumPrice: Double? = null,
     @SerialName("anosExperiencia") val yearsOfExperience: Int? = null,
     @SerialName("horarioFuncionamento") val workingHours: String? = null,
-    val totalReviews: Int? = null,
-    val totalCompletedOrders: Int? = null,
+    @SerialName("totalAvaliacoes") val totalReviews: Int? = null,
+    @SerialName("totalPedidosConcluidos") val totalCompletedOrders: Int? = null,
     @SerialName("avaliacaoDestaque") val highlightReview: String? = null,
     @SerialName("avaliacaoDestaqueAutor") val highlightReviewAuthor: String? = null,
-    val isFavoritado: Boolean
+    val isFavoritado: Boolean? = null
 )

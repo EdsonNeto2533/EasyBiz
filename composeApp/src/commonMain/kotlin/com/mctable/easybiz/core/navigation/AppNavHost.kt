@@ -16,6 +16,8 @@ import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
+import com.mctable.easybiz.features.my_business.presentation.ui.MyBusinessPage
+import com.mctable.easybiz.features.my_business.presentation.view_model.MyBusinessViewModel
 import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
 import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
@@ -106,6 +108,16 @@ fun AppNavHost() {
                     state = viewModel.state,
                     onEvent = { event -> viewModel.onEvent(event) },
                     id = route.id
+                )
+
+            }
+
+            composable<Destination.MyBusiness> {
+                val viewModel = koinViewModel<MyBusinessViewModel>()
+
+                MyBusinessPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
                 )
 
             }

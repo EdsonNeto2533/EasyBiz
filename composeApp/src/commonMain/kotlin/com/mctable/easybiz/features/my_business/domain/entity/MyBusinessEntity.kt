@@ -12,7 +12,7 @@ data class MyBusinessEntity(
     val completeAddress: String,
     val averageRating: Double,
     val logoUrl: String?,
-    val distanceKm: Double,
+    val distanceKm: Double?,
     val description: String?,
     val telephone: String?,
     val minimumPrice: Double?,
@@ -22,5 +22,5 @@ data class MyBusinessEntity(
     val totalCompletedOrders: Int?,
     val highlightReview: String?,
     val highlightReviewAuthor: String?,
-    val isFavorited: Boolean
+    val isFavorited: Boolean?
 )
