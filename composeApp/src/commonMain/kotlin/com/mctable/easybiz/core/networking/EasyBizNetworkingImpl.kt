@@ -5,6 +5,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -88,6 +89,26 @@ class EasyBizNetworkingImpl(
                 header(it.key, it.value)
             }
 
+        }.mapTo(responseMapper)
+    }
+
+    override suspend fun <T> patch(
+        host: String,
+        path: String,
+        body: Any?,
+        headers: Map<String, String>,
+        params: Map<String, String>,
+        responseMapper: (String) -> T
+    ): Result<T> = safeRequest {
+        httpClient.patch {
+            url(getUrl(host,path))
+            params.forEach {
+                parameter(it.key, it.value)
+            }
+            headers.forEach {
+                header(it.key, it.value)
+            }
+            setBody(body)
         }.mapTo(responseMapper)
     }
     

@@ -16,6 +16,10 @@ import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
+import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
+import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
+import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
+import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import com.mctable.easybiz.features.search_business.presentation.ui.SearchBusinessPage
 import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
 import kotlinx.coroutines.launch
@@ -84,6 +88,26 @@ fun AppNavHost() {
                     onEvent = { viewModel.onEvent(it) },
                     id = route.id
                 )
+            }
+
+            composable<Destination.RegisterBusiness> {
+                val viewModel = koinViewModel<RegisterBusinessViewModel>()
+                RegisterBusinessPage(
+                    state = viewModel.state,
+                    onEvent = { viewModel.onEvent(it) },
+                )
+            }
+
+            composable<Destination.UpdateBusiness> {
+                val route = it.toRoute<Destination.UpdateBusiness>()
+                val viewModel = koinViewModel<UpdateBusinessProfileViewModel>()
+
+                UpdateBusinessProfilePage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                    id = route.id
+                )
+
             }
         }
     }

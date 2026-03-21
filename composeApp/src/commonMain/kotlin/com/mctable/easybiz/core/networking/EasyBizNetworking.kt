@@ -35,5 +35,14 @@ interface EasyBizNetworking {
         params: Map<String, String> = emptyMap(),
         responseMapper: (String) -> T
     ): Result<T>
+
+    suspend fun <T> patch(
+        host: String,
+        path: String,
+        body: Any? = null,
+        headers: Map<String, String> = emptyMap(),
+        params: Map<String, String> = emptyMap(),
+        responseMapper: (String) -> T
+    ): Result<T>
 }
 

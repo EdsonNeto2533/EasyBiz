@@ -65,6 +65,8 @@ kotlin {
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.geolocalization.compose)
             implementation(libs.jetbrains.navigation.compose)
+            implementation(libs.peekaboo.ui)
+            implementation(libs.peekaboo.image.picker)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
