@@ -4,6 +4,7 @@ import com.mctable.easybiz.features.auth.di.authModule
 import com.mctable.easybiz.features.business_details.di.businessDetailsModule
 import com.mctable.easybiz.features.my_business.di.myBusinessModule
 import com.mctable.easybiz.features.my_favorites.di.myFavoriteModule
+import com.mctable.easybiz.features.my_orders.di.myOrderModule
 import com.mctable.easybiz.features.register_business.di.registerBusinessModule
 import com.mctable.easybiz.features.search_business.di.searchBusinessModule
 import org.koin.core.context.startKoin
@@ -21,7 +22,8 @@ fun initProjectKoin(config: KoinAppDeclaration? = null) {
             businessDetailsModule,
             registerBusinessModule,
             myBusinessModule,
-            myFavoriteModule
+            myFavoriteModule,
+            myOrderModule
         )
     }
 }

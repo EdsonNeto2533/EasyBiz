@@ -49,6 +49,12 @@ sealed interface Destination {
         override val title = "Favoritos"
     }
 
+    @Serializable
+    data object MyOrders : Destination {
+        override val isLoggedArea = true
+        override val title = "Meus pedidos"
+    }
+
     companion object {
         @Composable
         fun getIcon(destination: Destination): Painter {
@@ -57,6 +63,7 @@ sealed interface Destination {
                 is MyBusiness -> AppIcons.star()
                 is RegisterBusiness -> AppIcons.creditCard()
                 is MyFavorites -> AppIcons.star()
+                is MyOrders -> AppIcons.menu()
                 else -> AppIcons.arrowBack()
             }
         }
@@ -67,6 +74,7 @@ sealed interface Destination {
                 route?.contains("RegisterBusiness") == true -> RegisterBusiness
                 route?.contains("MyBusiness") == true -> MyBusiness
                 route?.contains("MyFavorites") == true -> MyFavorites
+                route?.contains("MyOrders") == true -> MyOrders
                 else -> Login
             }
         }
@@ -75,7 +83,8 @@ sealed interface Destination {
             SearchBusiness,
             RegisterBusiness,
             MyBusiness,
-            MyFavorites
+            MyFavorites,
+            MyOrders
         )
     }
 }
