@@ -18,6 +18,8 @@ import com.mctable.easybiz.features.business_details.presentation.ui.page.Busine
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
 import com.mctable.easybiz.features.my_business.presentation.ui.MyBusinessPage
 import com.mctable.easybiz.features.my_business.presentation.view_model.MyBusinessViewModel
+import com.mctable.easybiz.features.my_favorites.presentation.ui.MyFavoritePage
+import com.mctable.easybiz.features.my_favorites.presentation.view_model.MyFavoriteViewModel
 import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
 import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
@@ -120,6 +122,15 @@ fun AppNavHost() {
                     onEvent = { event -> viewModel.onEvent(event) },
                 )
 
+            }
+
+            composable<Destination.MyFavorites> {
+                val viewModel = koinViewModel<MyFavoriteViewModel>()
+
+                MyFavoritePage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                )
             }
         }
     }
