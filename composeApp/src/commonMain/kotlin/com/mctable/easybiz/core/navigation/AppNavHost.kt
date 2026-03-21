@@ -16,6 +16,12 @@ import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
+import com.mctable.easybiz.features.my_business.presentation.ui.MyBusinessPage
+import com.mctable.easybiz.features.my_business.presentation.view_model.MyBusinessViewModel
+import com.mctable.easybiz.features.my_favorites.presentation.ui.MyFavoritePage
+import com.mctable.easybiz.features.my_favorites.presentation.view_model.MyFavoriteViewModel
+import com.mctable.easybiz.features.my_orders.presentation.ui.MyOrderPage
+import com.mctable.easybiz.features.my_orders.presentation.view_model.MyOrderViewModel
 import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
 import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
@@ -108,6 +114,34 @@ fun AppNavHost() {
                     id = route.id
                 )
 
+            }
+
+            composable<Destination.MyBusiness> {
+                val viewModel = koinViewModel<MyBusinessViewModel>()
+
+                MyBusinessPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                )
+
+            }
+
+            composable<Destination.MyFavorites> {
+                val viewModel = koinViewModel<MyFavoriteViewModel>()
+
+                MyFavoritePage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                )
+            }
+
+            composable<Destination.MyOrders> {
+                val viewModel = koinViewModel<MyOrderViewModel>()
+
+                MyOrderPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                )
             }
         }
     }
