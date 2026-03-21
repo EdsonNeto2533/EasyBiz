@@ -53,7 +53,7 @@ fun MyBusinessCard(
                     model = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(80.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
@@ -62,7 +62,7 @@ fun MyBusinessCard(
                     AppIcons.contactEmail(),
                     null,
                     modifier = Modifier
-                        .size(120.dp),
+                        .size(80.dp),
                 )
             }
 
