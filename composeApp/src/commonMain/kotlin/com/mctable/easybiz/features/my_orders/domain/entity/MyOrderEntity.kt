@@ -1,10 +1,10 @@
 package com.mctable.easybiz.features.my_orders.domain.entity
 
 data class MyOrderEntity(
-    val id: Int,
-    val clientId: Int,
+    val id: String,
+    val clientId: String,
     val clientName: String,
-    val businessId: Int,
+    val businessId: String,
     val businessName: String,
     val description: String,
     val desiredDate: String,

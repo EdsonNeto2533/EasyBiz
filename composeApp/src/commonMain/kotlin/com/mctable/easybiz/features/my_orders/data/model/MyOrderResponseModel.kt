@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyOrderResponseModel(
-    val id: Int,
-    @SerialName("clienteId") val clientId: Int,
+    val id: String,
+    @SerialName("clienteId") val clientId: String,
     @SerialName("clienteNome") val clientName: String,
-    @SerialName("negocioId") val businessId: Int,
+    @SerialName("negocioId") val businessId: String,
     @SerialName("negocioNome") val businessName: String,
     @SerialName("descricao") val description: String,
     @SerialName("dataDesejada") val desiredDate: String,

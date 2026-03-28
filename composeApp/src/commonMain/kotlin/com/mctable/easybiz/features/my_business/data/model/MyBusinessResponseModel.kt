@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyBusinessResponseModel(
-    val id: Int,
+    val id: String,
     @SerialName("nome") val name: String,
     @SerialName("categoria") val category: String,
-    @SerialName("usuarioId") val userId: Int,
+    @SerialName("usuarioId") val userId: String,
     @SerialName("nomeUsuario") val userName: String,
     @SerialName("ativo") val active: Boolean,
     val latitude: Double,

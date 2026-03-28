@@ -1,10 +1,10 @@
 package com.mctable.easybiz.features.my_business.domain.entity
 
 data class MyBusinessEntity(
-    val id: Int,
+    val id: String,
     val name: String,
     val category: String,
-    val userId: Int,
+    val userId: String,
     val userName: String,
     val active: Boolean,
     val latitude: Double,

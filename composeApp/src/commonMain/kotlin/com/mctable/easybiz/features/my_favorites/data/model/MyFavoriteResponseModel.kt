@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyFavoriteResponseModel(
-    val id: Int,
-    @SerialName("negocioId") val businessId: Int,
+    val id: String,
+    @SerialName("negocioId") val businessId: String,
     @SerialName("negocioNome") val businessName: String,
     @SerialName("negocioCategoria") val category: String,
     @SerialName("notaMedia") val averageRating: Double,

@@ -22,7 +22,7 @@ sealed interface Destination {
     }
 
     @Serializable
-    data class BusinessDetails(val id: Int) : Destination {
+    data class BusinessDetails(val id: String) : Destination {
         override val isLoggedArea = true
     }
 
@@ -33,7 +33,7 @@ sealed interface Destination {
     }
 
     @Serializable
-    data class UpdateBusiness(val id: Int) : Destination {
+    data class UpdateBusiness(val id: String) : Destination {
         override val isLoggedArea = true
     }
 
