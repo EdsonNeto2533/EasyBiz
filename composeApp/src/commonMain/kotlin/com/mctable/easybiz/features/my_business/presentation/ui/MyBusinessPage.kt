@@ -108,10 +108,10 @@ fun MyBusinessPagePreview() {
     val state = MyBusinessState(
         myBusinessList = listOf(
             MyBusinessEntity(
-                id = 1,
+                id = "",
                 name = "Oficina do Ricardo",
                 category = "MECANICO",
-                userId = 1,
+                userId = "",
                 userName = "Ricardo Silva",
                 active = true,
                 latitude = -23.5505,

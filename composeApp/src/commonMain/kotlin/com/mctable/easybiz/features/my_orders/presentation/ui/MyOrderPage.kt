@@ -99,10 +99,10 @@ fun MyOrderPagePreview() {
     val state = MyOrderState(
         orders = listOf(
             MyOrderEntity(
-                id = 1,
-                clientId = 2,
+                id = "",
+                clientId = "",
                 clientName = "Ana Souza",
-                businessId = 1,
+                businessId = "",
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",
@@ -111,10 +111,10 @@ fun MyOrderPagePreview() {
                 businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
             ),
             MyOrderEntity(
-                id = 1,
-                clientId = 2,
+                id = "",
+                clientId = "",
                 clientName = "Ana Souza",
-                businessId = 1,
+                businessId = "",
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",

@@ -238,10 +238,10 @@ fun BusinessDetailsPagePreview() {
         startChatLabel = "Iniciar chat",
         descriptionLabel = "Sobre",
         businessDetails = BusinessDetailsEntity(
-            id = 1,
+            id = "",
             name = "Ricardo Alencar",
             category = "Mecânico Especialista",
-            userId = 1,
+            userId = "",
             userName = "Ricardo",
             active = true,
             latitude = 0.0,

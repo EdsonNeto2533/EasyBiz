@@ -105,8 +105,8 @@ fun MyFavoritePagePreview() {
     val state = MyFavoriteState(
         favoriteList = listOf(
             MyFavoriteEntity(
-                id = 1,
-                businessId = 5,
+                id = "",
+                businessId = "",
                 businessName = "Barbearia do João",
                 category = "BARBEARIA",
                 averageRating = 4.5,
