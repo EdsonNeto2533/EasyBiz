@@ -54,7 +54,7 @@ class UpdateBusinessProfileViewModel(
     private fun validateFields(): Boolean =
         state.description.isNotBlank() && state.cellphone.isNotBlank() && state.minimalPrice.isNotBlank() && state.yearsOfExperience.isNotBlank()
 
-    private fun handleUpdateBusiness(id: Int) {
+    private fun handleUpdateBusiness(id: String) {
         state = state.copy(isLoading = true, isError = false)
         viewModelScope.launch {
             val updateResult = updateBusinessProfileUseCase.execute(
@@ -79,7 +79,7 @@ class UpdateBusinessProfileViewModel(
         }
     }
 
-    private suspend fun updateUserImage(id: Int, imageBytes: ByteArray){
+    private suspend fun updateUserImage(id: String, imageBytes: ByteArray){
         addLogoUseCase.execute(id, imageBytes).fold(
             onSuccess = {
                 state = state.copy(isLoading = false, success = true)

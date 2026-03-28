@@ -34,7 +34,7 @@ import com.mctable.easybiz.features.business_details.presentation.ui.molecules.B
 fun BusinessDetailsPage(
     state: BusinessDetailsState,
     onEvent: (BusinessDetailsEvent) -> Unit,
-    id: Int
+    id: String
 ) {
 
     val scrollState = rememberScrollState()
@@ -59,7 +59,7 @@ fun BusinessDetailsPage(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 text = state.startChatLabel,
                 onClick = {
-                    onEvent(BusinessDetailsEvent.StartChat)
+                    onEvent(BusinessDetailsEvent.CreateOrder)
                 }
             )
         }
@@ -249,7 +249,7 @@ fun BusinessDetailsPagePreview() {
             completeAddress = "Av. Paulista, 1500 - Bela Vista - São Paulo - SP",
             averageRating = 4.9,
             logoUrl = null,
-            description = "Somos um profissional de mecânica com mais de 4 anos no mercado fazendo coisas e mais coisas",
+            description = "Somos um profissional de mecânica com plus de 4 anos no mercado fazendo coisas e mais coisas",
             minimalValue = 100.0,
             yearsOfExperience = 5,
             totalRatings = 10
@@ -261,7 +261,7 @@ fun BusinessDetailsPagePreview() {
         BusinessDetailsPage(
             state = state,
             onEvent = {},
-            1
+            "1"
         )
     }
 }

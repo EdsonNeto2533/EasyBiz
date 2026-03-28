@@ -6,7 +6,7 @@ import com.mctable.easybiz.features.business_details.domain.repository.BusinessD
 class GetBusinessDetailsUseCase(
     private val repository: BusinessDetailsRepository
 ) {
-    suspend fun execute(id: Int): Result<BusinessDetailsEntity> {
+    suspend fun execute(id: String): Result<BusinessDetailsEntity> {
         return repository.getBusinessDetails(id)
     }
 }

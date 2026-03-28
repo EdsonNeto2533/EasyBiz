@@ -4,7 +4,7 @@ import com.mctable.easybiz.features.register_business.domain.repository.Register
 
 class UpdateBusinessProfileUseCase(private val repository: RegisterBusinessRepository) {
     suspend fun execute(
-        id: Int,
+        id: String,
         description: String,
         telephone: String,
         minimumPrice: Double,

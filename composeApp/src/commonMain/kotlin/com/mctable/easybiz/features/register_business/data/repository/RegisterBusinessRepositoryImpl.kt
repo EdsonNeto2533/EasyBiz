@@ -25,7 +25,7 @@ class RegisterBusinessRepositoryImpl(
     }
 
     override suspend fun updateProfile(
-        id: Int,
+        id: String,
         description: String,
         telephone: String,
         minimumPrice: Double,
@@ -42,7 +42,7 @@ class RegisterBusinessRepositoryImpl(
         return datasource.updateProfile(id, request)
     }
 
-    override suspend fun addLogo(id: Int, imageBytes: ByteArray): Result<Unit> = runCatching {
+    override suspend fun addLogo(id: String, imageBytes: ByteArray): Result<Unit> = runCatching {
         return datasource.addLogo(id, imageBytes)
     }
 }

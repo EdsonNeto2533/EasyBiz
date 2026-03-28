@@ -4,6 +4,7 @@ import com.mctable.easybiz.features.business_details.data.datasource.BusinessDet
 import com.mctable.easybiz.features.business_details.data.datasource.BusinessDetailsDatasourceImpl
 import com.mctable.easybiz.features.business_details.data.repository.BusinessDetailsRepositoryImpl
 import com.mctable.easybiz.features.business_details.domain.repository.BusinessDetailsRepository
+import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderUseCase
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
 import org.koin.core.module.dsl.viewModel
@@ -22,5 +23,9 @@ val businessDetailsModule = module {
         GetBusinessDetailsUseCase(get())
     }
 
-    viewModel { BusinessDetailsViewModel(get(), get()) }
+    factory {
+        CreateOrderUseCase(get())
+    }
+
+    viewModel { BusinessDetailsViewModel(get(), get(), get()) }
 }
