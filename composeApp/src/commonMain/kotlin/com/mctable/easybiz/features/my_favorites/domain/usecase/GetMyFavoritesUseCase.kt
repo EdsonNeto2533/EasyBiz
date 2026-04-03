@@ -3,10 +3,14 @@ package com.mctable.easybiz.features.my_favorites.domain.usecase
 import com.mctable.easybiz.features.my_favorites.domain.entity.MyFavoriteEntity
 import com.mctable.easybiz.features.my_favorites.domain.repository.MyFavoriteRepository
 
-class GetMyFavoritesUseCase(
+interface GetMyFavoritesUseCase {
+    suspend fun execute(): Result<List<MyFavoriteEntity>>
+}
+
+class GetMyFavoritesUseCaseImpl(
     private val repository: MyFavoriteRepository
-) {
-    suspend fun execute(): Result<List<MyFavoriteEntity>> {
+) : GetMyFavoritesUseCase {
+    override suspend fun execute(): Result<List<MyFavoriteEntity>> {
         return repository.getMyFavorites()
     }
 }

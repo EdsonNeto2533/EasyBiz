@@ -12,7 +12,7 @@ interface RegisterBusinessRepository {
     ): Result<BusinessProfileEntity>
 
     suspend fun updateProfile(
-        id: Int,
+        id: String,
         description: String,
         telephone: String,
         minimumPrice: Double,
@@ -20,5 +20,5 @@ interface RegisterBusinessRepository {
         workingHours: String
     ): Result<Unit>
 
-    suspend fun addLogo(id: Int, imageBytes: ByteArray): Result<Unit>
+    suspend fun addLogo(id: String, imageBytes: ByteArray): Result<Unit>
 }

@@ -120,10 +120,10 @@ fun SearchBusinessPagePreview() {
                 inputPlaceholder = "O que você precisa hoje",
                 businessList = listOf(
                     BusinessEntity(
-                        id = 1,
+                        id = "",
                         name = "Oficina do Carlos",
                         category = "Mecânico",
-                        userId = 101,
+                        userId = "",
                         userName = "Carlos Silva",
                         active = true,
                         latitude = -3.7319,
@@ -134,10 +134,10 @@ fun SearchBusinessPagePreview() {
                         distance = 2.0
                     ),
                     BusinessEntity(
-                        id = 2,
+                        id = "",
                         name = "TechFix Assistência",
                         category = "Eletrônicos",
-                        userId = 102,
+                        userId = "",
                         userName = "Mariana Costa",
                         active = true,
                         latitude = -3.7340,
@@ -148,10 +148,10 @@ fun SearchBusinessPagePreview() {
                         distance = 1.0
                     ),
                     BusinessEntity(
-                        id = 3,
+                        id = "",
                         name = "Rei da Bicicleta",
                         category = "Bicicletaria",
-                        userId = 103,
+                        userId = "",
                         userName = "João Pereira",
                         active = true,
                         latitude = -3.7285,

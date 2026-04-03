@@ -40,7 +40,7 @@ import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 
 @Composable
 fun UpdateBusinessProfilePage(
-    id: Int,
+    id: String,
     state: UpdateBusinessProfileState,
     onEvent: (UpdateBusinessProfileEvent) -> Unit
 ) {
@@ -202,7 +202,7 @@ fun UpdateBusinessProfilePagePreview() {
         UpdateBusinessProfilePage(
             state = state,
             onEvent = {},
-            id = 1
+            id = "1"
         )
     }
 }

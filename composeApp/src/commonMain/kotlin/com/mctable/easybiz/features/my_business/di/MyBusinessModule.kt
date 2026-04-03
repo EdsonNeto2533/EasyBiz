@@ -5,6 +5,7 @@ import com.mctable.easybiz.features.my_business.data.datasource.MyBusinessDataso
 import com.mctable.easybiz.features.my_business.data.repository.MyBusinessRepositoryImpl
 import com.mctable.easybiz.features.my_business.domain.repository.MyBusinessRepository
 import com.mctable.easybiz.features.my_business.domain.usecase.GetMyBusinessUseCase
+import com.mctable.easybiz.features.my_business.domain.usecase.GetMyBusinessUseCaseImpl
 import com.mctable.easybiz.features.my_business.presentation.view_model.MyBusinessViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -18,7 +19,7 @@ val myBusinessModule = module {
         MyBusinessRepositoryImpl(get())
     }
 
-    factory { GetMyBusinessUseCase(get()) }
+    factory<GetMyBusinessUseCase> { GetMyBusinessUseCaseImpl(get()) }
 
     viewModel { MyBusinessViewModel(get(), get()) }
 }

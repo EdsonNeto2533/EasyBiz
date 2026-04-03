@@ -67,6 +67,7 @@ kotlin {
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
+            implementation(libs.kotlinx.datetime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -152,4 +153,3 @@ android {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
-

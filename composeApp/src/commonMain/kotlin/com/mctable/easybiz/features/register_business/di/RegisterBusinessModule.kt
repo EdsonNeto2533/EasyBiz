@@ -7,6 +7,9 @@ import com.mctable.easybiz.features.register_business.domain.repository.Register
 import com.mctable.easybiz.features.register_business.domain.usecase.CreateBusinessUseCase
 import com.mctable.easybiz.features.register_business.domain.usecase.UpdateBusinessProfileUseCase
 import com.mctable.easybiz.features.register_business.domain.usecase.AddLogoUseCase
+import com.mctable.easybiz.features.register_business.domain.usecase.AddLogoUseCaseImpl
+import com.mctable.easybiz.features.register_business.domain.usecase.CreateBusinessUseCaseImpl
+import com.mctable.easybiz.features.register_business.domain.usecase.UpdateBusinessProfileUseCaseImpl
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
 import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import org.koin.core.module.dsl.viewModel
@@ -22,9 +25,9 @@ val registerBusinessModule = module {
         RegisterBusinessRepositoryImpl(get())
     }
 
-    factory { CreateBusinessUseCase(get()) }
-    factory { UpdateBusinessProfileUseCase(get()) }
-    factory { AddLogoUseCase(get()) }
+    factory<CreateBusinessUseCase> { CreateBusinessUseCaseImpl(get()) }
+    factory<UpdateBusinessProfileUseCase> { UpdateBusinessProfileUseCaseImpl(get()) }
+    factory<AddLogoUseCase> { AddLogoUseCaseImpl(get()) }
 
     viewModel { RegisterBusinessViewModel(get(), get(), get()) }
     viewModel { UpdateBusinessProfileViewModel( get(), get(), get()) }

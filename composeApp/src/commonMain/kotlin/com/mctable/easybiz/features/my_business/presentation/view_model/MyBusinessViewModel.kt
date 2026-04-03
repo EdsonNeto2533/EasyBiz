@@ -30,6 +30,9 @@ class MyBusinessViewModel(
             is MyBusinessEvent.OnEditBusinessClicked -> {
                 navigator.navigate(Destination.UpdateBusiness(event.id))
             }
+            is MyBusinessEvent.OnViewOrdersClicked -> {
+                navigator.navigate(Destination.MyOrders(paper = null, businessId = event.id))
+            }
         }
     }
 

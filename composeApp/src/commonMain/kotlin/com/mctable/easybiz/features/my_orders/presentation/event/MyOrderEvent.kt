@@ -1,7 +1,14 @@
 package com.mctable.easybiz.features.my_orders.presentation.event
 
 sealed class MyOrderEvent {
-    data object GetMyOrders : MyOrderEvent()
+    data class GetMyOrders(
+        val paper: String?,
+        val businessId: String?
+    ) : MyOrderEvent()
+
     data object OnBackPressed : MyOrderEvent()
-    data object LoadNextPage : MyOrderEvent()
+    data class LoadNextPage(
+        val paper: String?,
+        val businessId: String?
+    ) : MyOrderEvent()
 }

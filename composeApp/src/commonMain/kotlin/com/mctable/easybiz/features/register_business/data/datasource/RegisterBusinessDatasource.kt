@@ -13,8 +13,8 @@ import io.ktor.http.HttpHeaders
 
 interface RegisterBusinessDatasource {
     suspend fun createBusiness(request: CreateBusinessRequest): Result<BusinessProfileResponseModel>
-    suspend fun updateProfile(id: Int, request: UpdateProfileRequest): Result<Unit>
-    suspend fun addLogo(id: Int, imageBytes: ByteArray): Result<Unit>
+    suspend fun updateProfile(id: String, request: UpdateProfileRequest): Result<Unit>
+    suspend fun addLogo(id: String, imageBytes: ByteArray): Result<Unit>
 }
 
 class RegisterBusinessDatasourceImpl(
@@ -32,7 +32,7 @@ class RegisterBusinessDatasourceImpl(
         )
     }
 
-    override suspend fun updateProfile(id: Int, request: UpdateProfileRequest): Result<Unit> {
+    override suspend fun updateProfile(id: String, request: UpdateProfileRequest): Result<Unit> {
         return networking.patch(
             host = appEnv.host,
             path = "/negocios/$id/perfil",
@@ -41,7 +41,7 @@ class RegisterBusinessDatasourceImpl(
         )
     }
 
-    override suspend fun addLogo(id: Int, imageBytes: ByteArray): Result<Unit> {
+    override suspend fun addLogo(id: String, imageBytes: ByteArray): Result<Unit> {
         return networkingMultiPart.patch(
             host = appEnv.host,
             path = "/negocios/$id/logo",

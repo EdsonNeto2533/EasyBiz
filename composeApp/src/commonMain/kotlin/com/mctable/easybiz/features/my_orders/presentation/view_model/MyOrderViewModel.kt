@@ -19,34 +19,44 @@ class MyOrderViewModel(
     var state by mutableStateOf(MyOrderState())
         private set
 
-    init {
-        onEvent(MyOrderEvent.GetMyOrders)
-    }
-
     fun onEvent(event: MyOrderEvent) {
         when (event) {
-            MyOrderEvent.GetMyOrders -> loadMyOrders()
+            is MyOrderEvent.GetMyOrders -> loadMyOrders(event.paper, event.businessId)
             MyOrderEvent.OnBackPressed -> navigator.pop()
-            MyOrderEvent.LoadNextPage -> handleNextPage()
+            is MyOrderEvent.LoadNextPage -> handleNextPage(event.paper, event.businessId)
         }
     }
 
-    private fun loadMyOrders() {
+    private fun loadMyOrders(
+        paper: String? = null,
+        businessId: String? = null
+    ) {
         state = state.copy(isLoading = true, isError = false, currentPage = 0, orders = emptyList())
-        fetchOrders()
+        fetchOrders(paper, businessId)
     }
 
-    private fun handleNextPage() {
+    private fun handleNextPage(
+        paper: String? = null,
+        businessId: String? = null
+    ) {
         if (!state.isLastPage && !state.isLoading) {
             state = state.copy(currentPage = state.currentPage + 1)
-            fetchOrders()
+            fetchOrders(paper, businessId)
         }
     }
 
-    private fun fetchOrders() {
+    private fun fetchOrders(
+        paper: String?,
+        businessId: String?
+    ) {
         state = state.copy(isLoading = true)
         viewModelScope.launch {
-            getMyOrdersUseCase.execute(state.currentPage, 20).fold(
+            getMyOrdersUseCase.execute(
+                state.currentPage,
+                20,
+                paper = paper,
+                businessId = businessId
+            ).fold(
                 onSuccess = { page ->
                     state = state.copy(
                         orders = state.orders + page.content,

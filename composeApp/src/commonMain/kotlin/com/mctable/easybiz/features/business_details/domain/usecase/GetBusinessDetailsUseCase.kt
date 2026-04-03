@@ -3,10 +3,14 @@ package com.mctable.easybiz.features.business_details.domain.usecase
 import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetailsEntity
 import com.mctable.easybiz.features.business_details.domain.repository.BusinessDetailsRepository
 
-class GetBusinessDetailsUseCase(
+interface GetBusinessDetailsUseCase {
+    suspend fun execute(id: String): Result<BusinessDetailsEntity>
+}
+
+class GetBusinessDetailsUseCaseImpl(
     private val repository: BusinessDetailsRepository
-) {
-    suspend fun execute(id: Int): Result<BusinessDetailsEntity> {
+): GetBusinessDetailsUseCase {
+    override suspend fun execute(id: String): Result<BusinessDetailsEntity> {
         return repository.getBusinessDetails(id)
     }
 }

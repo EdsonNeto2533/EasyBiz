@@ -1,6 +1,7 @@
 package com.mctable.easybiz.features.business_details.data.mapper
 
 import com.mctable.easybiz.features.business_details.data.model.BusinessDetailsResponseModel
+import com.mctable.easybiz.features.business_details.data.model.OrderResponseModel
 import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetailsEntity
 import kotlinx.serialization.json.Json
 
@@ -8,6 +9,10 @@ object BusinessDetailsMapper {
     private val json = Json { ignoreUnknownKeys = true }
 
     fun parseResponse(jsonString: String): BusinessDetailsResponseModel {
+        return json.decodeFromString(jsonString)
+    }
+
+    fun parseOrderResponse(jsonString: String): OrderResponseModel {
         return json.decodeFromString(jsonString)
     }
 

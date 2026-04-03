@@ -136,11 +136,14 @@ fun AppNavHost() {
             }
 
             composable<Destination.MyOrders> {
+                val route = it.toRoute<Destination.MyOrders>()
                 val viewModel = koinViewModel<MyOrderViewModel>()
 
                 MyOrderPage(
                     state = viewModel.state,
                     onEvent = { event -> viewModel.onEvent(event) },
+                    paper = route.paper,
+                    businessId = route.businessId
                 )
             }
         }

@@ -38,7 +38,7 @@ class SearchBusinessViewModel(
         }
     }
 
-    private fun handleOnBusinessClick(id: Int) {
+    private fun handleOnBusinessClick(id: String) {
         navigator.navigate(Destination.BusinessDetails(id))
     }
 

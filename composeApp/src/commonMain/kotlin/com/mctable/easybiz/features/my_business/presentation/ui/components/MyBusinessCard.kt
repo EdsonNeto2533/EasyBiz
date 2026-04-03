@@ -8,13 +8,15 @@ import com.mctable.easybiz.features.my_business.domain.entity.MyBusinessEntity
 fun MyBusinessCard(
     business: MyBusinessEntity,
     onClick: () -> Unit,
-    onEditClick: () -> Unit
+    onEditClick: () -> Unit,
+    onOrdersClick: () -> Unit = {}
 ) {
     BusinessInfoCardMolecule(
         title = business.name,
         subtitle = business.category,
         logoUrl = business.logoUrl,
         onClick = onClick,
-        onEditClick = onEditClick
+        onEditClick = onEditClick,
+        onOrdersClick = onOrdersClick
     )
 }
