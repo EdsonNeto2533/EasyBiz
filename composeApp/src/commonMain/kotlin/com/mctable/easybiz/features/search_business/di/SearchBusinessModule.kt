@@ -20,7 +20,7 @@ val searchBusinessModule = module {
     }
 
     factory<SearchBusinessUseCase> {
-        SearchBusinessUseCaseImpl(get())
+        SearchBusinessUseCaseImpl(get(), get())
     }
 
     viewModel {

@@ -14,6 +14,10 @@ class LoginRepositoryImpl(
     override suspend fun login(email: String, password: String): Result<LoginEntity> = runCatching {
         return remoteDataSource.login(email, password).mapCatching { responseModel ->
             easyBizStorage.setString("token", responseModel.token)
+            responseModel.userId?.let {
+                easyBizStorage.setString("userId", responseModel.userId)
+            }
+
             LoginMapper.toDomain(responseModel)
         }
     }
