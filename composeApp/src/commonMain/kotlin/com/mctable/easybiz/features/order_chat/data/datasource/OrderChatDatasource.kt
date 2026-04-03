@@ -6,7 +6,13 @@ import com.mctable.easybiz.features.order_chat.data.dto.SendMessageDto
 import com.mctable.easybiz.features.order_chat.data.mapper.OrderChatMapper
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatMessageResponseModel
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatPageResponseModel
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import io.ktor.websocket.Frame
+import io.ktor.websocket.readText
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 
 interface OrderChatDatasource {
     suspend fun getMessages(
@@ -20,10 +26,7 @@ interface OrderChatDatasource {
         content: String
     ): Result<OrderChatMessageResponseModel>
 
-    suspend fun connectToChat(
-        orderId: String,
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit>
+    fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel>
 }
 
 class OrderChatDatasourceImpl(
@@ -63,14 +66,22 @@ class OrderChatDatasourceImpl(
         )
     }
 
-    override suspend fun connectToChat(
-        orderId: String,
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit> {
-        return networking.webSocket(
+    override fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel> = callbackFlow {
+        networking.webSocket(
             host = appEnv.host,
             path = "/pedidos/$orderId/mensagens",
-            block = block
+            block = {
+                incoming.consumeAsFlow()
+                    .filterIsInstance<Frame.Text>()
+                    .map { frame ->
+                        val jsonString = frame.readText()
+                        OrderChatMapper.parseMessageResponse(jsonString)
+                    }
+                    .collect { message ->
+                        send(message)
+                    }
+            }
         )
+        close()
     }
 }

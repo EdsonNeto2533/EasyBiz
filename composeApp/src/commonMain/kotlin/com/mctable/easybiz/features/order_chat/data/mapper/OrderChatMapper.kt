@@ -17,7 +17,7 @@ object OrderChatMapper {
         return json.decodeFromString(jsonString)
     }
 
-    fun toEntity(model: OrderChatMessageResponseModel): OrderChatMessageEntity {
+    fun toEntity(model: OrderChatMessageResponseModel, userId: String): OrderChatMessageEntity {
         return OrderChatMessageEntity(
             id = model.id,
             orderId = model.orderId,
@@ -27,13 +27,14 @@ object OrderChatMapper {
             sentAt = model.sentAt,
             isRead = model.isRead,
             readAt = model.readAt,
-            senderPhotoUrl = model.senderPhotoUrl
+            senderPhotoUrl = model.senderPhotoUrl,
+            mine = userId == model.senderId
         )
     }
 
-    fun toPageEntity(model: OrderChatPageResponseModel): OrderChatPageEntity {
+    fun toPageEntity(model: OrderChatPageResponseModel, userId: String): OrderChatPageEntity {
         return OrderChatPageEntity(
-            messages = model.content.map { toEntity(it) },
+            messages = model.content.map { toEntity(it, userId) },
             totalElements = model.totalElements,
             totalPages = model.totalPages,
             isLast = model.last

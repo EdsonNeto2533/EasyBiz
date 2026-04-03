@@ -11,6 +11,7 @@ import easybiz.composeapp.generated.resources.credit_card
 import easybiz.composeapp.generated.resources.location_on
 import easybiz.composeapp.generated.resources.menu
 import easybiz.composeapp.generated.resources.search
+import easybiz.composeapp.generated.resources.send
 import easybiz.composeapp.generated.resources.star
 import easybiz.composeapp.generated.resources.verified_user
 import easybiz.composeapp.generated.resources.visibility_off
@@ -72,5 +73,10 @@ object AppIcons {
     @Composable
     fun verified(): Painter {
         return painterResource(Res.drawable.verified_user)
+    }
+
+    @Composable
+    fun send(): Painter {
+        return painterResource(Res.drawable.send)
     }
 }

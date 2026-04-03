@@ -9,7 +9,8 @@ data class OrderChatMessageEntity(
     val sentAt: String,
     val isRead: Boolean,
     val readAt: String?,
-    val senderPhotoUrl: String?
+    val senderPhotoUrl: String?,
+    val mine: Boolean
 )
 
 data class OrderChatPageEntity(

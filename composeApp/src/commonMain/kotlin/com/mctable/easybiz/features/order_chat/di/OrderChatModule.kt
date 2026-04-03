@@ -4,12 +4,9 @@ import com.mctable.easybiz.features.order_chat.data.datasource.OrderChatDatasour
 import com.mctable.easybiz.features.order_chat.data.datasource.OrderChatDatasourceImpl
 import com.mctable.easybiz.features.order_chat.data.repository.OrderChatRepositoryImpl
 import com.mctable.easybiz.features.order_chat.domain.repository.OrderChatRepository
-import com.mctable.easybiz.features.order_chat.domain.usecase.ConnectToOrderChatUseCase
-import com.mctable.easybiz.features.order_chat.domain.usecase.ConnectToOrderChatUseCaseImpl
-import com.mctable.easybiz.features.order_chat.domain.usecase.GetOrderMessagesUseCase
-import com.mctable.easybiz.features.order_chat.domain.usecase.GetOrderMessagesUseCaseImpl
-import com.mctable.easybiz.features.order_chat.domain.usecase.SendOrderMessageUseCase
-import com.mctable.easybiz.features.order_chat.domain.usecase.SendOrderMessageUseCaseImpl
+import com.mctable.easybiz.features.order_chat.domain.usecase.*
+import com.mctable.easybiz.features.order_chat.presentation.view_model.OrderChatViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val orderChatModule = module {
@@ -23,5 +20,7 @@ val orderChatModule = module {
 
     factory<GetOrderMessagesUseCase> { GetOrderMessagesUseCaseImpl(get()) }
     factory<SendOrderMessageUseCase> { SendOrderMessageUseCaseImpl(get()) }
-    factory<ConnectToOrderChatUseCase> { ConnectToOrderChatUseCaseImpl(get()) }
+    factory<ObserveOrderMessagesUseCase> { ObserveOrderMessagesUseCaseImpl(get()) }
+
+    viewModel { OrderChatViewModel(get(), get(), get(), get()) }
 }

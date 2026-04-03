@@ -2,7 +2,7 @@ package com.mctable.easybiz.features.order_chat.domain.repository
 
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEntity
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatPageEntity
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import kotlinx.coroutines.flow.Flow
 
 interface OrderChatRepository {
     suspend fun getMessages(
@@ -16,8 +16,5 @@ interface OrderChatRepository {
         content: String
     ): Result<OrderChatMessageEntity>
 
-    suspend fun connectToChat(
-        orderId: String,
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit>
+    suspend fun observeMessages(orderId: String): Flow<OrderChatMessageEntity>
 }

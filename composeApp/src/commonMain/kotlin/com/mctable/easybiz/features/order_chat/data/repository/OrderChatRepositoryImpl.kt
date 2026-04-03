@@ -1,14 +1,17 @@
 package com.mctable.easybiz.features.order_chat.data.repository
 
+import com.mctable.easybiz.core.local_storage.EasyBizStorage
 import com.mctable.easybiz.features.order_chat.data.datasource.OrderChatDatasource
 import com.mctable.easybiz.features.order_chat.data.mapper.OrderChatMapper
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEntity
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatPageEntity
 import com.mctable.easybiz.features.order_chat.domain.repository.OrderChatRepository
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OrderChatRepositoryImpl(
-    private val datasource: OrderChatDatasource
+    private val datasource: OrderChatDatasource,
+    private val easeBizStorage: EasyBizStorage
 ) : OrderChatRepository {
 
     override suspend fun getMessages(
@@ -16,22 +19,27 @@ class OrderChatRepositoryImpl(
         page: Int,
         size: Int
     ): Result<OrderChatPageEntity> = runCatching {
-        val response = datasource.getMessages(orderId, page, size).getOrThrow()
-        OrderChatMapper.toPageEntity(response)
+        val userId = easeBizStorage.getString("userId")
+        return datasource.getMessages(orderId, page, size).map {
+            OrderChatMapper.toPageEntity(it, userId ?: "")
+        }
+
     }
 
     override suspend fun sendMessage(
         orderId: String,
         content: String
     ): Result<OrderChatMessageEntity> = runCatching {
-        val response = datasource.sendMessage(orderId, content).getOrThrow()
-        OrderChatMapper.toEntity(response)
+        val userId = easeBizStorage.getString("userId")
+        return datasource.sendMessage(orderId, content).map {
+            OrderChatMapper.toEntity(it, userId ?: "")
+        }
     }
 
-    override suspend fun connectToChat(
-        orderId: String,
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit> = runCatching {
-        datasource.connectToChat(orderId, block).getOrThrow()
+    override suspend fun observeMessages(orderId: String): Flow<OrderChatMessageEntity> {
+        val userId = easeBizStorage.getString("userId")
+        return datasource.observeMessages(orderId).map { response ->
+            OrderChatMapper.toEntity(response, userId ?: "")
+        }
     }
 }
