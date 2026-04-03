@@ -11,4 +11,6 @@ sealed class MyOrderEvent {
         val paper: String?,
         val businessId: String?
     ) : MyOrderEvent()
+
+    data class OnOrderClick(val orderId: String) : MyOrderEvent()
 }

@@ -5,5 +5,5 @@ import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetai
 
 interface BusinessDetailsRepository {
     suspend fun getBusinessDetails(id: String): Result<BusinessDetailsEntity>
-    suspend fun createOrder(request: CreateOrderRequest): Result<Unit>
+    suspend fun createOrder(request: CreateOrderRequest): Result<String>
 }

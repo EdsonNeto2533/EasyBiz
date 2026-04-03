@@ -77,7 +77,9 @@ fun MyOrderPage(
                         title = order.businessName,
                         subtitle = order.status,
                         logoUrl = order.businessLogoUrl,
-                        onClick = { /* Do nothing for now */ },
+                        onClick = {
+                            onEvent(MyOrderEvent.OnOrderClick(order.id))
+                        },
                         extraContent = {
                             // Future info here
                         },

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.my_orders.domain.usecase.GetMyOrdersUseCase
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
@@ -24,6 +25,7 @@ class MyOrderViewModel(
             is MyOrderEvent.GetMyOrders -> loadMyOrders(event.paper, event.businessId)
             MyOrderEvent.OnBackPressed -> navigator.pop()
             is MyOrderEvent.LoadNextPage -> handleNextPage(event.paper, event.businessId)
+            is MyOrderEvent.OnOrderClick -> navigator.navigate(Destination.Chat(event.orderId))
         }
     }
 

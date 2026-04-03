@@ -4,13 +4,13 @@ import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.domain.repository.BusinessDetailsRepository
 
 interface CreateOrderUseCase {
-    suspend fun execute(request: CreateOrderRequest): Result<Unit>
+    suspend fun execute(request: CreateOrderRequest): Result<String>
 }
 
 class CreateOrderUseCaseImpl(
     private val repository: BusinessDetailsRepository
 ): CreateOrderUseCase {
-    override suspend fun execute(request: CreateOrderRequest): Result<Unit> {
+    override suspend fun execute(request: CreateOrderRequest): Result<String> {
         return repository.createOrder(request)
     }
 }
