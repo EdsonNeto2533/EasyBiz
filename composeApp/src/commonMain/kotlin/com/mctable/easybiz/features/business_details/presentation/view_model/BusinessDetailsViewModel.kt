@@ -16,6 +16,8 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 class BusinessDetailsViewModel(
     private val getBusinessDetailsUseCase: GetBusinessDetailsUseCase,
@@ -67,14 +69,12 @@ class BusinessDetailsViewModel(
         val business = state.businessDetails ?: return
         state = state.copy(showLoading = true)
 
-        val nextDay = Clock.System.now()
-            .plus(1, DateTimeUnit.DAY, TimeZone.UTC)
-            .toString()
+        val nextDay = Clock.System.now().plus(24.hours)
 
         val request = CreateOrderRequest(
             businessId = business.id,
             description = business.description ?: business.name,
-            desiredDate = nextDay
+            desiredDate = nextDay.toString()
         )
 
         viewModelScope.launch {

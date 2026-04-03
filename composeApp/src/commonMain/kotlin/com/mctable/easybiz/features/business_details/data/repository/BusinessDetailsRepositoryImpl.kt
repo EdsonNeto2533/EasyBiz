@@ -9,13 +9,14 @@ import com.mctable.easybiz.features.business_details.domain.repository.BusinessD
 class BusinessDetailsRepositoryImpl(
     private val datasource: BusinessDetailsDatasource
 ) : BusinessDetailsRepository {
-    override suspend fun getBusinessDetails(id: String): Result<BusinessDetailsEntity> {
-        return datasource.getBusinessDetails(id).map {
-            BusinessDetailsMapper.toEntity(it)
+    override suspend fun getBusinessDetails(id: String): Result<BusinessDetailsEntity> =
+        runCatching {
+            return datasource.getBusinessDetails(id).map {
+                BusinessDetailsMapper.toEntity(it)
+            }
         }
-    }
 
-    override suspend fun createOrder(request: CreateOrderRequest): Result<Unit> {
+    override suspend fun createOrder(request: CreateOrderRequest): Result<Unit> = runCatching {
         return datasource.createOrder(request).map { }
     }
 }
