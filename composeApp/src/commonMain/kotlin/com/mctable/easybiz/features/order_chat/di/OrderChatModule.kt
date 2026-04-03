@@ -15,7 +15,7 @@ val orderChatModule = module {
     }
 
     single<OrderChatRepository> {
-        OrderChatRepositoryImpl(get())
+        OrderChatRepositoryImpl(get(), get())
     }
 
     factory<GetOrderMessagesUseCase> { GetOrderMessagesUseCaseImpl(get()) }
