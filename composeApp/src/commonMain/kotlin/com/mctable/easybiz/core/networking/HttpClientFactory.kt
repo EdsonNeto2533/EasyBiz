@@ -9,6 +9,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -42,6 +43,8 @@ object HttpClientFactory {
             connectTimeoutMillis = 30.seconds.inWholeMilliseconds
             socketTimeoutMillis = 30.seconds.inWholeMilliseconds
         }
+
+        install(WebSockets)
 
         install(ContentNegotiation) {
             json(json = Json {
