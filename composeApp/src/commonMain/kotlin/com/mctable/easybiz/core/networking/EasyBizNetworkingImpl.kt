@@ -1,6 +1,8 @@
 package com.mctable.easybiz.core.networking
 
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -10,6 +12,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.HttpMethod
 
 class EasyBizNetworkingImpl(
     private val httpClient: HttpClient
@@ -23,7 +26,7 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.get {
-            url(getUrl(host,path))
+            url(getUrl(host, path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -42,7 +45,7 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.post {
-            url(getUrl(host,path))
+            url(getUrl(host, path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -62,7 +65,7 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.put {
-            url(getUrl(host,path))
+            url(getUrl(host, path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -81,7 +84,7 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.delete {
-            url(getUrl(host,path))
+            url(getUrl(host, path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -101,7 +104,7 @@ class EasyBizNetworkingImpl(
         responseMapper: (String) -> T
     ): Result<T> = safeRequest {
         httpClient.patch {
-            url(getUrl(host,path))
+            url(getUrl(host, path))
             params.forEach {
                 parameter(it.key, it.value)
             }
@@ -111,8 +114,29 @@ class EasyBizNetworkingImpl(
             setBody(body)
         }.mapTo(responseMapper)
     }
-    
-    private fun getUrl(host: String, path: String) = "$host$path"
 
-    
+    override suspend fun webSocket(
+        host: String,
+        path: String,
+        headers: Map<String, String>,
+        params: Map<String, String>,
+        block: suspend DefaultClientWebSocketSession.() -> Unit
+    ): Result<Unit> = safeRequest {
+        httpClient.webSocket(
+            method = HttpMethod.Get,
+            host = host.removePrefix("https://").removePrefix("http://"),
+            path = path,
+            request = {
+                params.forEach {
+                    parameter(it.key, it.value)
+                }
+                headers.forEach {
+                    header(it.key, it.value)
+                }
+            },
+            block = block
+        )
+    }
+
+    private fun getUrl(host: String, path: String) = "$host$path"
 }
