@@ -82,6 +82,9 @@ fun MyBusinessPage(
                                 },
                                 onEditClick = {
                                     onEvent(MyBusinessEvent.OnEditBusinessClicked(business.id))
+                                },
+                                onOrdersClick = {
+                                    onEvent(MyBusinessEvent.OnViewOrdersClicked(business.id))
                                 }
                             )
                         }

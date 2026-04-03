@@ -32,13 +32,15 @@ fun BusinessInfoCardMolecule(
     logoUrl: String?,
     onClick: () -> Unit,
     onEditClick: (() -> Unit)? = null,
+    onOrdersClick: (() -> Unit)? = null,
     extraContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }.then(modifier),
+            .clickable { onClick() }
+            .then(modifier),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
@@ -85,11 +87,20 @@ fun BusinessInfoCardMolecule(
                 extraContent?.invoke()
             }
 
-            if (onEditClick != null) {
-                TextButton(
-                    onClick = onEditClick
-                ) {
-                    Text("Editar")
+            Column(horizontalAlignment = Alignment.End) {
+                if (onEditClick != null) {
+                    TextButton(
+                        onClick = onEditClick
+                    ) {
+                        Text("Editar")
+                    }
+                }
+                if (onOrdersClick != null) {
+                    TextButton(
+                        onClick = onOrdersClick
+                    ) {
+                        Text("Pedidos")
+                    }
                 }
             }
         }

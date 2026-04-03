@@ -27,9 +27,15 @@ import com.mctable.easybiz.features.my_orders.presentation.state.MyOrderState
 @Composable
 fun MyOrderPage(
     state: MyOrderState,
-    onEvent: (MyOrderEvent) -> Unit
+    onEvent: (MyOrderEvent) -> Unit,
+    paper: String? = null,
+    businessId: String? = null
 ) {
     val listState = rememberLazyListState()
+
+    LaunchedEffect(Unit) {
+        onEvent(MyOrderEvent.GetMyOrders(paper, businessId))
+    }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -43,7 +49,7 @@ fun MyOrderPage(
 
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore && !state.isLastPage && !state.isLoading) {
-            onEvent(MyOrderEvent.LoadNextPage)
+            onEvent(MyOrderEvent.LoadNextPage(paper, businessId))
         }
     }
 
@@ -73,7 +79,7 @@ fun MyOrderPage(
                         logoUrl = order.businessLogoUrl,
                         onClick = { /* Do nothing for now */ },
                         extraContent = {
-                           // Future info here
+                            // Future info here
                         },
                         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     )
@@ -86,7 +92,7 @@ fun MyOrderPage(
 
             AnimatedVisibility(state.isError) {
                 ErrorDialogMolecule {
-                    onEvent.invoke(MyOrderEvent.GetMyOrders)
+                    onEvent.invoke(MyOrderEvent.GetMyOrders(paper, businessId))
                 }
             }
         }

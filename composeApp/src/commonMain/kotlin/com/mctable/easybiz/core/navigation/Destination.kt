@@ -50,7 +50,10 @@ sealed interface Destination {
     }
 
     @Serializable
-    data object MyOrders : Destination {
+    data class MyOrders(
+        val paper: String? = "CLIENTE",
+        val businessId: String? = null
+    ) : Destination {
         override val isLoggedArea = true
         override val title = "Meus pedidos"
     }
@@ -74,7 +77,7 @@ sealed interface Destination {
                 route?.contains("RegisterBusiness") == true -> RegisterBusiness
                 route?.contains("MyBusiness") == true -> MyBusiness
                 route?.contains("MyFavorites") == true -> MyFavorites
-                route?.contains("MyOrders") == true -> MyOrders
+                route?.contains("MyOrders") == true -> MyOrders()
                 else -> Login
             }
         }
@@ -84,7 +87,7 @@ sealed interface Destination {
             RegisterBusiness,
             MyBusiness,
             MyFavorites,
-            MyOrders
+            MyOrders()
         )
     }
 }
