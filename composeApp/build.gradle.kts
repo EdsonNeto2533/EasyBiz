@@ -68,6 +68,8 @@ kotlin {
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.krossbow.stomp.core)
+            implementation(libs.krossbow.websocket.ktor)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

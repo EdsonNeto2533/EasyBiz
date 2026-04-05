@@ -46,12 +46,4 @@ interface EasyBizNetworking {
         params: Map<String, String> = emptyMap(),
         responseMapper: (String) -> T
     ): Result<T>
-
-    suspend fun webSocket(
-        host: String,
-        path: String,
-        headers: Map<String, String> = emptyMap(),
-        params: Map<String, String> = emptyMap(),
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit>
 }

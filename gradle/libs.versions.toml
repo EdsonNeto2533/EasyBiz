@@ -29,6 +29,7 @@ mokoGeo = "0.8.0"
 navCompose = "2.9.2"
 peekaboo = "0.5.2"
 kotlinx-datetime = "0.6.1"
+krossbow = "9.3.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -74,6 +75,8 @@ jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:nav
 peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+krossbow-stomp-core = { module = "org.hildan.krossbow:krossbow-stomp-core", version.ref = "krossbow" }
+krossbow-websocket-ktor = { module = "org.hildan.krossbow:krossbow-websocket-ktor", version.ref = "krossbow" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

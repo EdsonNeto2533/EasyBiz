@@ -115,28 +115,5 @@ class EasyBizNetworkingImpl(
         }.mapTo(responseMapper)
     }
 
-    override suspend fun webSocket(
-        host: String,
-        path: String,
-        headers: Map<String, String>,
-        params: Map<String, String>,
-        block: suspend DefaultClientWebSocketSession.() -> Unit
-    ): Result<Unit> = safeRequest {
-        httpClient.webSocket(
-            method = HttpMethod.Get,
-            host = host.removePrefix("https://").removePrefix("http://"),
-            path = path,
-            request = {
-                params.forEach {
-                    parameter(it.key, it.value)
-                }
-                headers.forEach {
-                    header(it.key, it.value)
-                }
-            },
-            block = block
-        )
-    }
-
     private fun getUrl(host: String, path: String) = "$host$path"
 }

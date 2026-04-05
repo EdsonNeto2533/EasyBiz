@@ -44,8 +44,6 @@ object HttpClientFactory {
             socketTimeoutMillis = 30.seconds.inWholeMilliseconds
         }
 
-        install(WebSockets)
-
         install(ContentNegotiation) {
             json(json = Json {
                 ignoreUnknownKeys = true
