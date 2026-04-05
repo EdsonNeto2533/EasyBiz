@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -116,6 +117,7 @@ fun ChatMessageBubble(message: OrderChatMessageEntity) {
     ) {
         Row(
             verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = if (isMine) Arrangement.End else Arrangement.Start,
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
             if (!isMine) {
@@ -206,6 +208,18 @@ fun ChatInputBar(
 fun OrderChatPagePreview() {
     val state = OrderChatState(
         messages = listOf(
+            OrderChatMessageEntity(
+                id = "1",
+                orderId = "1",
+                senderId = "user1",
+                senderName = "João Silva",
+                content = "Olá",
+                sentAt = "2026-04-03T17:32:16.331Z",
+                isRead = true,
+                readAt = null,
+                senderPhotoUrl = null,
+                true
+            ),
             OrderChatMessageEntity(
                 id = "1",
                 orderId = "1",
