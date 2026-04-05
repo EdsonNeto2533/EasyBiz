@@ -29,11 +29,8 @@ class OrderChatRepositoryImpl(
     override suspend fun sendMessage(
         orderId: String,
         content: String
-    ): Result<OrderChatMessageEntity> = runCatching {
-        val userId = easeBizStorage.getString("userId")
-        return datasource.sendMessage(orderId, content).map {
-            OrderChatMapper.toEntity(it, userId ?: "")
-        }
+    ): Result<Unit> = runCatching {
+        return datasource.sendMessage(orderId, content)
     }
 
     override suspend fun observeMessages(orderId: String): Flow<OrderChatMessageEntity> {

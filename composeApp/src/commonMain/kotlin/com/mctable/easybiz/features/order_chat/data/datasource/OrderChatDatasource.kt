@@ -2,17 +2,17 @@ package com.mctable.easybiz.features.order_chat.data.datasource
 
 import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.networking.EasyBizNetworking
+import com.mctable.easybiz.core.networking.EasyBizWebSocket
 import com.mctable.easybiz.features.order_chat.data.dto.SendMessageDto
+import com.mctable.easybiz.features.order_chat.data.manager.OrderChatWebSocketManager
 import com.mctable.easybiz.features.order_chat.data.mapper.OrderChatMapper
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatMessageResponseModel
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatPageResponseModel
-import io.ktor.websocket.Frame
-import io.ktor.websocket.readText
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.json.Json
+import org.hildan.krossbow.stomp.sendText
+import org.hildan.krossbow.stomp.subscribeText
 
 interface OrderChatDatasource {
     suspend fun getMessages(
@@ -24,14 +24,15 @@ interface OrderChatDatasource {
     suspend fun sendMessage(
         orderId: String,
         content: String
-    ): Result<OrderChatMessageResponseModel>
+    ): Result<Unit>
 
-    fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel>
+    suspend fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel>
 }
 
 class OrderChatDatasourceImpl(
     private val networking: EasyBizNetworking,
-    private val appEnv: AppEnv
+    private val appEnv: AppEnv,
+    private val orderChatWebSocketManager: OrderChatWebSocketManager
 ) : OrderChatDatasource {
 
     override suspend fun getMessages(
@@ -55,33 +56,24 @@ class OrderChatDatasourceImpl(
     override suspend fun sendMessage(
         orderId: String,
         content: String
-    ): Result<OrderChatMessageResponseModel> {
-        return networking.post(
-            host = appEnv.host,
-            path = "/pedidos/$orderId/mensagens",
-            body = SendMessageDto(conteudo = content),
-            responseMapper = { jsonString ->
-                OrderChatMapper.parseMessageResponse(jsonString)
-            }
-        )
+    ): Result<Unit> {
+        val payload = """{"conteudo": "$content"}"""
+        val session = orderChatWebSocketManager.getSession()
+        session.sendText("/app/chat/$orderId", payload)
+
+        return Result.success(Unit)
     }
 
-    override fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel> = callbackFlow {
-        networking.webSocket(
-            host = appEnv.host,
-            path = "/pedidos/$orderId/mensagens",
-            block = {
-                incoming.consumeAsFlow()
-                    .filterIsInstance<Frame.Text>()
-                    .map { frame ->
-                        val jsonString = frame.readText()
-                        OrderChatMapper.parseMessageResponse(jsonString)
-                    }
-                    .collect { message ->
-                        send(message)
-                    }
+    override suspend fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel> =
+        flow {
+            val session = orderChatWebSocketManager.getSession()
+
+            val subscribeDestination = "/user/queue/chat/$orderId"
+
+            val subscription = session.subscribeText(subscribeDestination)
+
+            subscription.collect {
+                emit(Json.decodeFromString(it))
             }
-        )
-        close()
-    }
+        }
 }

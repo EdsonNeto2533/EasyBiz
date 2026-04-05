@@ -14,7 +14,7 @@ interface OrderChatRepository {
     suspend fun sendMessage(
         orderId: String,
         content: String
-    ): Result<OrderChatMessageEntity>
+    ): Result<Unit>
 
     suspend fun observeMessages(orderId: String): Flow<OrderChatMessageEntity>
 }

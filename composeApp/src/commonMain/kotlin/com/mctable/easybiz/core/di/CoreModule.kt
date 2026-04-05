@@ -11,6 +11,11 @@ import com.mctable.easybiz.core.networking.EasyBizNetworkingImpl
 import com.mctable.easybiz.core.networking.EasyBizWebSocket
 import com.mctable.easybiz.core.networking.EasyBizWebSocketImpl
 import com.mctable.easybiz.core.networking.HttpClientFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.websocket.ktor.KtorWebSocketClient
 import org.koin.core.qualifier.named
@@ -31,7 +36,20 @@ val coreModule = module {
 
     single<EasyBizWebSocket> {
         EasyBizWebSocketImpl(
-            StompClient(KtorWebSocketClient()),
+            StompClient(KtorWebSocketClient(
+                HttpClient {
+                    install(Logging) {
+                        level = LogLevel.ALL
+                        logger = object : Logger {
+                            override fun log(message: String) {
+                                println(message)
+                            }
+                        }
+                    }
+
+                    install(WebSockets)
+                }
+            )),
             get()
         )
     }

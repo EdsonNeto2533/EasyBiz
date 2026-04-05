@@ -98,20 +98,40 @@ buildkonfig {
             name = "API_HOST",
             value = localProp("API_HML_HOST")
         )
+        buildConfigField(
+            type = STRING,
+            name = "SOCKET_HOST",
+            value = localProp("SOCKET_HML_HOST")
+        )
     }
 
     targetConfigs {
         create("debug") {
             buildConfigField(STRING, "API_HOST", localProp("API_HML_HOST"))
+            buildConfigField(
+                type = STRING,
+                name = "SOCKET_HOST",
+                value = localProp("SOCKET_HML_HOST")
+            )
         }
         create("release") {
             buildConfigField(STRING, "API_HOST", localProp("API_HML_HOST"))
+            buildConfigField(
+                type = STRING,
+                name = "SOCKET_HOST",
+                value = localProp("SOCKET_PRD_HOST")
+            )
         }
         create("iosArm64") {
             buildConfigField(
                 type = STRING,
                 name = "API_HOST",
-                value = localProp("API_HML_HOST")
+                value = localProp("API_PRD_HOST")
+            )
+            buildConfigField(
+                type = STRING,
+                name = "SOCKET_HOST",
+                value = localProp("SOCKET_PRD_HOST")
             )
         }
 
@@ -120,6 +140,11 @@ buildkonfig {
                 type = STRING,
                 name = "API_HOST",
                 value = localProp("API_HML_HOST")
+            )
+            buildConfigField(
+                type = STRING,
+                name = "SOCKET_HOST",
+                value = localProp("SOCKET_HML_HOST")
             )
         }
     }

@@ -2,6 +2,7 @@ package com.mctable.easybiz.features.order_chat.di
 
 import com.mctable.easybiz.features.order_chat.data.datasource.OrderChatDatasource
 import com.mctable.easybiz.features.order_chat.data.datasource.OrderChatDatasourceImpl
+import com.mctable.easybiz.features.order_chat.data.manager.OrderChatWebSocketManager
 import com.mctable.easybiz.features.order_chat.data.repository.OrderChatRepositoryImpl
 import com.mctable.easybiz.features.order_chat.domain.repository.OrderChatRepository
 import com.mctable.easybiz.features.order_chat.domain.usecase.*
@@ -10,9 +11,10 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val orderChatModule = module {
-    single<OrderChatDatasource> {
-        OrderChatDatasourceImpl(get(), get())
+    factory<OrderChatDatasource> {
+        OrderChatDatasourceImpl(get(), get(), get())
     }
+    factory { OrderChatWebSocketManager(get(), get()) }
 
     single<OrderChatRepository> {
         OrderChatRepositoryImpl(get(), get())
