@@ -6,4 +6,5 @@ sealed class OrderChatEvent {
     data class OnInputTextChanged(val text: String) : OrderChatEvent()
     data object OnBackPressed : OrderChatEvent()
     data object OnLoadMoreMessages : OrderChatEvent()
+    data object Disconnect : OrderChatEvent()
 }

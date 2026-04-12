@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil3.compose.AsyncImage
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
@@ -57,6 +59,7 @@ fun OrderChatPage(
     orderId: String
 ) {
     val listState = rememberLazyListState()
+    val localLifecycle = LocalLifecycleOwner.current
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -68,13 +71,17 @@ fun OrderChatPage(
         }
     }
 
-    LaunchedEffect(Unit) {
-        onEvent(OrderChatEvent.Init(orderId))
-    }
-
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore && !state.isLastPage && !state.isLoading) {
             onEvent(OrderChatEvent.OnLoadMoreMessages)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onEvent(OrderChatEvent.Init(orderId))
+
+        onDispose {
+            onEvent(OrderChatEvent.Disconnect)
         }
     }
 
