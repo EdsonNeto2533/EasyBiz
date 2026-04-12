@@ -4,6 +4,7 @@ import com.mctable.easybiz.features.my_orders.data.model.MyOrderPageResponseMode
 import com.mctable.easybiz.features.my_orders.data.model.MyOrderResponseModel
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderPageEntity
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import kotlinx.serialization.json.Json
 
 object MyOrderMapper {
@@ -22,7 +23,7 @@ object MyOrderMapper {
             businessName = model.businessName,
             description = model.description,
             desiredDate = model.desiredDate,
-            status = model.status,
+            status = OrderStatus.fromString(model.status),
             createdAt = model.createdAt,
             businessLogoUrl = model.businessLogoUrl
         )

@@ -1,5 +1,7 @@
 package com.mctable.easybiz.features.my_orders.domain.entity
 
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
+
 data class MyOrderEntity(
     val id: String,
     val clientId: String,
@@ -8,7 +10,7 @@ data class MyOrderEntity(
     val businessName: String,
     val description: String,
     val desiredDate: String,
-    val status: String,
+    val status: OrderStatus,
     val createdAt: String,
     val businessLogoUrl: String?
 )

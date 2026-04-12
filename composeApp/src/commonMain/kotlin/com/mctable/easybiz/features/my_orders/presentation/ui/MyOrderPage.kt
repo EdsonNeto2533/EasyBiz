@@ -21,6 +21,7 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
 import com.mctable.easybiz.features.my_orders.presentation.state.MyOrderState
 
@@ -75,10 +76,12 @@ fun MyOrderPage(
                     val order = state.orders[index]
                     BusinessInfoCardMolecule(
                         title = order.businessName,
-                        subtitle = order.status,
+                        subtitle = order.status.name,
                         logoUrl = order.businessLogoUrl,
                         onClick = {
-                            onEvent(MyOrderEvent.OnOrderClick(order.id))
+                            if (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO) {
+                                onEvent(MyOrderEvent.OnOrderClick(order.id))
+                            }
                         },
                         extraContent = {
                             // Future info here
@@ -114,7 +117,7 @@ fun MyOrderPagePreview() {
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",
-                status = "ABERTO",
+                status = OrderStatus.RECUSADO,
                 createdAt = "2026-03-21T15:08:39.551Z",
                 businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
             ),
@@ -126,7 +129,7 @@ fun MyOrderPagePreview() {
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",
-                status = "ABERTO",
+                status = OrderStatus.ABERTO,
                 createdAt = "2026-03-21T15:08:39.551Z",
                 businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
             )
