@@ -24,6 +24,10 @@ val orderChatModule = module {
     factory<SendOrderMessageUseCase> { SendOrderMessageUseCaseImpl(get()) }
     factory<ObserveOrderMessagesUseCase> { ObserveOrderMessagesUseCaseImpl(get()) }
     factory<DisconnectChatUseCase> { DisconnectUseCaseImpl(get()) }
+    factory<MarkMessageAsReadUseCase> { MarkMessageAsReadUseCaseImpl(get()) }
+    factory<SendTypingStatusUseCase> { SendTypingStatusUseCaseImpl(get()) }
+    factory<ObserveTypingStatusUseCase> { ObserveTypingStatusUseCaseImpl(get()) }
+    factory<ObserveMessageReadStatusUseCase> { ObserveMessageReadStatusUseCaseImpl(get()) }
 
     viewModel {
         OrderChatViewModel(
