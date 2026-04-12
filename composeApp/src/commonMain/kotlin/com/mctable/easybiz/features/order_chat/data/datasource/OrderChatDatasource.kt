@@ -29,6 +29,7 @@ interface OrderChatDatasource {
     suspend fun sendTypingStatus(
         orderId: String,
         userName: String,
+        userId: String,
         isTyping: Boolean
     ): Result<Unit>
 
@@ -52,6 +53,10 @@ class OrderChatDatasourceImpl(
     private val orderChatWebSocketManager: OrderChatWebSocketManager
 ) : OrderChatDatasource {
 
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     override suspend fun getMessages(
         orderId: String,
         page: Int,
@@ -74,7 +79,7 @@ class OrderChatDatasourceImpl(
         orderId: String,
         content: String
     ): Result<Unit> = runCatching {
-        val payload = Json.encodeToString(SendMessageDto(conteudo = content))
+        val payload = """{"conteudo": "$content"}"""
         val session = orderChatWebSocketManager.getSession()
         session.sendText("/app/chat/$orderId", payload)
         return Result.success(Unit)
@@ -82,10 +87,11 @@ class OrderChatDatasourceImpl(
 
     override suspend fun sendTypingStatus(
         orderId: String,
+        userId: String,
         userName: String,
         isTyping: Boolean
     ): Result<Unit> = runCatching {
-        val payload = Json.encodeToString(TypingStatusDto(userName = userName, isTyping = isTyping))
+        val payload = json.encodeToString(TypingStatusDto(userName = userName, isTyping = isTyping))
         val session = orderChatWebSocketManager.getSession()
         session.sendText("/app/chat/$orderId/digitando", payload)
         return Result.success(Unit)
@@ -107,7 +113,7 @@ class OrderChatDatasourceImpl(
             val subscription = session.subscribeText(subscribeDestination)
 
             subscription.collect {
-                emit(Json.decodeFromString(it))
+                emit(json.decodeFromString(it))
             }
         }
 
@@ -118,7 +124,7 @@ class OrderChatDatasourceImpl(
             val subscription = session.subscribeText(subscribeDestination)
 
             subscription.collect {
-                emit(Json.decodeFromString(it))
+                emit(json.decodeFromString(it))
             }
         }
 

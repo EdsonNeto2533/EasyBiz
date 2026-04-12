@@ -39,7 +39,8 @@ class OrderChatRepositoryImpl(
         userName: String,
         isTyping: Boolean
     ): Result<Unit> = runCatching {
-        return datasource.sendTypingStatus(orderId, userName, isTyping)
+        val userId = easeBizStorage.getString("userId")
+        return datasource.sendTypingStatus(orderId, userName, userId ?: "", isTyping)
     }
 
     override suspend fun markMessageAsRead(
@@ -65,6 +66,6 @@ class OrderChatRepositoryImpl(
     }
 
     override suspend fun disconnect(): Result<Unit> = runCatching {
-       return datasource.disconnect()
+        return datasource.disconnect()
     }
 }
