@@ -59,7 +59,6 @@ fun OrderChatPage(
     orderId: String
 ) {
     val listState = rememberLazyListState()
-    val localLifecycle = LocalLifecycleOwner.current
 
     val shouldLoadMore by remember {
         derivedStateOf {

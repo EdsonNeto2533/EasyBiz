@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.order_chat.domain.usecase.DisconnectChatUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.GetOrderMessagesUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.ObserveOrderMessagesUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.SendOrderMessageUseCase
@@ -17,6 +18,7 @@ class OrderChatViewModel(
     private val getOrderMessagesUseCase: GetOrderMessagesUseCase,
     private val sendOrderMessageUseCase: SendOrderMessageUseCase,
     private val observeOrderMessagesUseCase: ObserveOrderMessagesUseCase,
+    private val disconnectChatUseCase: DisconnectChatUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -30,12 +32,17 @@ class OrderChatViewModel(
                 loadMessages()
                 observeMessages()
             }
+
             OrderChatEvent.OnSendMessage -> sendMessage()
             is OrderChatEvent.OnInputTextChanged -> {
                 state = state.copy(inputText = event.text)
             }
+
             OrderChatEvent.OnBackPressed -> navigator.pop()
             OrderChatEvent.OnLoadMoreMessages -> loadMoreMessages()
+            OrderChatEvent.Disconnect -> viewModelScope.launch {
+                disconnectChatUseCase.execute()
+            }
         }
     }
 
@@ -59,7 +66,7 @@ class OrderChatViewModel(
 
     private fun loadMoreMessages() {
         if (state.isLastPage || state.isLoading) return
-        
+
         state = state.copy(isLoading = true)
         viewModelScope.launch {
             val nextPage = state.currentPage + 1
@@ -81,10 +88,10 @@ class OrderChatViewModel(
 
     private fun sendMessage() {
         if (state.inputText.isBlank()) return
-        
+
         val content = state.inputText
         state = state.copy(inputText = "")
-        
+
         viewModelScope.launch {
             sendOrderMessageUseCase.execute(state.orderId, content).fold(
                 onSuccess = { newMessage ->

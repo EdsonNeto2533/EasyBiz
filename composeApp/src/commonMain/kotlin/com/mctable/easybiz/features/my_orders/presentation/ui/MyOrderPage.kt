@@ -3,7 +3,6 @@ package com.mctable.easybiz.features.my_orders.presentation.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,13 +98,14 @@ fun MyOrderPage(
                         },
                         extraContent = {
                             if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
-                                Spacer(Modifier.height(8.dp))
                                 TextButton(
                                     onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text("Atualizar status")
                                 }
+
+                                Spacer(Modifier.height(8.dp))
                             }
                         },
                         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
@@ -162,6 +162,7 @@ fun MyOrderPage(
 @Composable
 fun MyOrderPagePreview() {
     val state = MyOrderState(
+        availableStatusOptions = listOf(OrderStatus.ACEITO, OrderStatus.RECUSADO),
         orders = listOf(
             MyOrderEntity(
                 id = "",
@@ -193,7 +194,8 @@ fun MyOrderPagePreview() {
     EasyBizTheme {
         MyOrderPage(
             state = state,
-            onEvent = {}
+            onEvent = {},
+            businessId = "1"
         )
     }
 }

@@ -83,8 +83,6 @@ fun BusinessInfoCardMolecule(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
-
-                extraContent?.invoke()
             }
 
             Column(horizontalAlignment = Alignment.End) {
@@ -104,5 +102,7 @@ fun BusinessInfoCardMolecule(
                 }
             }
         }
+
+        extraContent?.invoke()
     }
 }
