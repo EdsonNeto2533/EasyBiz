@@ -94,11 +94,11 @@ class OrderChatViewModel(
 
         viewModelScope.launch {
             sendOrderMessageUseCase.execute(state.orderId, content).fold(
-                onSuccess = { newMessage ->
-                    // Instant feedback logic can go here
+                onSuccess = {
+
                 },
                 onFailure = {
-                    // Handle failure
+
                 }
             )
         }
