@@ -1,6 +1,5 @@
 package com.mctable.easybiz.features.order_chat.domain.usecase
 
-import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEntity
 import com.mctable.easybiz.features.order_chat.domain.repository.OrderChatRepository
 
 interface SendOrderMessageUseCase {

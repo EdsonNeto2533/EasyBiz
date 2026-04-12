@@ -2,8 +2,6 @@ package com.mctable.easybiz.features.order_chat.data.datasource
 
 import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.networking.EasyBizNetworking
-import com.mctable.easybiz.core.networking.EasyBizWebSocket
-import com.mctable.easybiz.features.order_chat.data.dto.SendMessageDto
 import com.mctable.easybiz.features.order_chat.data.manager.OrderChatWebSocketManager
 import com.mctable.easybiz.features.order_chat.data.mapper.OrderChatMapper
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatMessageResponseModel

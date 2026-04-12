@@ -1,8 +1,6 @@
 package com.mctable.easybiz.core.networking
 
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -12,7 +10,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import io.ktor.http.HttpMethod
 
 class EasyBizNetworkingImpl(
     private val httpClient: HttpClient

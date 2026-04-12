@@ -1,7 +1,5 @@
 package com.mctable.easybiz.core.networking
 
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-
 interface EasyBizNetworking {
 
     suspend fun <T> get(
