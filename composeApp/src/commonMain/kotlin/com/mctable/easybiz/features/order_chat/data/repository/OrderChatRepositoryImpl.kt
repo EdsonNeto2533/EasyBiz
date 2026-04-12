@@ -39,4 +39,8 @@ class OrderChatRepositoryImpl(
             OrderChatMapper.toEntity(response, userId ?: "")
         }
     }
+
+    override suspend fun disconnect(): Result<Unit> = runCatching {
+        return datasource.disconnect()
+    }
 }

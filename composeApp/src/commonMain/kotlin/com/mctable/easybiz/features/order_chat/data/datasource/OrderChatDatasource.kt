@@ -25,6 +25,8 @@ interface OrderChatDatasource {
     ): Result<Unit>
 
     suspend fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel>
+
+    suspend fun disconnect(): Result<Unit>
 }
 
 class OrderChatDatasourceImpl(
@@ -74,4 +76,8 @@ class OrderChatDatasourceImpl(
                 emit(Json.decodeFromString(it))
             }
         }
+
+    override suspend fun disconnect(): Result<Unit> {
+        return Result.success(orderChatWebSocketManager.disconnect())
+    }
 }
