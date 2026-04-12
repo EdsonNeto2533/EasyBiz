@@ -152,13 +152,29 @@ fun ChatMessageBubble(message: OrderChatMessageEntity) {
                         text = message.content,
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    Text(
-                        text = message.sentAt.substring(11, 16), // Simple time extraction
-                        style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.align(Alignment.End),
-                        color = Color.Gray,
-                        fontSize = 10.sp
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = message.sentAt.substring(11, 16), // Simple time extraction
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.Gray,
+                            fontSize = 10.sp
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        if (message.isRead) {
+                            Icon(
+                                painter = AppIcons.done(),
+                                contentDescription = null,
+                                tint = Color.Green.copy(alpha = 0.5f),
+                                modifier = Modifier.size(12.dp)
+                            )
+                        }
+                    }
+
+
                 }
             }
         }
