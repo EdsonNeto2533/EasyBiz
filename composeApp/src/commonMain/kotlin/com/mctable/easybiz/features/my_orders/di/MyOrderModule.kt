@@ -6,6 +6,8 @@ import com.mctable.easybiz.features.my_orders.data.repository.MyOrderRepositoryI
 import com.mctable.easybiz.features.my_orders.domain.repository.MyOrderRepository
 import com.mctable.easybiz.features.my_orders.domain.usecase.GetMyOrdersUseCase
 import com.mctable.easybiz.features.my_orders.domain.usecase.GetMyOrdersUseCaseImpl
+import com.mctable.easybiz.features.my_orders.domain.usecase.UpdateOrderStatusUseCase
+import com.mctable.easybiz.features.my_orders.domain.usecase.UpdateOrderStatusUseCaseImpl
 import com.mctable.easybiz.features.my_orders.presentation.view_model.MyOrderViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -20,6 +22,7 @@ val myOrderModule = module {
     }
 
     factory<GetMyOrdersUseCase> { GetMyOrdersUseCaseImpl(get()) }
+    factory<UpdateOrderStatusUseCase> { UpdateOrderStatusUseCaseImpl(get()) }
 
-    viewModel { MyOrderViewModel(get(), get()) }
+    viewModel { MyOrderViewModel(get(), get(), get()) }
 }

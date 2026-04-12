@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import com.mctable.easybiz.features.my_orders.domain.usecase.GetMyOrdersUseCase
+import com.mctable.easybiz.features.my_orders.domain.usecase.UpdateOrderStatusUseCase
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
 import com.mctable.easybiz.features.my_orders.presentation.state.MyOrderState
 import kotlinx.coroutines.launch
 
 class MyOrderViewModel(
     private val getMyOrdersUseCase: GetMyOrdersUseCase,
+    private val updateOrderStatusUseCase: UpdateOrderStatusUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -26,6 +29,9 @@ class MyOrderViewModel(
             MyOrderEvent.OnBackPressed -> navigator.pop()
             is MyOrderEvent.LoadNextPage -> handleNextPage(event.paper, event.businessId)
             is MyOrderEvent.OnOrderClick -> navigator.navigate(Destination.Chat(event.orderId))
+            is MyOrderEvent.OnUpdateStatusClick -> handleUpdateStatusClick(event.orderId, event.currentStatus)
+            MyOrderEvent.OnDismissBottomSheet -> state = state.copy(showStatusBottomSheet = false)
+            is MyOrderEvent.OnStatusSelected -> handleStatusSelected(event.orderId, event.newStatus)
         }
     }
 
@@ -71,6 +77,38 @@ class MyOrderViewModel(
                         isLoading = false,
                         isError = true
                     )
+                }
+            )
+        }
+    }
+
+    private fun handleUpdateStatusClick(orderId: String, currentStatus: OrderStatus) {
+        val options = when (currentStatus) {
+            OrderStatus.ABERTO -> listOf(OrderStatus.ACEITO, OrderStatus.RECUSADO)
+            OrderStatus.ACEITO -> listOf(OrderStatus.CONCLUIDO, OrderStatus.RECUSADO)
+            else -> emptyList()
+        }
+        
+        if (options.isNotEmpty()) {
+            state = state.copy(
+                selectedOrderId = orderId,
+                availableStatusOptions = options,
+                showStatusBottomSheet = true
+            )
+        }
+    }
+
+    private fun handleStatusSelected(orderId: String, newStatus: OrderStatus) {
+        state = state.copy(showStatusBottomSheet = false, isLoading = true)
+        viewModelScope.launch {
+            updateOrderStatusUseCase.execute(orderId, newStatus).fold(
+                onSuccess = {
+                    // Refresh current page/list
+                    // For simplicity, reload first page
+                    loadMyOrders() 
+                },
+                onFailure = {
+                    state = state.copy(isLoading = false, isError = true)
                 }
             )
         }
