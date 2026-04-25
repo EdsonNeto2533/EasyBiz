@@ -29,6 +29,9 @@ class LoginRepositoryImpl(
     ): Result<LoginEntity> = runCatching {
         return remoteDataSource.register(email, password, name).mapCatching { responseModel ->
             easyBizStorage.setString("token", responseModel.token)
+            responseModel.userId?.let {
+                easyBizStorage.setString("userId", responseModel.userId)
+            }
             LoginMapper.toDomain(responseModel)
         }
     }
