@@ -14,12 +14,22 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.utils.AppIcons
+import com.mctable.easybiz.core.helpers.ObserveAsEvents
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+
+val userChannel: Channel<String> = Channel()
 
 @Composable
 fun NavDrawer(
@@ -29,7 +39,12 @@ fun NavDrawer(
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-
+    var userName by remember {
+        mutableStateOf("")
+    }
+    ObserveAsEvents(userChannel.receiveAsFlow()) { action ->
+        userName = action
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = currentDestination.isLoggedArea,
@@ -43,7 +58,7 @@ fun NavDrawer(
                             Column(
                                 modifier = Modifier.padding(start = 12.dp)
                             ) {
-                                Text("Edson Neto", style = MaterialTheme.typography.titleMedium)
+                                Text(userName, style = MaterialTheme.typography.titleMedium)
                                 Text("Cliente", style = MaterialTheme.typography.bodySmall)
                             }
                         }
@@ -55,7 +70,12 @@ fun NavDrawer(
                         Destination.drawerDestinations.forEach { destination ->
                             NavigationDrawerItem(
                                 label = { Text(text = destination.title ?: "") },
-                                icon = { Icon(painter = Destination.getIcon(destination), contentDescription = null) },
+                                icon = {
+                                    Icon(
+                                        painter = Destination.getIcon(destination),
+                                        contentDescription = null
+                                    )
+                                },
                                 selected = currentDestination::class == destination::class,
                                 onClick = {
                                     scope.launch { drawerState.close() }
