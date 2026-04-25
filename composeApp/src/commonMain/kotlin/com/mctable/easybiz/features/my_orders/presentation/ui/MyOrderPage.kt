@@ -2,11 +2,22 @@ package com.mctable.easybiz.features.my_orders.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -21,9 +32,11 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
 import com.mctable.easybiz.features.my_orders.presentation.state.MyOrderState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyOrderPage(
     state: MyOrderState,
@@ -32,6 +45,7 @@ fun MyOrderPage(
     businessId: String? = null
 ) {
     val listState = rememberLazyListState()
+    val bottomSheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit) {
         onEvent(MyOrderEvent.GetMyOrders(paper, businessId))
@@ -75,11 +89,24 @@ fun MyOrderPage(
                     val order = state.orders[index]
                     BusinessInfoCardMolecule(
                         title = order.businessName,
-                        subtitle = order.status,
+                        subtitle = order.status.name,
                         logoUrl = order.businessLogoUrl,
-                        onClick = { /* Do nothing for now */ },
+                        onClick = {
+                            if (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO) {
+                                onEvent(MyOrderEvent.OnOrderClick(order.id))
+                            }
+                        },
                         extraContent = {
-                            // Future info here
+                            if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
+                                TextButton(
+                                    onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Atualizar status")
+                                }
+
+                                Spacer(Modifier.height(8.dp))
+                            }
                         },
                         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     )
@@ -96,6 +123,38 @@ fun MyOrderPage(
                 }
             }
         }
+
+        if (state.showStatusBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { onEvent(MyOrderEvent.OnDismissBottomSheet) },
+                sheetState = bottomSheetState
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    Text(
+                        text = "Alterar status do pedido",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    
+                    state.availableStatusOptions.forEach { status ->
+                        Button(
+                            onClick = { 
+                                state.selectedOrderId?.let { id ->
+                                    onEvent(MyOrderEvent.OnStatusSelected(id, status))
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                        ) {
+                            Text(status.name)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -103,6 +162,7 @@ fun MyOrderPage(
 @Composable
 fun MyOrderPagePreview() {
     val state = MyOrderState(
+        availableStatusOptions = listOf(OrderStatus.ACEITO, OrderStatus.RECUSADO),
         orders = listOf(
             MyOrderEntity(
                 id = "",
@@ -112,7 +172,7 @@ fun MyOrderPagePreview() {
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",
-                status = "ABERTO",
+                status = OrderStatus.RECUSADO,
                 createdAt = "2026-03-21T15:08:39.551Z",
                 businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
             ),
@@ -124,7 +184,7 @@ fun MyOrderPagePreview() {
                 businessName = "Marcos Elétrica",
                 description = "Instalar chuveiro",
                 desiredDate = "2026-03-21T15:08:39.551Z",
-                status = "ABERTO",
+                status = OrderStatus.ABERTO,
                 createdAt = "2026-03-21T15:08:39.551Z",
                 businessLogoUrl = "https://res.cloudinary.com/easybiz/image/upload/logo.jpg"
             )
@@ -134,7 +194,8 @@ fun MyOrderPagePreview() {
     EasyBizTheme {
         MyOrderPage(
             state = state,
-            onEvent = {}
+            onEvent = {},
+            businessId = "1"
         )
     }
 }

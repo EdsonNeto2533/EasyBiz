@@ -45,4 +45,3 @@ interface EasyBizNetworking {
         responseMapper: (String) -> T
     ): Result<T>
 }
-

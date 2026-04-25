@@ -4,6 +4,7 @@ import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.networking.EasyBizNetworking
 import com.mctable.easybiz.features.my_orders.data.mapper.MyOrderMapper
 import com.mctable.easybiz.features.my_orders.data.model.MyOrderPageResponseModel
+import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 
 interface MyOrderDatasource {
     suspend fun getMyOrders(
@@ -12,6 +13,11 @@ interface MyOrderDatasource {
         paper: String?,
         businessId: String?
     ): Result<MyOrderPageResponseModel>
+
+    suspend fun updateOrderStatus(
+        orderId: String,
+        status: OrderStatus
+    ): Result<Unit>
 }
 
 class MyOrderDatasourceImpl(
@@ -39,6 +45,22 @@ class MyOrderDatasourceImpl(
             responseMapper = { jsonString ->
                 MyOrderMapper.parsePageResponse(jsonString)
             }
+        )
+    }
+
+    override suspend fun updateOrderStatus(orderId: String, status: OrderStatus): Result<Unit> {
+        val path = when (status) {
+            OrderStatus.ACEITO -> "/pedidos/$orderId/ACEITAR"
+            OrderStatus.CONCLUIDO -> "/pedidos/$orderId/CONCLUIR"
+            OrderStatus.CANCELADO -> "/pedidos/$orderId/CANCELAR"
+            OrderStatus.RECUSADO -> "/pedidos/$orderId/RECUSAR"
+            else -> throw IllegalArgumentException("Invalid status update")
+        }
+
+        return networking.patch(
+            host = appEnv.host,
+            path = path,
+            responseMapper = { }
         )
     }
 }

@@ -22,6 +22,8 @@ import com.mctable.easybiz.features.my_favorites.presentation.ui.MyFavoritePage
 import com.mctable.easybiz.features.my_favorites.presentation.view_model.MyFavoriteViewModel
 import com.mctable.easybiz.features.my_orders.presentation.ui.MyOrderPage
 import com.mctable.easybiz.features.my_orders.presentation.view_model.MyOrderViewModel
+import com.mctable.easybiz.features.order_chat.presentation.ui.page.OrderChatPage
+import com.mctable.easybiz.features.order_chat.presentation.view_model.OrderChatViewModel
 import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
 import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
@@ -145,6 +147,18 @@ fun AppNavHost() {
                     paper = route.paper,
                     businessId = route.businessId
                 )
+            }
+
+            composable<Destination.Chat> {
+                val route = it.toRoute<Destination.Chat>()
+                val viewModel = koinViewModel<OrderChatViewModel>()
+
+                OrderChatPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                    orderId = route.orderId
+                )
+
             }
         }
     }

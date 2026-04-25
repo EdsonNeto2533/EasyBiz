@@ -58,6 +58,11 @@ sealed interface Destination {
         override val title = "Meus pedidos"
     }
 
+    @Serializable
+    data class Chat(val orderId: String) : Destination {
+        override val isLoggedArea = true
+    }
+
     companion object {
         @Composable
         fun getIcon(destination: Destination): Painter {

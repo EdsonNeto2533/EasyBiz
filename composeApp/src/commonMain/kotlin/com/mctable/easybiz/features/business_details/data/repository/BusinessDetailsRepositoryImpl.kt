@@ -16,7 +16,9 @@ class BusinessDetailsRepositoryImpl(
             }
         }
 
-    override suspend fun createOrder(request: CreateOrderRequest): Result<Unit> = runCatching {
-        return datasource.createOrder(request).map { }
+    override suspend fun createOrder(request: CreateOrderRequest): Result<String> = runCatching {
+        return datasource.createOrder(request).map {
+            it.id
+        }
     }
 }

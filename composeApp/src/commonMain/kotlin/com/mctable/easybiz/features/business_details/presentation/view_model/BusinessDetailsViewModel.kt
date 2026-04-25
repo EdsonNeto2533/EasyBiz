@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderUseCase
@@ -12,11 +13,7 @@ import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessD
 import com.mctable.easybiz.features.business_details.presentation.event.BusinessDetailsEvent
 import com.mctable.easybiz.features.business_details.presentation.state.BusinessDetailsState
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
 import kotlin.time.Clock
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 
 class BusinessDetailsViewModel(
@@ -81,7 +78,7 @@ class BusinessDetailsViewModel(
             createOrderUseCase.execute(request).fold(
                 onSuccess = {
                     state = state.copy(showLoading = false)
-                    // TODO: Navigate to chat
+                    navigator.navigate(Destination.Chat(it))
                 },
                 onFailure = {
                     state = state.copy(showLoading = false, showError = true)
