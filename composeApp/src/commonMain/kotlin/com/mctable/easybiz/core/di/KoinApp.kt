@@ -8,6 +8,7 @@ import com.mctable.easybiz.features.my_orders.di.myOrderModule
 import com.mctable.easybiz.features.order_chat.di.orderChatModule
 import com.mctable.easybiz.features.register_business.di.registerBusinessModule
 import com.mctable.easybiz.features.search_business.di.searchBusinessModule
+import com.mctable.easybiz.features.user_data.di.userDataModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.includes
@@ -25,7 +26,8 @@ fun initProjectKoin(config: KoinAppDeclaration? = null) {
             myBusinessModule,
             myFavoriteModule,
             myOrderModule,
-            orderChatModule
+            orderChatModule,
+            userDataModule
         )
     }
 }

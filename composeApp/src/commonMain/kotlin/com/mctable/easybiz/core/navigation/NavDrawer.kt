@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.core.helpers.ObserveAsEvents
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
