@@ -10,6 +10,8 @@ import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserDataUseCa
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserDataUseCaseImpl
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserPhotoUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserPhotoUseCaseImpl
+import com.mctable.easybiz.features.user_data.presentation.view_model.UserDataViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -37,4 +39,6 @@ val userDataModule = module {
     factory<UpdateUserPhotoUseCase> {
         UpdateUserPhotoUseCaseImpl(get())
     }
+
+    viewModel { UserDataViewModel(get(), get(), get()) }
 }

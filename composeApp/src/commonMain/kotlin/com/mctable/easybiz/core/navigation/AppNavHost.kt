@@ -30,6 +30,8 @@ import com.mctable.easybiz.features.register_business.presentation.view_model.Re
 import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import com.mctable.easybiz.features.search_business.presentation.ui.SearchBusinessPage
 import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
+import com.mctable.easybiz.features.user_data.presentation.ui.page.UserDataPage
+import com.mctable.easybiz.features.user_data.presentation.view_model.UserDataViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
@@ -159,6 +161,15 @@ fun AppNavHost() {
                     orderId = route.orderId
                 )
 
+            }
+
+            composable<Destination.Profile> {
+                val viewModel = koinViewModel<UserDataViewModel>()
+
+                UserDataPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) }
+                )
             }
         }
     }
