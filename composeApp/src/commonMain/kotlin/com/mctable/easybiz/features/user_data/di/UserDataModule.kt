@@ -40,5 +40,5 @@ val userDataModule = module {
         UpdateUserPhotoUseCaseImpl(get())
     }
 
-    viewModel { UserDataViewModel(get(), get(), get()) }
+    viewModel { UserDataViewModel(get(), get(), get(), get()) }
 }

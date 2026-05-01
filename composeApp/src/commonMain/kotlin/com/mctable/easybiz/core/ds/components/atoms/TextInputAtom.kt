@@ -37,6 +37,8 @@ fun TextInputAtom(
     placeHolder: String,
     onChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    initialValue: String = "",
+    enabled: Boolean = true,
     icon: Painter? = null,
     leadingIcon: Painter? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -46,7 +48,7 @@ fun TextInputAtom(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     imeAction: ImeAction = ImeAction.Next
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by remember(initialValue) { mutableStateOf(initialValue) }
     val visualTransformation =
         if (mask != null) MaskVisualTransformation(mask) else VisualTransformation.None
 
@@ -55,6 +57,7 @@ fun TextInputAtom(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = text,
+            enabled = enabled,
             keyboardActions = keyboardActions,
             onValueChange = {
                 val newText = if (mask != null) it.take(mask.count { c -> c == '#' }) else it

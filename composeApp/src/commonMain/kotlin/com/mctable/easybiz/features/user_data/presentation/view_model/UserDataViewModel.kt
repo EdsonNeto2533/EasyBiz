@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.core.navigation.userChannel
 import com.mctable.easybiz.features.user_data.domain.usecase.GetUserDataUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserDataUseCase
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 class UserDataViewModel(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val updateUserDataUseCase: UpdateUserDataUseCase,
-    private val updateUserPhotoUseCase: UpdateUserPhotoUseCase
+    private val updateUserPhotoUseCase: UpdateUserPhotoUseCase,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     var state by mutableStateOf(UserDataState())
@@ -30,6 +32,7 @@ class UserDataViewModel(
             is UserDataEvent.OnImageLoaded -> onImageLoaded(event.bytes)
             UserDataEvent.UpdateUserData -> updateUserData()
             UserDataEvent.UpdateUserImage -> updateUserImage()
+            UserDataEvent.OnBackPressed -> navigator.pop()
         }
     }
 
