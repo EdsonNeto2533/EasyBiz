@@ -10,17 +10,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,7 +35,9 @@ import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.register_business.presentation.event.UpdateBusinessProfileEvent
 import com.mctable.easybiz.features.register_business.presentation.state.UpdateBusinessProfileState
 import com.preat.peekaboo.image.picker.SelectionMode
@@ -61,6 +66,8 @@ fun UpdateBusinessProfilePage(
 
     Scaffold(
 
+        containerColor = MaterialTheme.colorScheme.background,
+
         topBar = {
             TopAppBarOrganism(
                 title = "Atualizar perfil",
@@ -70,13 +77,23 @@ fun UpdateBusinessProfilePage(
         },
 
         bottomBar = {
-
-            ButtonAtom(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                text = "Salvar alterações",
-                isEnabled = state.enableButton,
-                onClick = { onEvent(UpdateBusinessProfileEvent.UpdateBusiness(id)) }
-            )
+            Surface(
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp,
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                ButtonAtom(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.screenPaddingHorizontal,
+                            vertical = Dimens.spacingMd
+                        ),
+                    text = "Salvar alterações",
+                    isEnabled = state.enableButton,
+                    onClick = { onEvent(UpdateBusinessProfileEvent.UpdateBusiness(id)) }
+                )
+            }
         }
 
     ) { padding ->
@@ -85,24 +102,25 @@ fun UpdateBusinessProfilePage(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Dimens.screenPaddingHorizontal)
                 .fillMaxSize()
         ) {
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
             Text(
                 text = "Informações do prestador",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .height(160.dp)
+                    .clip(MaterialTheme.shapes.large)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable {
                         singleImagePicker.launch()
@@ -118,15 +136,24 @@ fun UpdateBusinessProfilePage(
                         contentScale = ContentScale.Crop
                     )
                 } else {
-                    Text(
-                        text = "Adicionar imagem",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = AppIcons.accountCircle(),
+                            contentDescription = null,
+                            modifier = Modifier.size(Dimens.iconSizeLg),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.height(Dimens.spacingSm))
+                        Text(
+                            text = "Toque para adicionar imagem",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
             TextInputAtom(
                 label = "Descrição",
@@ -136,7 +163,7 @@ fun UpdateBusinessProfilePage(
                 }
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 label = "Telefone",
@@ -147,7 +174,7 @@ fun UpdateBusinessProfilePage(
                 }
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 label = "Menor valor cobrado",
@@ -158,7 +185,7 @@ fun UpdateBusinessProfilePage(
                 }
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 label = "Anos de experiência",
@@ -170,7 +197,7 @@ fun UpdateBusinessProfilePage(
                 }
             )
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(Dimens.spacing4xl))
         }
     }
 

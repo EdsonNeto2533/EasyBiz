@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +24,7 @@ import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.helpers.BindLocationTracker
 import com.mctable.easybiz.core.helpers.rememberLocationTracker
@@ -47,6 +49,8 @@ fun RegisterBusinessPage(
 
     Scaffold(
 
+        containerColor = MaterialTheme.colorScheme.background,
+
         topBar = {
             TopAppBarOrganism(
                 title = "Cadastrar empresa",
@@ -56,13 +60,23 @@ fun RegisterBusinessPage(
         },
 
         bottomBar = {
-
-            ButtonAtom(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                text = "Cadastrar empresa",
-                isEnabled = state.enableButton,
-                onClick = { onEvent(RegisterBusinessEvent.CreateBusiness) }
-            )
+            Surface(
+                tonalElevation = 2.dp,
+                shadowElevation = 8.dp,
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                ButtonAtom(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.screenPaddingHorizontal,
+                            vertical = Dimens.spacingMd
+                        ),
+                    text = "Cadastrar empresa",
+                    isEnabled = state.enableButton,
+                    onClick = { onEvent(RegisterBusinessEvent.CreateBusiness) }
+                )
+            }
         }
 
     ) { padding ->
@@ -71,19 +85,19 @@ fun RegisterBusinessPage(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = Dimens.screenPaddingHorizontal)
                 .fillMaxSize()
         ) {
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
             Text(
                 text = "Informações da empresa",
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
             TextInputAtom(
                 label = "Nome da empresa",
@@ -93,7 +107,7 @@ fun RegisterBusinessPage(
                 }
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 label = "Categoria",
@@ -103,7 +117,7 @@ fun RegisterBusinessPage(
                 }
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 label = "Endereço completo",
@@ -114,7 +128,7 @@ fun RegisterBusinessPage(
                 imeAction = ImeAction.Done
             )
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(Dimens.spacing4xl))
 
             if (state.isLoading) {
                 LoadingDialogMolecule()

@@ -1,6 +1,8 @@
 package com.mctable.easybiz.features.auth.presentation.ui.page
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,15 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,9 +37,10 @@ import com.mctable.easybiz.core.ds.components.atoms.PasswordInputAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.Neutral100
 import com.mctable.easybiz.core.ds.theme.Neutral200
-import com.mctable.easybiz.core.ds.theme.Neutral300
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
@@ -74,24 +76,28 @@ fun LoginPage(
         )
     }
 
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            CenterAlignedTopAppBar(title = {
-                Text("EasyBiz")
-            })
-        },
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             if (!state.showErrorDialog && !state.showPermissionDeniedForeverScreen && !state.showPermissionDeniedScreen)
-                ButtonAtom(
-                    state.loginButtonLabel,
-                    isEnabled = state.enableButton,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                Surface(
+                    tonalElevation = 2.dp,
+                    shadowElevation = 8.dp,
+                    color = MaterialTheme.colorScheme.surface
                 ) {
-                    onEvent.invoke(LoginEvent.LoginClick)
+                    ButtonAtom(
+                        state.loginButtonLabel,
+                        isEnabled = state.enableButton,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = Dimens.screenPaddingHorizontal,
+                                vertical = Dimens.spacingMd
+                            )
+                    ) {
+                        onEvent.invoke(LoginEvent.LoginClick)
+                    }
                 }
         }
     ) {
@@ -99,46 +105,73 @@ fun LoginPage(
             Column(
                 modifier = Modifier
                     .padding(it)
-                    .background(color = Neutral200)
-                    .padding(16.dp)
-                    .fillMaxHeight().verticalScroll(scrollState),
+                    .background(color = MaterialTheme.colorScheme.background)
+                    .padding(horizontal = Dimens.screenPaddingHorizontal)
+                    .fillMaxHeight()
+                    .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(state.title, style = MaterialTheme.typography.titleLarge)
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Dimens.spacing4xl))
+
+                Text(
+                    "EasyBiz",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(modifier = Modifier.height(Dimens.spacingSm))
+
+                Text(
+                    state.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(Dimens.spacingSm))
+
                 Text(
                     state.subTitle,
                     style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(24.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = Neutral300, RoundedCornerShape(16.dp))
-                        .padding(horizontal = 6.dp)
+
+                Spacer(modifier = Modifier.height(Dimens.spacing3xl))
+
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    color = Neutral100,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    ButtonAtom(
-                        state.loginOptionButtonLabel,
-                        onClick = {
-                            onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Login))
-                        },
-                        modifier = Modifier.weight(1f),
-                        buttonType = if (state.operationType is OperationType.Login) ButtonType.Secondary else ButtonType.Ghost
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    ButtonAtom(
-                        state.createAccountOptionButtonLabel,
-                        onClick = {
-                            onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Register))
-                        },
-                        modifier = Modifier.weight(1f),
-                        buttonType = if (state.operationType is OperationType.Register) ButtonType.Secondary else ButtonType.Ghost
-                    )
+                    Row(
+                        modifier = Modifier.padding(Dimens.spacingXs)
+                    ) {
+                        ButtonAtom(
+                            state.loginOptionButtonLabel,
+                            onClick = {
+                                onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Login))
+                            },
+                            modifier = Modifier.weight(1f),
+                            buttonType = if (state.operationType is OperationType.Login) ButtonType.Secondary else ButtonType.Ghost
+                        )
+                        Spacer(modifier = Modifier.width(Dimens.spacingXs))
+                        ButtonAtom(
+                            state.createAccountOptionButtonLabel,
+                            onClick = {
+                                onEvent.invoke(LoginEvent.ChangeOperationType(OperationType.Register))
+                            },
+                            modifier = Modifier.weight(1f),
+                            buttonType = if (state.operationType is OperationType.Register) ButtonType.Secondary else ButtonType.Ghost
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(24.dp))
-                AnimatedVisibility(visible = state.operationType is OperationType.Register) {
+
+                Spacer(modifier = Modifier.height(Dimens.spacingXxl))
+
+                AnimatedVisibility(
+                    visible = state.operationType is OperationType.Register,
+                    enter = fadeIn() + slideInVertically()
+                ) {
                     Column {
                         TextInputAtom(
                             label = "Nome",
@@ -149,10 +182,10 @@ fun LoginPage(
                                 onEvent.invoke(LoginEvent.OnNameTyped(name))
                             }
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Dimens.spacingLg))
                     }
-
                 }
+
                 TextInputAtom(
                     label = state.inputLabel,
                     placeHolder = state.inputPlaceholder,
@@ -163,7 +196,9 @@ fun LoginPage(
                         onEvent.invoke(LoginEvent.OnEmailTyped(email))
                     }
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+
+                Spacer(modifier = Modifier.height(Dimens.spacingLg))
+
                 PasswordInputAtom(
                     label = state.passwordInputLabel,
                     placeHolder = state.passwordInputLabel,
@@ -173,6 +208,8 @@ fun LoginPage(
                         onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                     }
                 )
+
+                Spacer(modifier = Modifier.height(Dimens.spacing3xl))
             }
 
             if (state.showLoadingDialog) {
@@ -204,7 +241,6 @@ fun LoginPage(
                     onEvent.invoke(LoginEvent.RequestPermission(permissionController))
                 }
             }
-
         }
     }
 }

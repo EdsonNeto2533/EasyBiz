@@ -3,24 +3,23 @@ package com.mctable.easybiz.features.my_business.presentation.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.mctable.easybiz.core.ds.components.molecules.EmptyStateMolecule
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.my_business.domain.entity.MyBusinessEntity
 import com.mctable.easybiz.features.my_business.presentation.event.MyBusinessEvent
 import com.mctable.easybiz.features.my_business.presentation.state.MyBusinessState
@@ -37,6 +36,7 @@ fun MyBusinessPage(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBarOrganism(
                 title = "Meus negócios",
@@ -53,25 +53,17 @@ fun MyBusinessPage(
         ) {
             when {
                 state.myBusinessList.isEmpty() && !state.isLoading -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(24.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Você ainda não possui negócios cadastrados",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    EmptyStateMolecule(
+                        icon = AppIcons.creditCard(),
+                        title = "Nenhum negócio cadastrado",
+                        description = "Cadastre sua empresa para começar a receber pedidos"
+                    )
                 }
 
                 else -> {
                     LazyColumn(
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        contentPadding = PaddingValues(Dimens.screenPaddingHorizontal),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
                     ) {
                         items(state.myBusinessList.size) { index ->
                             val business = state.myBusinessList[index]

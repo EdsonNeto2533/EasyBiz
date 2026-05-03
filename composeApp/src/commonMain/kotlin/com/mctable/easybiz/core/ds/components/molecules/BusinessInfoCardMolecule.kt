@@ -7,23 +7,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.mctable.easybiz.core.ds.utils.AppIcons
+import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
+import com.mctable.easybiz.core.ds.theme.Dimens
 
 @Composable
 fun BusinessInfoCardMolecule(
@@ -41,63 +36,61 @@ fun BusinessInfoCardMolecule(
             .fillMaxWidth()
             .clickable { onClick() }
             .then(modifier),
-        shape = RoundedCornerShape(16.dp)
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = Dimens.cardElevation
+        )
     ) {
         Row(
-            modifier = Modifier
-                .padding(16.dp),
+            modifier = Modifier.padding(Dimens.cardPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            logoUrl?.let {
-                AsyncImage(
-                    model = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            } ?: run {
-                Icon(
-                    AppIcons.accountCircle(),
-                    null,
-                    modifier = Modifier
-                        .size(64.dp),
-                )
-            }
+            AvatarAtom(
+                imageUrl = logoUrl,
+                contentDescription = title,
+                size = Dimens.avatarSizeMd
+            )
 
-            Spacer(Modifier.width(12.dp))
+            Spacer(Modifier.width(Dimens.spacingMd))
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(Dimens.spacingXs))
 
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
 
             Column(horizontalAlignment = Alignment.End) {
                 if (onEditClick != null) {
-                    TextButton(
-                        onClick = onEditClick
-                    ) {
-                        Text("Editar")
+                    TextButton(onClick = onEditClick) {
+                        Text(
+                            "Editar",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
                 if (onOrdersClick != null) {
-                    TextButton(
-                        onClick = onOrdersClick
-                    ) {
-                        Text("Pedidos")
+                    TextButton(onClick = onOrdersClick) {
+                        Text(
+                            "Pedidos",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }
