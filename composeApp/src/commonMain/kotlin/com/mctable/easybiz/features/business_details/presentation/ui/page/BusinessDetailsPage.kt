@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -12,16 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
+import com.mctable.easybiz.core.ds.components.atoms.PillAtom
+import com.mctable.easybiz.core.ds.components.atoms.PillType
+import com.mctable.easybiz.core.ds.components.atoms.RatingAtom
+import com.mctable.easybiz.core.ds.components.atoms.SectionHeaderAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetailsEntity
@@ -46,6 +47,8 @@ fun BusinessDetailsPage(
 
     Scaffold(
 
+        containerColor = MaterialTheme.colorScheme.background,
+
         topBar = {
             TopAppBarOrganism(
                 title = state.pageTitle,
@@ -55,13 +58,20 @@ fun BusinessDetailsPage(
         },
 
         bottomBar = {
-            ButtonAtom(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                text = state.startChatLabel,
-                onClick = {
-                    onEvent(BusinessDetailsEvent.CreateOrder)
-                }
-            )
+            Column {
+                ButtonAtom(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.screenPaddingHorizontal,
+                        ),
+                    text = state.startChatLabel,
+                    onClick = {
+                        onEvent(BusinessDetailsEvent.CreateOrder)
+                    }
+                )
+                Box(modifier = Modifier.height(12.dp))
+            }
         }
 
     ) { padding ->
@@ -71,99 +81,64 @@ fun BusinessDetailsPage(
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = Dimens.screenPaddingHorizontal),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-
-                business?.logoUrl?.let {
-                    AsyncImage(
-                        model = it,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                } ?: run {
-                    Icon(
-                        AppIcons.contactEmail(),
-                        null,
-                        modifier = Modifier
-                            .size(120.dp),
-                    )
-                }
-
-
-                if (business?.active == true) {
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .clip(RoundedCornerShape(50))
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
-                    ) {
-
-                        Text(
-                            text = state.availableLabel,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    }
-                }
+            Box(contentAlignment = Alignment.Center) {
+                AvatarAtom(
+                    imageUrl = business?.logoUrl,
+                    contentDescription = business?.name,
+                    size = Dimens.avatarSizeXl,
+                    showOnlineIndicator = business?.active == true
+                )
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(Dimens.spacingLg))
 
             Text(
                 text = business?.name ?: "",
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(Dimens.spacingXs))
 
             Text(
                 text = business?.category ?: "",
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(Dimens.spacingSm))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Icon(
-                    painter = AppIcons.star(),
-                    contentDescription = null,
-                    tint = Color.Yellow.copy(alpha = 0.7f)
+            if (business?.active == true) {
+                PillAtom(
+                    pillType = PillType.Success,
+                    text = state.availableLabel
                 )
-
-                Spacer(Modifier.width(6.dp))
-
-                Text(
-                    text = "${business?.averageRating ?: 0.0} (${business?.totalRatings ?: 0} avaliações)",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Spacer(Modifier.height(Dimens.spacingSm))
             }
 
-            Spacer(Modifier.height(24.dp))
+            RatingAtom(
+                rating = business?.averageRating ?: 0.0,
+                reviewCount = business?.totalRatings ?: 0
+            )
 
-            Row(modifier = Modifier.wrapContentHeight()) {
+            Spacer(Modifier.height(Dimens.spacingXxl))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
+            ) {
                 BadgeCardMolecule(
                     painter = AppIcons.verified(),
                     value = "${business?.yearsOfExperience ?: 0} anos",
                     label = "Experiência",
                     modifier = Modifier.weight(1f)
                 )
-                Spacer(Modifier.width(24.dp))
                 BadgeCardMolecule(
                     painter = AppIcons.creditCard(),
                     value = "R$ ${business?.minimalValue ?: 0}",
@@ -172,47 +147,28 @@ fun BusinessDetailsPage(
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            HorizontalDivider(
+                thickness = Dimens.dividerThickness,
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
 
-                Text(
-                    text = state.addressTitle,
-                    style = MaterialTheme.typography.titleMedium
-                )
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
-                Spacer(Modifier.height(8.dp))
+            SectionHeaderAtom(
+                title = state.addressTitle,
+                subtitle = business?.completeAddress ?: ""
+            )
 
-                Text(
-                    text = business?.completeAddress ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Spacer(Modifier.height(Dimens.spacingXxl))
 
-            Spacer(Modifier.height(24.dp))
+            SectionHeaderAtom(
+                title = state.descriptionLabel,
+                subtitle = business?.description ?: ""
+            )
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                Text(
-                    text = state.descriptionLabel,
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Spacer(Modifier.height(8.dp))
-
-                Text(
-                    text = business?.description ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(Dimens.spacing4xl))
 
             if (state.showLoading) {
                 LoadingDialogMolecule()

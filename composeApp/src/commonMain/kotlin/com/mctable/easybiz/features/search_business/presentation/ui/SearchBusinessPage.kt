@@ -1,7 +1,9 @@
 package com.mctable.easybiz.features.search_business.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,9 +21,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
+import com.mctable.easybiz.core.ds.components.molecules.EmptyStateMolecule
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.core.helpers.BindLocationTracker
@@ -48,6 +52,7 @@ fun SearchBusinessPage(
         onEvent.invoke(SearchBusinessEvent.SearchBusiness)
     }
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBarOrganism(
                 title = "EasyBiz",
@@ -56,10 +61,14 @@ fun SearchBusinessPage(
             )
         }) {
         Column(
-            modifier = Modifier
-                .padding(it)
+            modifier = Modifier.padding(it)
         ) {
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = Dimens.dividerThickness,
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
             TextInputAtom(
                 "",
                 placeHolder = state.inputPlaceholder,
@@ -70,28 +79,46 @@ fun SearchBusinessPage(
                     onEvent.invoke(SearchBusinessEvent.SearchBusinessByName)
                 }),
                 imeAction = ImeAction.Search,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.screenPaddingHorizontal, vertical = Dimens.spacingSm),
                 leadingIcon = AppIcons.search()
             )
+
             Text(
                 state.title,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.titleMedium
+                modifier = Modifier.padding(
+                    horizontal = Dimens.screenPaddingHorizontal,
+                    vertical = Dimens.spacingSm
+                ),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            LazyColumn {
-                items(state.businessList.size) { index ->
-                    val business = state.businessList[index]
-                    ProfessionalCardOrganism(
-                        name = business.name,
-                        profession = business.category,
-                        rating = business.averageRating,
-                        distance = "${business.distance}km de você",
-                        imageUrl = business.logo,
-                        onChatClick = {
-                            onEvent.invoke(SearchBusinessEvent.OnBusinessClick(business.id))
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    )
+
+            if (state.businessList.isEmpty() && !state.showLoading) {
+                EmptyStateMolecule(
+                    icon = AppIcons.search(),
+                    title = "Nenhum prestador encontrado",
+                    description = "Tente ajustar sua busca ou localização"
+                )
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = Dimens.screenPaddingHorizontal),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
+                ) {
+                    items(state.businessList.size) { index ->
+                        val business = state.businessList[index]
+                        ProfessionalCardOrganism(
+                            name = business.name,
+                            profession = business.category,
+                            rating = business.averageRating,
+                            distance = "${business.distance}km de você",
+                            imageUrl = business.logo,
+                            onChatClick = {
+                                onEvent.invoke(SearchBusinessEvent.OnBusinessClick(business.id))
+                            }
+                        )
+                    }
                 }
             }
 
@@ -106,7 +133,6 @@ fun SearchBusinessPage(
             }
         }
     }
-
 }
 
 

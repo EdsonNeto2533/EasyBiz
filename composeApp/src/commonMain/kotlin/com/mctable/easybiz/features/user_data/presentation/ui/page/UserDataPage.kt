@@ -14,17 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonType
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.user_data.domain.entity.UserEntity
@@ -58,6 +58,7 @@ fun UserDataPage(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBarOrganism(
                 title = "Meu Perfil",
@@ -71,42 +72,35 @@ fun UserDataPage(
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp, vertical = 16.dp),
+                .padding(
+                    horizontal = Dimens.screenPaddingHorizontal,
+                    vertical = Dimens.screenPaddingVertical
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            
+            Spacer(modifier = Modifier.height(Dimens.spacingXxl))
+
             // Profile Image Section
             Box(
                 modifier = Modifier
-                    .size(140.dp)
+                    .size(Dimens.avatarSizeXl)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable(enabled = state.isEditMode) {
                         singleImagePicker.launch()
                     },
                 contentAlignment = Alignment.Center
             ) {
-                if (state.user?.photoUrl != null) {
-                    AsyncImage(
-                        model = state.user.photoUrl,
-                        contentDescription = "Foto de perfil",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        painter = AppIcons.accountCircle(),
-                        contentDescription = null,
-                        modifier = Modifier.size(80.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                AvatarAtom(
+                    imageUrl = state.user?.photoUrl,
+                    contentDescription = "Foto de perfil",
+                    size = Dimens.avatarSizeXl
+                )
 
                 if (state.isEditMode) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
+                            .clip(CircleShape)
                             .background(Color.Black.copy(alpha = 0.4f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -115,20 +109,19 @@ fun UserDataPage(
                                 painter = AppIcons.accountCircle(),
                                 contentDescription = "Mudar foto",
                                 tint = Color.White,
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(Dimens.iconSizeLg)
                             )
                             Text(
                                 text = "Alterar",
                                 color = Color.White,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold
+                                style = MaterialTheme.typography.labelSmall
                             )
                         }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(Dimens.spacing3xl))
 
             // User Info Fields
             TextInputAtom(
@@ -140,7 +133,7 @@ fun UserDataPage(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
                 initialValue = state.user?.email ?: "",
@@ -151,7 +144,7 @@ fun UserDataPage(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(Dimens.spacing4xl))
 
             // Action Buttons
             if (!state.isEditMode) {
@@ -166,7 +159,7 @@ fun UserDataPage(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onEvent(UserDataEvent.UpdateUserData) }
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Dimens.spacingMd))
                 ButtonAtom(
                     text = "Cancelar",
                     buttonType = ButtonType.Secondary,

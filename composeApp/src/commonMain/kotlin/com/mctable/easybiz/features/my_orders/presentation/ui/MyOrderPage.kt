@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -27,10 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.molecules.BusinessInfoCardMolecule
+import com.mctable.easybiz.core.ds.components.molecules.EmptyStateMolecule
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
 import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import com.mctable.easybiz.features.my_orders.presentation.event.MyOrderEvent
@@ -68,6 +73,7 @@ fun MyOrderPage(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBarOrganism(
                 title = "Meus pedidos",
@@ -81,35 +87,51 @@ fun MyOrderPage(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(state.orders.size) { index ->
-                    val order = state.orders[index]
-                    BusinessInfoCardMolecule(
-                        title = order.businessName,
-                        subtitle = order.status.name,
-                        logoUrl = order.businessLogoUrl,
-                        onClick = {
-                            if (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO) {
-                                onEvent(MyOrderEvent.OnOrderClick(order.id))
-                            }
-                        },
-                        extraContent = {
-                            if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
-                                TextButton(
-                                    onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("Atualizar status")
+            if (state.orders.isEmpty() && !state.isLoading) {
+                EmptyStateMolecule(
+                    icon = AppIcons.search(),
+                    title = "Nenhum pedido encontrado",
+                    description = "Seus pedidos aparecerão aqui"
+                )
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(state.orders.size) { index ->
+                        val order = state.orders[index]
+                        BusinessInfoCardMolecule(
+                            title = order.businessName,
+                            subtitle = order.status.name,
+                            logoUrl = order.businessLogoUrl,
+                            onClick = {
+                                if (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO) {
+                                    onEvent(MyOrderEvent.OnOrderClick(order.id))
                                 }
-
-                                Spacer(Modifier.height(8.dp))
-                            }
-                        },
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                    )
+                            },
+                            extraContent = {
+                                if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
+                                    TextButton(
+                                        onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = Dimens.cardPadding)
+                                    ) {
+                                        Text(
+                                            "Atualizar status",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier.padding(
+                                top = Dimens.spacingMd,
+                                start = Dimens.screenPaddingHorizontal,
+                                end = Dimens.screenPaddingHorizontal
+                            )
+                        )
+                    }
                 }
             }
 
@@ -127,29 +149,47 @@ fun MyOrderPage(
         if (state.showStatusBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { onEvent(MyOrderEvent.OnDismissBottomSheet) },
-                sheetState = bottomSheetState
+                sheetState = bottomSheetState,
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 32.dp, start = 16.dp, end = 16.dp)
+                        .padding(bottom = Dimens.spacing3xl, start = Dimens.screenPaddingHorizontal, end = Dimens.screenPaddingHorizontal)
                 ) {
                     Text(
                         text = "Alterar status do pedido",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = Dimens.spacingLg)
                     )
-                    
+
+                    HorizontalDivider(
+                        thickness = Dimens.dividerThickness,
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+
+                    Spacer(Modifier.height(Dimens.spacingLg))
+
                     state.availableStatusOptions.forEach { status ->
                         Button(
-                            onClick = { 
+                            onClick = {
                                 state.selectedOrderId?.let { id ->
                                     onEvent(MyOrderEvent.OnStatusSelected(id, status))
                                 }
                             },
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = Dimens.spacingXs),
+                            shape = MaterialTheme.shapes.medium,
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 0.dp
+                            )
                         ) {
-                            Text(status.name)
+                            Text(
+                                status.name,
+                                style = MaterialTheme.typography.labelLarge
+                            )
                         }
                     }
                 }

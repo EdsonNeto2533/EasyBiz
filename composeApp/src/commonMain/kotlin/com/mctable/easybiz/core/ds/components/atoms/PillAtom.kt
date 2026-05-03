@@ -18,57 +18,64 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
-import com.mctable.easybiz.core.ds.theme.md_light_success
+import com.mctable.easybiz.core.ds.theme.ErrorRed
+import com.mctable.easybiz.core.ds.theme.ErrorRedContainer
+import com.mctable.easybiz.core.ds.theme.SuccessGreen
+import com.mctable.easybiz.core.ds.theme.SuccessGreenContainer
+import com.mctable.easybiz.core.ds.theme.WarningYellow
+import com.mctable.easybiz.core.ds.theme.WarningYellowContainer
 
 sealed class PillType {
     object Ghost : PillType()
     object Success : PillType()
+    object Warning : PillType()
+    object Error : PillType()
 }
 
 @Composable
 fun PillAtom(pillType: PillType = PillType.Ghost, text: String, modifier: Modifier = Modifier) {
-    when (pillType) {
-        PillType.Ghost -> {
-            Box(
-                modifier = Modifier.border(
-                    shape = RoundedCornerShape(50),
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
-                ).background(
-                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(50)
-                )
-                    .padding(top = 4.dp, bottom = 4.dp, start = 18.dp, end = 18.dp)
-                    .then(modifier)
-            ) {
-                Text(
-                    text = text,
-                    color = MaterialTheme.colorScheme.secondary,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
+    val (bgColor, textColor, borderColor) = when (pillType) {
+        PillType.Ghost -> Triple(
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            MaterialTheme.colorScheme.onSurfaceVariant,
+            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        )
+        PillType.Success -> Triple(
+            SuccessGreenContainer,
+            SuccessGreen,
+            SuccessGreen.copy(alpha = 0.3f)
+        )
+        PillType.Warning -> Triple(
+            WarningYellowContainer,
+            WarningYellow,
+            WarningYellow.copy(alpha = 0.3f)
+        )
+        PillType.Error -> Triple(
+            ErrorRedContainer,
+            ErrorRed,
+            ErrorRed.copy(alpha = 0.3f)
+        )
+    }
 
-        PillType.Success -> {
-            Box(
-                modifier = Modifier.border(
-                    shape = RoundedCornerShape(50),
-                    width = 1.dp,
-                    color = md_light_success
-                ).background(
-                    md_light_success.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(50)
-                )
-                    .padding(top = 4.dp, bottom = 4.dp, start = 18.dp, end = 18.dp)
-                    .then(modifier)
-            ) {
-                Text(
-                    text = text,
-                    color = md_light_success,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
+    Box(
+        modifier = Modifier
+            .border(
+                shape = RoundedCornerShape(50),
+                width = 1.dp,
+                color = borderColor
+            )
+            .background(
+                bgColor,
+                shape = RoundedCornerShape(50)
+            )
+            .padding(horizontal = 14.dp, vertical = 5.dp)
+            .then(modifier)
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 
@@ -82,10 +89,13 @@ fun PillAtomPreview() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            PillAtom(pillType = PillType.Success, text = "Disponivel")
+            PillAtom(pillType = PillType.Success, text = "Disponível")
             Spacer(modifier = Modifier.height(8.dp))
-            PillAtom(pillType = PillType.Ghost, text = "Ocupado")
+            PillAtom(pillType = PillType.Warning, text = "Em espera")
+            Spacer(modifier = Modifier.height(8.dp))
+            PillAtom(pillType = PillType.Error, text = "Indisponível")
+            Spacer(modifier = Modifier.height(8.dp))
+            PillAtom(pillType = PillType.Ghost, text = "Padrão")
         }
     }
-
 }

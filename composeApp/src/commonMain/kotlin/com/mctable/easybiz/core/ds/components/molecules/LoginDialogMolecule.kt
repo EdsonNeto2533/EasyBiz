@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 
 @Composable
@@ -25,21 +26,26 @@ fun LoadingDialogMolecule(
     ) {
         Surface(
             shape = MaterialTheme.shapes.large,
-            tonalElevation = 6.dp
+            tonalElevation = 6.dp,
+            shadowElevation = 4.dp,
+            color = MaterialTheme.colorScheme.surface
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(Dimens.spacing3xl),
+                verticalArrangement = Arrangement.spacedBy(Dimens.spacingLg),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 CircularProgressIndicator(
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(40.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeWidth = 3.dp
                 )
 
                 Text(
                     text = message,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -57,4 +63,3 @@ private fun LoadingDialogPreview() {
         }
     }
 }
-

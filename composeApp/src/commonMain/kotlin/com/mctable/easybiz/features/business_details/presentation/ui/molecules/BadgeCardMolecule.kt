@@ -1,7 +1,6 @@
 package com.mctable.easybiz.features.business_details.presentation.ui.molecules
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -9,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
 
@@ -22,40 +22,42 @@ fun BadgeCardMolecule(
 
     Card(
         modifier = Modifier.wrapContentHeight().then(modifier),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = Dimens.cardElevation
         )
     ) {
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(Dimens.spacingXl),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Icon(
                 painter = painter,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(Dimens.iconSizeMd)
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(Dimens.spacingSm))
 
             Text(
                 text = value,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(Dimens.spacingXs))
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

@@ -1,6 +1,7 @@
 package com.mctable.easybiz.features.order_chat.presentation.ui.page
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,7 +46,13 @@ import coil3.compose.AsyncImage
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
+import com.mctable.easybiz.core.ds.theme.ChatBubbleMine
+import com.mctable.easybiz.core.ds.theme.ChatBubbleTheirs
+import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.Neutral50
+import com.mctable.easybiz.core.ds.theme.OnlineGreen
+import com.mctable.easybiz.core.ds.theme.SuccessGreen
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEntity
 import com.mctable.easybiz.features.order_chat.presentation.event.OrderChatEvent
@@ -85,6 +91,7 @@ fun OrderChatPage(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBarOrganism(
                 title = "Chat do Pedido",
@@ -94,12 +101,15 @@ fun OrderChatPage(
         },
         bottomBar = {
             Column {
-                if (state.showTyping) {
+                AnimatedVisibility(visible = state.showTyping) {
                     Text(
                         "Digitando...",
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        textAlign = TextAlign.End
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Dimens.screenPaddingHorizontal, vertical = Dimens.spacingXs),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
                 ChatInputBar(
@@ -118,8 +128,8 @@ fun OrderChatPage(
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(Dimens.screenPaddingHorizontal),
+                verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
                 reverseLayout = true
             ) {
                 items(state.messages) { message ->
@@ -157,33 +167,36 @@ fun ChatMessageBubble(message: OrderChatMessageEntity) {
                 AsyncImage(
                     model = message.senderPhotoUrl,
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp).clip(CircleShape),
+                    modifier = Modifier
+                        .size(Dimens.avatarSizeSm)
+                        .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(Dimens.spacingSm))
             }
 
             Surface(
-                color = if (isMine) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+                color = if (isMine) ChatBubbleMine else ChatBubbleTheirs,
                 shape = RoundedCornerShape(
                     topStart = 16.dp,
                     topEnd = 16.dp,
-                    bottomStart = if (isMine) 16.dp else 0.dp,
-                    bottomEnd = if (isMine) 0.dp else 16.dp
+                    bottomStart = if (isMine) 16.dp else 4.dp,
+                    bottomEnd = if (isMine) 4.dp else 16.dp
                 )
             ) {
-                Column(modifier = Modifier.padding(12.dp)) {
+                Column(modifier = Modifier.padding(Dimens.spacingMd)) {
                     if (!isMine) {
                         Text(
                             text = message.senderName,
                             style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         )
+                        Spacer(Modifier.width(Dimens.spacingXs))
                     }
                     Text(
                         text = message.content,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -191,23 +204,21 @@ fun ChatMessageBubble(message: OrderChatMessageEntity) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = message.sentAt.substring(11, 16), // Simple time extraction
+                            text = message.sentAt.substring(11, 16),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 10.sp
                         )
-                        Spacer(Modifier.width(8.dp))
-                        if (message.isRead) {
+                        if (isMine && message.isRead) {
+                            Spacer(Modifier.width(Dimens.spacingXs))
                             Icon(
                                 painter = AppIcons.done(),
                                 contentDescription = null,
-                                tint = Color.Green.copy(alpha = 0.5f),
+                                tint = SuccessGreen,
                                 modifier = Modifier.size(12.dp)
                             )
                         }
                     }
-
-
                 }
             }
         }
@@ -222,31 +233,56 @@ fun ChatInputBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth().imePadding(),
-        tonalElevation = 4.dp
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 8.dp
     ) {
         Row(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(
+                horizontal = Dimens.spacingMd,
+                vertical = Dimens.spacingSm
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
                 value = text,
                 onValueChange = onTextChanged,
-                placeholder = { Text("Escreva uma mensagem...") },
+                placeholder = {
+                    Text(
+                        "Escreva uma mensagem...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
                 modifier = Modifier.weight(1f),
+                textStyle = MaterialTheme.typography.bodyMedium,
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
+                    focusedContainerColor = Neutral50,
+                    unfocusedContainerColor = Neutral50,
+                    disabledContainerColor = Neutral50,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                )
+                ),
+                shape = MaterialTheme.shapes.large
             )
-            IconButton(onClick = onSend, enabled = text.isNotBlank()) {
-                Icon(
-                    painter = AppIcons.send(),
-                    contentDescription = "Enviar",
-                    tint = if (text.isNotBlank()) MaterialTheme.colorScheme.primary else Color.Gray
-                )
+            Spacer(Modifier.width(Dimens.spacingSm))
+            Surface(
+                shape = CircleShape,
+                color = if (text.isNotBlank()) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier.size(44.dp)
+            ) {
+                IconButton(
+                    onClick = onSend,
+                    enabled = text.isNotBlank()
+                ) {
+                    Icon(
+                        painter = AppIcons.send(),
+                        contentDescription = "Enviar",
+                        tint = if (text.isNotBlank()) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
     }
