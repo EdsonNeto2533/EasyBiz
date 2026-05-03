@@ -56,14 +56,6 @@ fun TextInputAtom(
     val visualTransformation =
         if (mask != null) MaskVisualTransformation(mask) else VisualTransformation.None
 
-    val borderColor by animateColorAsState(
-        targetValue = when {
-            showError -> MaterialTheme.colorScheme.error
-            isFocused -> MaterialTheme.colorScheme.primary
-            else -> Neutral200
-        }
-    )
-
     Column(modifier = modifier) {
         if (label.isNotEmpty()) {
             Text(

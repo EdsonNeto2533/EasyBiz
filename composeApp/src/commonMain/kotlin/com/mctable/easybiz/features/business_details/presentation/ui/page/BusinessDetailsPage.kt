@@ -58,23 +58,19 @@ fun BusinessDetailsPage(
         },
 
         bottomBar = {
-            Surface(
-                tonalElevation = 2.dp,
-                shadowElevation = 8.dp,
-                color = MaterialTheme.colorScheme.surface
-            ) {
+            Column {
                 ButtonAtom(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
                             horizontal = Dimens.screenPaddingHorizontal,
-                            vertical = Dimens.spacingMd
                         ),
                     text = state.startChatLabel,
                     onClick = {
                         onEvent(BusinessDetailsEvent.CreateOrder)
                     }
                 )
+                Box(modifier = Modifier.height(12.dp))
             }
         }
 

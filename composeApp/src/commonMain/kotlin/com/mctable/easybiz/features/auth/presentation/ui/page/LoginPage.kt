@@ -81,11 +81,7 @@ fun LoginPage(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             if (!state.showErrorDialog && !state.showPermissionDeniedForeverScreen && !state.showPermissionDeniedScreen)
-                Surface(
-                    tonalElevation = 2.dp,
-                    shadowElevation = 8.dp,
-                    color = MaterialTheme.colorScheme.surface
-                ) {
+                Column {
                     ButtonAtom(
                         state.loginButtonLabel,
                         isEnabled = state.enableButton,
@@ -93,11 +89,11 @@ fun LoginPage(
                             .fillMaxWidth()
                             .padding(
                                 horizontal = Dimens.screenPaddingHorizontal,
-                                vertical = Dimens.spacingMd
                             )
                     ) {
                         onEvent.invoke(LoginEvent.LoginClick)
                     }
+                    Box(modifier = Modifier.height(12.dp))
                 }
         }
     ) {

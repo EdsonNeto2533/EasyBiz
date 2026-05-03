@@ -1,6 +1,7 @@
 package com.mctable.easybiz.features.register_business.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,22 +61,18 @@ fun RegisterBusinessPage(
         },
 
         bottomBar = {
-            Surface(
-                tonalElevation = 2.dp,
-                shadowElevation = 8.dp,
-                color = MaterialTheme.colorScheme.surface
-            ) {
+            Column {
                 ButtonAtom(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
                             horizontal = Dimens.screenPaddingHorizontal,
-                            vertical = Dimens.spacingMd
                         ),
                     text = "Cadastrar empresa",
                     isEnabled = state.enableButton,
                     onClick = { onEvent(RegisterBusinessEvent.CreateBusiness) }
                 )
+                Box(modifier = Modifier.height(12.dp))
             }
         }
 
