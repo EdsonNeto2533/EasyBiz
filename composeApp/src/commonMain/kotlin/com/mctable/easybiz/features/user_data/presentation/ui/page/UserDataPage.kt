@@ -48,7 +48,6 @@ fun UserDataPage(
         onResult = { byteArrays ->
             byteArrays.firstOrNull()?.let {
                 onEvent(UserDataEvent.OnImageLoaded(it))
-                onEvent(UserDataEvent.UpdateUserImage)
             }
         }
     )

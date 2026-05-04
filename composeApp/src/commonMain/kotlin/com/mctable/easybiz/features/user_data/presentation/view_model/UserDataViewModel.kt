@@ -31,7 +31,6 @@ class UserDataViewModel(
             is UserDataEvent.OnNameChanged -> onNameChanged(event.name)
             is UserDataEvent.OnImageLoaded -> onImageLoaded(event.bytes)
             UserDataEvent.UpdateUserData -> updateUserData()
-            UserDataEvent.UpdateUserImage -> updateUserImage()
             UserDataEvent.OnBackPressed -> navigator.pop()
         }
     }
@@ -74,12 +73,16 @@ class UserDataViewModel(
             state = state.copy(isLoading = true)
             updateUserDataUseCase.execute(state.updatedName)
                 .onSuccess { user ->
-                    state = state.copy(
-                        user = user,
-                        isEditMode = false,
-                        isLoading = false
-                    )
-                    userChannel.send(user.name)
+                    state.updatedImageBytes?.let {
+                        updateUserImage()
+                    } ?: run {
+                        state = state.copy(
+                            user = user,
+                            isEditMode = false,
+                            isLoading = false
+                        )
+                    }
+
                 }
                 .onFailure { error ->
                     state = state.copy(
@@ -96,7 +99,7 @@ class UserDataViewModel(
             state = state.copy(isLoading = true)
             updateUserPhotoUseCase.execute(bytes)
                 .onSuccess {
-                    loadUserData()
+                    navigator.pop()
                 }
                 .onFailure { error ->
                     state = state.copy(
