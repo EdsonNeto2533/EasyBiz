@@ -105,7 +105,7 @@ fun MyOrderPage(
                             subtitle = order.status.name,
                             logoUrl = order.businessLogoUrl,
                             onClick = {
-                                if (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO) {
+                                if (order.status == OrderStatus.ACEITO) {
                                     onEvent(MyOrderEvent.OnOrderClick(order.id))
                                 }
                             },
