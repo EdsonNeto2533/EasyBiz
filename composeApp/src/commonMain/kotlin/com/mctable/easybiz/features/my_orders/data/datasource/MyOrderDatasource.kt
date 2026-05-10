@@ -50,10 +50,10 @@ class MyOrderDatasourceImpl(
 
     override suspend fun updateOrderStatus(orderId: String, status: OrderStatus): Result<Unit> {
         val path = when (status) {
-            OrderStatus.ACEITO -> "/pedidos/$orderId/ACEITAR"
-            OrderStatus.CONCLUIDO -> "/pedidos/$orderId/CONCLUIR"
-            OrderStatus.CANCELADO -> "/pedidos/$orderId/CANCELAR"
-            OrderStatus.RECUSADO -> "/pedidos/$orderId/RECUSAR"
+            OrderStatus.ACEITO -> "/pedidos/$orderId/aceitar"
+            OrderStatus.CONCLUIDO -> "/pedidos/$orderId/concluir"
+            OrderStatus.CANCELADO -> "/pedidos/$orderId/cancelar"
+            OrderStatus.RECUSADO -> "/pedidos/$orderId/recursar"
             else -> throw IllegalArgumentException("Invalid status update")
         }
 
