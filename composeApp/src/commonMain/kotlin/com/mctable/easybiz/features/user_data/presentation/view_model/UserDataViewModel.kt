@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.core.navigation.UserData
 import com.mctable.easybiz.core.navigation.userChannel
 import com.mctable.easybiz.features.user_data.domain.usecase.GetUserDataUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserDataUseCase
@@ -45,7 +46,7 @@ class UserDataViewModel(
                         updatedName = user.name,
                         isLoading = false
                     )
-                    userChannel.send(user.name)
+                    userChannel.send(UserData(user.name, user.email, user.photoUrl))
                 }
                 .onFailure { error ->
                     state = state.copy(
