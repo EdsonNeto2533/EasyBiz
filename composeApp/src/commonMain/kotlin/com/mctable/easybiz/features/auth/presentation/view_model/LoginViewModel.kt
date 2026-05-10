@@ -136,7 +136,7 @@ class LoginViewModel(
 
     private fun handleLoginSuccess(loginEntity: LoginEntity) {
         state = state.copy(showLoadingDialog = false)
-        navigator.navigate(Destination.SearchBusiness)
+        navigator.navigate(Destination.SearchBusiness, true)
     }
 
     private fun handleLoginError(exception: Throwable) {
