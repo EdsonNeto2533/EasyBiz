@@ -1,9 +1,11 @@
 package com.mctable.easybiz.features.auth.data.repository
 
 import com.mctable.easybiz.core.local_storage.EasyBizStorage
+import com.mctable.easybiz.core.navigation.UserData
 import com.mctable.easybiz.core.navigation.userChannel
 import com.mctable.easybiz.features.auth.data.datasource.LoginRemoteDataSource
 import com.mctable.easybiz.features.auth.data.mapper.LoginMapper
+import com.mctable.easybiz.features.auth.data.model.LoginResponseModel
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.repository.LoginRepository
 
@@ -15,7 +17,7 @@ class LoginRepositoryImpl(
     override suspend fun login(email: String, password: String): Result<LoginEntity> = runCatching {
         return remoteDataSource.login(email, password).mapCatching { responseModel ->
             easyBizStorage.setString("token", responseModel.token)
-            updateUserName(email)
+            updateUserData(responseModel, email)
             responseModel.userId?.let {
                 easyBizStorage.setString("userId", responseModel.userId)
             }
@@ -31,7 +33,7 @@ class LoginRepositoryImpl(
     ): Result<LoginEntity> = runCatching {
         return remoteDataSource.register(email, password, name).mapCatching { responseModel ->
             easyBizStorage.setString("token", responseModel.token)
-            updateUserName(email)
+            updateUserData(responseModel, email)
             responseModel.userId?.let {
                 easyBizStorage.setString("userId", responseModel.userId)
             }
@@ -39,7 +41,7 @@ class LoginRepositoryImpl(
         }
     }
 
-    private suspend fun updateUserName(name: String){
-        userChannel.send(name)
+    private suspend fun updateUserData(userData: LoginResponseModel, email: String) {
+        userChannel.send(UserData(userData.name, email, userData.photoUrl))
     }
 }

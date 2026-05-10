@@ -1,7 +1,9 @@
 package com.mctable.easybiz.features.order_chat.presentation.state
 
+import androidx.compose.runtime.Immutable
 import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEntity
 
+@Immutable
 data class OrderChatState(
     val messages: List<OrderChatMessageEntity> = emptyList(),
     val isLoading: Boolean = false,

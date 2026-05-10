@@ -106,7 +106,10 @@ fun OrderChatPage(
                         "Digitando...",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = Dimens.screenPaddingHorizontal, vertical = Dimens.spacingXs),
+                            .padding(
+                                horizontal = Dimens.screenPaddingHorizontal,
+                                vertical = Dimens.spacingXs
+                            ),
                         textAlign = TextAlign.End,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
@@ -132,7 +135,7 @@ fun OrderChatPage(
                 verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
                 reverseLayout = true
             ) {
-                items(state.messages) { message ->
+                items(state.messages, key = { it.id }) { message ->
                     ChatMessageBubble(message = message)
                 }
             }

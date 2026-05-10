@@ -32,7 +32,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-val userChannel: Channel<String> = Channel()
+data class UserData(
+    val name: String?,
+    val email: String,
+    val photoUrl: String?
+)
+val userChannel: Channel<UserData> = Channel()
 
 @Composable
 fun NavDrawer(
@@ -45,8 +50,12 @@ fun NavDrawer(
     var userName by remember {
         mutableStateOf("")
     }
+    var userImage by remember {
+        mutableStateOf<String?>(null)
+    }
     ObserveAsEvents(userChannel.receiveAsFlow()) { action ->
-        userName = action
+        userName = action.name ?: ""
+        userImage = action.photoUrl
     }
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -62,7 +71,7 @@ fun NavDrawer(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AvatarAtom(
-                                imageUrl = null,
+                                imageUrl = userImage,
                                 contentDescription = userName,
                                 size = Dimens.avatarSizeMd
                             )

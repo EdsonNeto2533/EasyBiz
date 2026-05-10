@@ -1,5 +1,8 @@
 package com.mctable.easybiz.features.order_chat.domain.entity
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class OrderChatMessageEntity(
     val id: String,
     val orderId: String,
@@ -13,6 +16,7 @@ data class OrderChatMessageEntity(
     val mine: Boolean
 )
 
+@Immutable
 data class OrderChatPageEntity(
     val messages: List<OrderChatMessageEntity>,
     val totalElements: Int,

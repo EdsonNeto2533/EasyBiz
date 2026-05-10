@@ -10,5 +10,9 @@ data class LoginResponseModel(
     @SerialName("userId")
     val userId: String? = null,
     @SerialName("email")
-    val email: String? = null
+    val email: String? = null,
+    @SerialName("nomeCompleto")
+    val name: String? = null,
+    @SerialName("fotoUrl")
+    val photoUrl: String? = null
 )

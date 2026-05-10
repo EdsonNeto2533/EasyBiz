@@ -8,6 +8,8 @@ object LoginMapper {
     fun toDomain(response: LoginResponseModel): LoginEntity {
         return LoginEntity(
             email = response.email ?: "",
+            name = response.name,
+            photoUrl = response.photoUrl
         )
     }
 
