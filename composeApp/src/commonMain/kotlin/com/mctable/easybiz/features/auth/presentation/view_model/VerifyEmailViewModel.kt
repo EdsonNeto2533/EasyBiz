@@ -28,6 +28,7 @@ class VerifyEmailViewModel(
                 )
 
             VerifyEmailEvent.SendCode -> sendCode()
+            VerifyEmailEvent.OnBackClick -> navigator.pop()
         }
     }
 
@@ -57,10 +58,11 @@ class VerifyEmailViewModel(
 
     private fun initialVerifyEmailState() = VerifyEmailState(
         title = "Informe seu email para confirmação",
-        subTitle = "",
+        subTitle = "Precisamos que informe seu email para o envio do código de confirmação",
         inputLabel = "E-mail",
         inputPlaceholder = "ex: easybiz@gmail.com",
-        emailErrorText = "Insira um email válido"
+        emailErrorText = "Insira um email válido",
+        buttonText = "enviar código"
     )
 
     private fun isValidEmail(email: String?): Boolean {
