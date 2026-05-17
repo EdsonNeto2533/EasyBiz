@@ -8,6 +8,10 @@ import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCaseImpl
+import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCaseImpl
+import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCaseImpl
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -37,6 +41,18 @@ val authModule = module {
     factory<RegisterUseCase> {
         RegisterUseCaseImpl(
             loginRepository = get()
+        )
+    }
+
+    factory<VerifyEmailUseCase> {
+        VerifyEmailUseCaseImpl(
+            repository = get()
+        )
+    }
+
+    factory<SendCodeUseCase> {
+        SendCodeUseCaseImpl(
+            repository = get()
         )
     }
 }

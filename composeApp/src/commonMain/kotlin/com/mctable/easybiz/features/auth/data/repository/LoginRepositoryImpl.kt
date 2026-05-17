@@ -41,6 +41,14 @@ class LoginRepositoryImpl(
         }
     }
 
+    override suspend fun verifyEmail(email: String, code: String): Result<Unit> = runCatching {
+        return remoteDataSource.verifyEmail(email, code)
+    }
+
+    override suspend fun sendCode(email: String): Result<Unit> = runCatching {
+        return remoteDataSource.sendCode(email)
+    }
+
     private suspend fun updateUserData(userData: LoginResponseModel, email: String) {
         userChannel.send(UserData(userData.name, email, userData.photoUrl))
     }
