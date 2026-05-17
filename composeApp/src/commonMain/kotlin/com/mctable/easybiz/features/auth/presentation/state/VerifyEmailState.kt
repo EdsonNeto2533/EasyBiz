@@ -6,7 +6,7 @@ data class VerifyEmailState(
     val inputLabel: String,
     val inputPlaceholder: String,
     val buttonText: String,
-    val email: String? = null,
+    val code: String? = null,
     val enableButton: Boolean = false,
     val emailErrorText: String? = null,
     val showEmailError: Boolean = false,

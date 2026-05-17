@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
 import com.mctable.easybiz.features.auth.presentation.event.VerifyEmailEvent
 import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
 import kotlinx.coroutines.launch
 
 class VerifyEmailViewModel(
-    private val sendCodeUseCase: SendCodeUseCase,
+    private val verifyEmailUseCase: VerifyEmailUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
     var state by mutableStateOf(initialVerifyEmailState())
@@ -21,22 +22,22 @@ class VerifyEmailViewModel(
     fun onAction(action: VerifyEmailEvent) {
         when (action) {
             VerifyEmailEvent.HideErrorDialog -> state = state.copy(showErrorDialog = false)
-            is VerifyEmailEvent.OnEmailTyped -> state =
+            is VerifyEmailEvent.OnCodeTyped -> state =
                 state.copy(
-                    email = action.email,
-                    enableButton = isValidEmail(action.email)
+                    code = action.code,
+                    enableButton = isValidCode(action.code)
                 )
 
-            VerifyEmailEvent.SendCode -> sendCode()
+            is VerifyEmailEvent.ConfirmCode -> confirmCode(action.email)
             VerifyEmailEvent.OnBackClick -> navigator.pop()
         }
     }
 
-    private fun sendCode() {
+    private fun confirmCode(email: String) {
         viewModelScope.launch {
             state = state.copy(showLoadingDialog = true)
-            state.email?.let {
-                sendCodeUseCase.execute(it).fold(
+            state.code?.let {
+                verifyEmailUseCase.execute(email, it).fold(
                     ::handleSendCodeSuccess,
                     ::handleSendCodeError
                 )
@@ -57,17 +58,16 @@ class VerifyEmailViewModel(
 
 
     private fun initialVerifyEmailState() = VerifyEmailState(
-        title = "Informe seu email para confirmação",
-        subTitle = "Precisamos que informe seu email para o envio do código de confirmação",
-        inputLabel = "E-mail",
-        inputPlaceholder = "ex: easybiz@gmail.com",
-        emailErrorText = "Insira um email válido",
-        buttonText = "enviar código"
+        title = "Informe seu código para confirmação",
+        subTitle = "Precisamos que informe o código recebido em seu email",
+        inputLabel = "Código",
+        inputPlaceholder = "0000000",
+        emailErrorText = "Insira um código válido",
+        buttonText = "Confirmar"
     )
 
-    private fun isValidEmail(email: String?): Boolean {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-        return email?.matches(emailRegex.toRegex()) ?: false
+    private fun isValidCode(code: String?): Boolean {
+        return code?.length == 6
     }
 
 }

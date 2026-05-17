@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.auth.presentation.ui.page
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
+import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
@@ -28,6 +32,7 @@ import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
 
 @Composable
 fun VerifyEmailPage(
+    email: String,
     state: VerifyEmailState,
     onAction: (VerifyEmailEvent) -> Unit
 ) {
@@ -51,7 +56,7 @@ fun VerifyEmailPage(
                             horizontal = Dimens.screenPaddingHorizontal,
                         )
                 ) {
-                    onAction.invoke(VerifyEmailEvent.SendCode)
+                    onAction.invoke(VerifyEmailEvent.ConfirmCode(email))
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -92,12 +97,23 @@ fun VerifyEmailPage(
                 placeHolder = state.inputPlaceholder,
                 showError = state.showEmailError,
                 errorMessage = state.emailErrorText,
-                onChanged = { email ->
+                keyboardType = KeyboardType.Number,
+                onChanged = { code ->
                     onAction.invoke(
-                        VerifyEmailEvent.OnEmailTyped(email)
+                        VerifyEmailEvent.OnCodeTyped(code)
                     )
                 }
             )
+        }
+
+        if (state.showLoadingDialog) {
+            LoadingDialogMolecule()
+        }
+
+        AnimatedVisibility(state.showErrorDialog) {
+            ErrorDialogMolecule {
+                onAction.invoke(VerifyEmailEvent.HideErrorDialog)
+            }
         }
 
     }
@@ -108,13 +124,14 @@ fun VerifyEmailPage(
 fun VerifyEmailPagePreview() {
     EasyBizTheme {
         VerifyEmailPage(
+            "",
             VerifyEmailState(
-                title = "Informe seu email para confirmação",
-                subTitle = "Precisamos que informe seu email para o envio do código de confirmação",
-                inputLabel = "E-mail",
-                inputPlaceholder = "ex: easybiz@gmail.com",
-                emailErrorText = "Insira um email válido",
-                buttonText = "enviar código"
+                title = "Informe seu código para confirmação",
+                subTitle = "Precisamos que informe o código recebido em seu email",
+                inputLabel = "Código",
+                inputPlaceholder = "0000000",
+                emailErrorText = "Insira um código válido",
+                buttonText = "Confirmar"
             )
         ) {}
     }
