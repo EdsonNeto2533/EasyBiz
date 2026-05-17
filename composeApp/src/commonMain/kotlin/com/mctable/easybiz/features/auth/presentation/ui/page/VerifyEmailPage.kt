@@ -33,6 +33,8 @@ import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
 @Composable
 fun VerifyEmailPage(
     email: String,
+    name: String,
+    password: String,
     state: VerifyEmailState,
     onAction: (VerifyEmailEvent) -> Unit
 ) {
@@ -56,7 +58,7 @@ fun VerifyEmailPage(
                             horizontal = Dimens.screenPaddingHorizontal,
                         )
                 ) {
-                    onAction.invoke(VerifyEmailEvent.ConfirmCode(email))
+                    onAction.invoke(VerifyEmailEvent.ConfirmCode(email, name, password))
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -124,6 +126,8 @@ fun VerifyEmailPage(
 fun VerifyEmailPagePreview() {
     EasyBizTheme {
         VerifyEmailPage(
+            "",
+            "",
             "",
             VerifyEmailState(
                 title = "Informe seu código para confirmação",

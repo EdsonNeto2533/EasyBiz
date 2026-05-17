@@ -10,6 +10,7 @@ import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
 import com.mctable.easybiz.features.auth.presentation.state.OperationType
@@ -23,8 +24,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val registerUseCase: RegisterUseCase,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val sendCodeUseCase: SendCodeUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(initialLoginState())
@@ -116,11 +117,11 @@ class LoginViewModel(
 
     private suspend fun register() {
         if (state.email != null && state.password != null && state.name != null) {
-            registerUseCase.execute(state.email!!, state.password!!, state.name!!)
-                .fold(
-                    onSuccess = ::handleLoginSuccess,
-                    onFailure = ::handleLoginError
-                )
+            sendCodeUseCase.execute(state.email ?: "").fold(onSuccess = {
+                //todo navegar tela nova
+            }, onFailure = {
+                handleLoginError(it)
+            })
         }
     }
 

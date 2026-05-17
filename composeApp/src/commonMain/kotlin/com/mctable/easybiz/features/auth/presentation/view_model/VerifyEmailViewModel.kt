@@ -5,7 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
+import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
 import com.mctable.easybiz.features.auth.presentation.event.VerifyEmailEvent
@@ -14,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class VerifyEmailViewModel(
     private val verifyEmailUseCase: VerifyEmailUseCase,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val registerUseCase: RegisterUseCase,
 ) : ViewModel() {
     var state by mutableStateOf(initialVerifyEmailState())
         private set
@@ -28,17 +32,24 @@ class VerifyEmailViewModel(
                     enableButton = isValidCode(action.code)
                 )
 
-            is VerifyEmailEvent.ConfirmCode -> confirmCode(action.email)
+            is VerifyEmailEvent.ConfirmCode -> confirmCode(
+                action.email,
+                action.name,
+                action.password
+            )
+
             VerifyEmailEvent.OnBackClick -> navigator.pop()
         }
     }
 
-    private fun confirmCode(email: String) {
+    private fun confirmCode(email: String, name: String, password: String) {
         viewModelScope.launch {
             state = state.copy(showLoadingDialog = true)
             state.code?.let {
                 verifyEmailUseCase.execute(email, it).fold(
-                    ::handleSendCodeSuccess,
+                    {
+                        handleSendCodeSuccess(email, name, password)
+                    },
                     ::handleSendCodeError
                 )
             }
@@ -47,13 +58,18 @@ class VerifyEmailViewModel(
 
     }
 
-    private fun handleSendCodeSuccess(unit: Unit) {
+    private suspend fun handleSendCodeSuccess(email: String, name: String, password: String) {
+        registerUseCase.execute(email, password, name)
+            .fold(::handleLoginSuccess, ::handleSendCodeError)
+    }
+
+    private fun handleLoginSuccess(loginEntity: LoginEntity) {
         state = state.copy(showLoadingDialog = false)
+        navigator.navigate(Destination.SearchBusiness, true)
     }
 
     private fun handleSendCodeError(failure: Throwable) {
         state = state.copy(showErrorDialog = true, showLoadingDialog = false)
-        //todo navigate
     }
 
 
