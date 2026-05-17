@@ -38,7 +38,7 @@ class VerifyEmailViewModel(
                 action.password
             )
 
-            VerifyEmailEvent.OnBackClick -> navigator.pop()
+            VerifyEmailEvent.OnBackClick -> navigator.navigate(Destination.Login, true)
         }
     }
 

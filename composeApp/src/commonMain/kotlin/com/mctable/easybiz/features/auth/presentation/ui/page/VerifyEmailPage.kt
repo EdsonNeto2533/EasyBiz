@@ -15,7 +15,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.features.auth.presentation.event.VerifyEmailEvent
 import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun VerifyEmailPage(
     email: String,
@@ -40,6 +43,11 @@ fun VerifyEmailPage(
 ) {
 
     val scrollState = rememberScrollState()
+
+    //todo deprecado
+    BackHandler {
+        onAction.invoke(VerifyEmailEvent.OnBackClick)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
