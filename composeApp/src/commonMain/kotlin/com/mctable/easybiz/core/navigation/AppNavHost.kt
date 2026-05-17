@@ -13,7 +13,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
+import com.mctable.easybiz.features.auth.presentation.ui.page.VerifyEmailPage
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
+import com.mctable.easybiz.features.auth.presentation.view_model.VerifyEmailViewModel
 import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
 import com.mctable.easybiz.features.my_business.presentation.ui.MyBusinessPage
@@ -170,6 +172,20 @@ fun AppNavHost() {
                     state = viewModel.state,
                     onEvent = { event -> viewModel.onEvent(event) }
                 )
+            }
+
+            composable<Destination.VerifyEmail> {
+                val route = it.toRoute<Destination.VerifyEmail>()
+                val viewModel = koinViewModel<VerifyEmailViewModel>()
+
+                VerifyEmailPage(
+                    email = route.email,
+                    password = route.password,
+                    name = route.name,
+                    state = viewModel.state,
+                    onAction = { event -> viewModel.onAction(event) },
+                )
+
             }
         }
     }

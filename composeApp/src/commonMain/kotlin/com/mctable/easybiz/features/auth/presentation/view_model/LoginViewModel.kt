@@ -118,7 +118,14 @@ class LoginViewModel(
     private suspend fun register() {
         if (state.email != null && state.password != null && state.name != null) {
             sendCodeUseCase.execute(state.email ?: "").fold(onSuccess = {
-                //todo navegar tela nova
+                navigator.navigate(
+                    Destination.VerifyEmail(
+                        state.email!!,
+                        state.name!!,
+                        state.password!!
+                    ),
+                    true
+                )
             }, onFailure = {
                 handleLoginError(it)
             })
