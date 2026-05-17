@@ -19,7 +19,8 @@ object BusinessMapper {
             completeAddress = it.completeAddress,
             averageRating = it.averageRating,
             logo = it.logo,
-            distance = it.distance
+            distance = it.distance,
+            favorite = it.favorite ?: false
         )
     }
 

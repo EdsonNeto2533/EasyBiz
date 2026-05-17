@@ -27,5 +27,7 @@ data class BusinessResponseModel(
     @SerialName("logoUrl")
     val logo: String?,
     @SerialName("distanciaKm")
-    val distance: Double
+    val distance: Double,
+    @SerialName("isFavoritado")
+    val favorite: Boolean?
 )

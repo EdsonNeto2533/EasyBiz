@@ -30,6 +30,7 @@ import com.mctable.easybiz.core.ds.components.atoms.PillType
 import com.mctable.easybiz.core.ds.components.atoms.RatingAtom
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.StarGold
 import com.mctable.easybiz.core.ds.utils.AppIcons
 
 @Composable
@@ -109,8 +110,15 @@ fun ProfessionalCardOrganism(
                 }
             }
 
-            IconButton(onClick = onFavoriteClick) {
-                Icon(painter = AppIcons.star(), "")
+            IconButton(onClick = {
+                isFavorite = !isFavorite
+                onFavoriteClick()
+            }) {
+                Icon(
+                    painter = AppIcons.star(),
+                    "",
+                    tint = if (!isFavorite) MaterialTheme.colorScheme.primary else StarGold
+                )
             }
         }
     }
