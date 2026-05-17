@@ -12,6 +12,7 @@ interface SearchBusinessDatasource {
         name: String?
     ): Result<List<BusinessResponseModel>>
 
+    suspend fun addFavorite(businessId: String): Result<Unit>
 }
 
 class SearchBusinessDatasourceImpl(
@@ -42,4 +43,11 @@ class SearchBusinessDatasourceImpl(
         )
     }
 
+    override suspend fun addFavorite(businessId: String): Result<Unit> {
+        return networking.post(
+            host = appEnv.host,
+            path = "/favoritos/$businessId",
+            responseMapper = { }
+        )
+    }
 }

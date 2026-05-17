@@ -8,4 +8,6 @@ interface SearchBusinessRepository {
         longitude: Double,
         name: String?
     ): Result<List<BusinessEntity>>
+
+    suspend fun addFavorite(businessId: String): Result<Unit>
 }

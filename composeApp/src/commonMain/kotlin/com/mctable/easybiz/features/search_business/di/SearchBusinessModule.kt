@@ -4,6 +4,8 @@ import com.mctable.easybiz.features.search_business.data.datasource.SearchBusine
 import com.mctable.easybiz.features.search_business.data.datasource.SearchBusinessDatasourceImpl
 import com.mctable.easybiz.features.search_business.data.repository.SearchBusinessRepositoryImpl
 import com.mctable.easybiz.features.search_business.domain.repository.SearchBusinessRepository
+import com.mctable.easybiz.features.search_business.domain.usecase.AddFavoriteUseCase
+import com.mctable.easybiz.features.search_business.domain.usecase.AddFavoriteUseCaseImpl
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCase
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCaseImpl
 import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
@@ -23,7 +25,11 @@ val searchBusinessModule = module {
         SearchBusinessUseCaseImpl(get(), get())
     }
 
+    factory<AddFavoriteUseCase> {
+        AddFavoriteUseCaseImpl(get())
+    }
+
     viewModel {
-        SearchBusinessViewModel(get(), get(), get())
+        SearchBusinessViewModel(get(), get(), get(), get())
     }
 }

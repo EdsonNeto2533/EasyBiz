@@ -10,6 +10,7 @@ import com.mctable.easybiz.core.location.SimpleLocation
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
+import com.mctable.easybiz.features.search_business.domain.usecase.AddFavoriteUseCase
 import com.mctable.easybiz.features.search_business.domain.usecase.SearchBusinessUseCase
 import com.mctable.easybiz.features.search_business.presentation.event.SearchBusinessEvent
 import com.mctable.easybiz.features.search_business.presentation.state.SearchBusinessState
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class SearchBusinessViewModel(
     private val searchBusinessUseCase: SearchBusinessUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
     private val navigator: Navigator,
     private val locationProvider: LocationProvider
 ) : ViewModel() {
@@ -35,6 +37,19 @@ class SearchBusinessViewModel(
                 event.tracker
             )
             is SearchBusinessEvent.OnBusinessClick -> handleOnBusinessClick(event.id)
+            is SearchBusinessEvent.OnFavoriteClick -> handleOnFavoriteClick(event.businessId)
+        }
+    }
+
+    private fun handleOnFavoriteClick(businessId: String) {
+        viewModelScope.launch {
+            addFavoriteUseCase.execute(businessId)
+                .onSuccess {
+                    // Success handling if needed
+                }
+                .onFailure {
+                    // Error handling if needed
+                }
         }
     }
 

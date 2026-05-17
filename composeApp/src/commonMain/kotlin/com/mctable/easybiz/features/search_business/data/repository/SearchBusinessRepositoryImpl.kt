@@ -22,4 +22,8 @@ class SearchBusinessRepositoryImpl(
             BusinessMapper.toDomain(responseModel)
         }
     }
+
+    override suspend fun addFavorite(businessId: String): Result<Unit> = runCatching{
+        return businessDatasource.addFavorite(businessId)
+    }
 }

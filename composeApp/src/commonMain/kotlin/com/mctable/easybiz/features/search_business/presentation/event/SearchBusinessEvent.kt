@@ -8,4 +8,5 @@ sealed class SearchBusinessEvent {
     data object SearchBusinessByName : SearchBusinessEvent()
     data class SetPermissionController(val tracker: LocationTracker) : SearchBusinessEvent()
     data class OnBusinessClick(val id: String) : SearchBusinessEvent()
+    data class OnFavoriteClick(val businessId: String) : SearchBusinessEvent()
 }

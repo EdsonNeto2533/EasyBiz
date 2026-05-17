@@ -116,6 +116,9 @@ fun SearchBusinessPage(
                             imageUrl = business.logo,
                             onChatClick = {
                                 onEvent.invoke(SearchBusinessEvent.OnBusinessClick(business.id))
+                            },
+                            onFavoriteClick = {
+                                onEvent.invoke(SearchBusinessEvent.OnFavoriteClick(business.id))
                             }
                         )
                     }
