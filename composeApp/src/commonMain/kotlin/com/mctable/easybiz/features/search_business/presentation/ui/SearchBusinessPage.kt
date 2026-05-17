@@ -160,7 +160,8 @@ fun SearchBusinessPagePreview() {
                         completeAddress = "Av. Dom Luís, 1200 - Aldeota, Fortaleza - CE",
                         averageRating = 4.8,
                         logo = "https://picsum.photos/200/200?1",
-                        distance = 2.0
+                        distance = 2.0,
+                        false
                     ),
                     BusinessEntity(
                         id = "",
@@ -174,7 +175,8 @@ fun SearchBusinessPagePreview() {
                         completeAddress = "Rua Barbosa de Freitas, 890 - Meireles, Fortaleza - CE",
                         averageRating = 4.6,
                         logo = "https://picsum.photos/200/200?2",
-                        distance = 1.0
+                        distance = 1.0,
+                        true
                     ),
                     BusinessEntity(
                         id = "",
@@ -188,7 +190,8 @@ fun SearchBusinessPagePreview() {
                         completeAddress = "Rua Silva Paulet, 450 - Meireles, Fortaleza - CE",
                         averageRating = 4.9,
                         logo = "https://picsum.photos/200/200?3",
-                        distance = 2.6
+                        distance = 2.6,
+                        false
                     )
                 )
             ),
