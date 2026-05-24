@@ -21,9 +21,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigationevent.NavigationEvent
-import androidx.navigationevent.NavigationEventHandler
 import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
@@ -46,10 +46,18 @@ fun VerifyEmailPage(
 
     val scrollState = rememberScrollState()
 
-    //todo deprecado
-//    BackHandler {
-//        onAction.invoke(VerifyEmailEvent.OnBackClick)
-//    }
+
+    val navigationState = rememberNavigationEventState(
+        currentInfo = NavigationEventInfo.None
+    )
+    NavigationBackHandler(
+        navigationState,
+        isBackEnabled = true,
+        onBackCancelled = {},
+        onBackCompleted = {
+            onAction.invoke(VerifyEmailEvent.OnBackClick)
+        },
+    )
 
 
     Scaffold(

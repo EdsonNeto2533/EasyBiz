@@ -70,6 +70,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.krossbow.stomp.core)
             implementation(libs.krossbow.websocket.ktor)
+            implementation(libs.androidx.navigationevent.compose)
+            implementation(libs.androidx.navigationevent)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
