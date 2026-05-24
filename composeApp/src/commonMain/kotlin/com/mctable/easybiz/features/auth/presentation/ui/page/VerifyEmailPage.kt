@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigationevent.NavigationEvent
+import androidx.navigationevent.NavigationEventHandler
+import androidx.navigationevent.NavigationEventInfo
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
@@ -45,9 +47,10 @@ fun VerifyEmailPage(
     val scrollState = rememberScrollState()
 
     //todo deprecado
-    BackHandler {
-        onAction.invoke(VerifyEmailEvent.OnBackClick)
-    }
+//    BackHandler {
+//        onAction.invoke(VerifyEmailEvent.OnBackClick)
+//    }
+
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

@@ -9,5 +9,7 @@ data class RegisterRequest(
     @SerialName("senha")
     val password: String,
     @SerialName("nomeCompleto")
-    val name: String
+    val name: String,
+    @SerialName("tokenCadastro")
+    val registerToken: String
 )

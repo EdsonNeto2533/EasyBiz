@@ -9,7 +9,6 @@ import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
-import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
 import com.mctable.easybiz.features.auth.presentation.event.VerifyEmailEvent
 import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
@@ -45,21 +44,24 @@ class VerifyEmailViewModel(
     private fun confirmCode(email: String, name: String, password: String) {
         viewModelScope.launch {
             state = state.copy(showLoadingDialog = true)
-            state.code?.let {
-                verifyEmailUseCase.execute(email, it).fold(
-                    {
-                        handleSendCodeSuccess(email, name, password)
+            state.code?.let { code ->
+                verifyEmailUseCase.execute(email, code).fold(
+                    onSuccess = { response ->
+                        handleSendCodeSuccess(email, name, password, response.registerToken)
                     },
-                    ::handleSendCodeError
+                    onFailure = ::handleSendCodeError
                 )
             }
-
         }
-
     }
 
-    private suspend fun handleSendCodeSuccess(email: String, name: String, password: String) {
-        registerUseCase.execute(email, password, name)
+    private suspend fun handleSendCodeSuccess(
+        email: String,
+        name: String,
+        password: String,
+        registerToken: String
+    ) {
+        registerUseCase.execute(email, password, name, registerToken)
             .fold(::handleLoginSuccess, ::handleSendCodeError)
     }
 
