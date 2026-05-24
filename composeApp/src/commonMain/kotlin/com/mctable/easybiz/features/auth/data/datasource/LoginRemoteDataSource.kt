@@ -58,7 +58,7 @@ class LoginRemoteDataSourceImpl(
         val request = VerifyEmailRequest(email, code)
         return networking.post(
             host = appEnv.host,
-            path = "/auth/verificar-email",
+            path = "/auth/verificar-codigo-cadastro",
             body = request,
             responseMapper = { }
         )
@@ -68,7 +68,7 @@ class LoginRemoteDataSourceImpl(
         val request = SendCodeRequest(email)
         return networking.post(
             host = appEnv.host,
-            path = "/auth/enviar-codigo",
+            path = "/auth/enviar-codigo-cadastro",
             body = request,
             responseMapper = { }
         )
