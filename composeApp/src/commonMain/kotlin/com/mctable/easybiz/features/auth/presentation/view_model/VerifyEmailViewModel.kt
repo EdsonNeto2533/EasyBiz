@@ -71,7 +71,11 @@ class VerifyEmailViewModel(
     }
 
     private fun handleSendCodeError(failure: Throwable) {
-        state = state.copy(showErrorDialog = true, showLoadingDialog = false)
+        state = state.copy(
+            showErrorDialog = true,
+            showLoadingDialog = false,
+            errorMessage = failure.message
+        )
     }
 
 

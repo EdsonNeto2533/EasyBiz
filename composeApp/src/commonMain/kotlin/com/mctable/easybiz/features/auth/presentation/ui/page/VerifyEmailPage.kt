@@ -132,7 +132,9 @@ fun VerifyEmailPage(
         }
 
         AnimatedVisibility(state.showErrorDialog) {
-            ErrorDialogMolecule {
+            ErrorDialogMolecule(
+                description = state.errorMessage ?: "Erro desconhecido",
+            ) {
                 onAction.invoke(VerifyEmailEvent.HideErrorDialog)
             }
         }

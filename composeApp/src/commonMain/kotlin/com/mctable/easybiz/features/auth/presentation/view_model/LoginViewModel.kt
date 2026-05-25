@@ -148,7 +148,11 @@ class LoginViewModel(
     }
 
     private fun handleLoginError(exception: Throwable) {
-        state = state.copy(showLoadingDialog = false, showErrorDialog = true)
+        state = state.copy(
+            showLoadingDialog = false,
+            showErrorDialog = true,
+            errorMessage = exception.message
+        )
     }
 
     private fun onEmailTyped(email: String) {

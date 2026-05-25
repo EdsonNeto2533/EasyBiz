@@ -11,5 +11,6 @@ data class VerifyEmailState(
     val emailErrorText: String? = null,
     val showEmailError: Boolean = false,
     val showErrorDialog: Boolean = false,
+    val errorMessage: String? = null,
     val showLoadingDialog: Boolean = false,
 )
