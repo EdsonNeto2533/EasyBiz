@@ -140,7 +140,9 @@ fun MyOrderPage(
             }
 
             AnimatedVisibility(state.isError) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(
+                    description = state.errorMessage ?: "Erro desconhecido",
+                ) {
                     onEvent.invoke(MyOrderEvent.GetMyOrders(paper, businessId))
                 }
             }

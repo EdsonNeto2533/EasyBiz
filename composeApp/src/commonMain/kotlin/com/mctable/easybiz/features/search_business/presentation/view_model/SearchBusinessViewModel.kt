@@ -88,7 +88,7 @@ class SearchBusinessViewModel(
     }
 
     private fun handleBusinessListError(e: Throwable) {
-        state = state.copy(showError = true, showLoading = false)
+        state = state.copy(showError = true, showLoading = false, errorMessage = e.message)
     }
 
     private fun handleSearchBusinessByNameEvent() {

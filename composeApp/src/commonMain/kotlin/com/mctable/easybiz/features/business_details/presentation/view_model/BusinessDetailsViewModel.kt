@@ -55,7 +55,8 @@ class BusinessDetailsViewModel(
                 onFailure = {
                     state = state.copy(
                         showLoading = false,
-                        showError = true
+                        showError = true,
+                        errorMessage = it.message
                     )
                 }
             )
@@ -81,7 +82,12 @@ class BusinessDetailsViewModel(
                     navigator.navigate(Destination.Chat(it))
                 },
                 onFailure = {
-                    state = state.copy(showLoading = false, showError = true)
+                    state =
+                        state.copy(
+                            showLoading = false,
+                            showError = true,
+                            errorMessage = it.message
+                        )
                 }
             )
         }

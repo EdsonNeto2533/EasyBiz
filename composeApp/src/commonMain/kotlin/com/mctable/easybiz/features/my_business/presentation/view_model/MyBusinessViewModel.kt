@@ -49,7 +49,8 @@ class MyBusinessViewModel(
                 onFailure = {
                     state = state.copy(
                         isLoading = false,
-                        isError = true
+                        isError = true,
+                        errorMessage = it.message
                     )
                 }
             )

@@ -5,5 +5,6 @@ import com.mctable.easybiz.features.my_business.domain.entity.MyBusinessEntity
 data class MyBusinessState(
     val myBusinessList: List<MyBusinessEntity> = emptyList(),
     val isLoading: Boolean = false,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val errorMessage: String? = null
 )

@@ -202,7 +202,9 @@ fun UpdateBusinessProfilePage(
     }
 
     AnimatedVisibility(state.isError) {
-        ErrorDialogMolecule {
+        ErrorDialogMolecule(
+            description = state.errorMessage ?: "Erro desconhecido"
+        ) {
             onEvent.invoke(UpdateBusinessProfileEvent.DismissErrorModal)
         }
     }
