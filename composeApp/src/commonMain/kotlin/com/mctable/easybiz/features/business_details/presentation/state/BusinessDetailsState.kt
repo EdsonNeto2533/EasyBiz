@@ -11,5 +11,6 @@ data class BusinessDetailsState(
     val ratingReviewsLabel: String = "",
     val addressTitle: String = "",
     val startChatLabel: String = "",
-    val descriptionLabel: String = ""
+    val descriptionLabel: String = "",
+    val errorMessage: String? = null
 )

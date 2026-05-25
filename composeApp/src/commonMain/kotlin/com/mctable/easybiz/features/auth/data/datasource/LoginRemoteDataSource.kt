@@ -4,12 +4,23 @@ import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.networking.EasyBizNetworking
 import com.mctable.easybiz.features.auth.data.mapper.LoginMapper
 import com.mctable.easybiz.features.auth.data.model.LoginResponseModel
+import com.mctable.easybiz.features.auth.data.model.VerifyEmailResponseModel
 import com.mctable.easybiz.features.auth.data.request.LoginRequestModel
 import com.mctable.easybiz.features.auth.data.request.RegisterRequest
+import com.mctable.easybiz.features.auth.data.request.SendCodeRequest
+import com.mctable.easybiz.features.auth.data.request.VerifyEmailRequest
 
 interface LoginRemoteDataSource {
     suspend fun login(email: String, password: String): Result<LoginResponseModel>
-    suspend fun register(email: String, password: String, name: String): Result<LoginResponseModel>
+    suspend fun register(
+        email: String,
+        password: String,
+        name: String,
+        registerToken: String
+    ): Result<LoginResponseModel>
+
+    suspend fun verifyEmail(email: String, code: String): Result<VerifyEmailResponseModel>
+    suspend fun sendCode(email: String): Result<Unit>
 }
 
 class LoginRemoteDataSourceImpl(
@@ -36,9 +47,10 @@ class LoginRemoteDataSourceImpl(
     override suspend fun register(
         email: String,
         password: String,
-        name: String
+        name: String,
+        registerToken: String
     ): Result<LoginResponseModel> {
-        val request = RegisterRequest(email, password, name)
+        val request = RegisterRequest(email, password, name, registerToken)
 
         return networking.post(
             host = appEnv.host,
@@ -47,6 +59,28 @@ class LoginRemoteDataSourceImpl(
             responseMapper = { jsonString ->
                 LoginMapper.parseResponse(jsonString)
             }
+        )
+    }
+
+    override suspend fun verifyEmail(email: String, code: String): Result<VerifyEmailResponseModel> {
+        val request = VerifyEmailRequest(email, code)
+        return networking.post(
+            host = appEnv.host,
+            path = "/auth/verificar-codigo-cadastro",
+            body = request,
+            responseMapper = { jsonString ->
+                LoginMapper.parseVerifyResponse(jsonString)
+            }
+        )
+    }
+
+    override suspend fun sendCode(email: String): Result<Unit> {
+        val request = SendCodeRequest(email)
+        return networking.post(
+            host = appEnv.host,
+            path = "/auth/enviar-codigo-cadastro",
+            body = request,
+            responseMapper = { }
         )
     }
 }

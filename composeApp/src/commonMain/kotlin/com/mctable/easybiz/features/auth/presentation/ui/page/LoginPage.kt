@@ -213,7 +213,7 @@ fun LoginPage(
             }
 
             AnimatedVisibility(state.showErrorDialog) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(description = state.errorMessage ?: "Erro desconhecido") {
                     onEvent.invoke(LoginEvent.HideErrorDialog)
                 }
             }

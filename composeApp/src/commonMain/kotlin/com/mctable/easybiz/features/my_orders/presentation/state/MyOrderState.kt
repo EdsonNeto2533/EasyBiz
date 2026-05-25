@@ -11,5 +11,6 @@ data class MyOrderState(
     val isLastPage: Boolean = false,
     val selectedOrderId: String? = null,
     val showStatusBottomSheet: Boolean = false,
-    val availableStatusOptions: List<OrderStatus> = emptyList()
+    val availableStatusOptions: List<OrderStatus> = emptyList(),
+    val errorMessage: String? = null
 )

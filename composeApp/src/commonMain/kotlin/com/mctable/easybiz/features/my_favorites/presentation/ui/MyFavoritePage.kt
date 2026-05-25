@@ -83,7 +83,9 @@ fun MyFavoritePage(
             }
 
             AnimatedVisibility(state.isError) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(
+                    description = state.errorMessage ?: "Erro desconhecido",
+                ) {
                     onEvent.invoke(MyFavoriteEvent.GetMyFavorites)
                 }
             }

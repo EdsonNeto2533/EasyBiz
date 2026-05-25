@@ -16,6 +16,16 @@ sealed interface Destination {
     }
 
     @Serializable
+    data class VerifyEmail(
+        val email: String,
+        val name: String,
+        val password: String
+    ) :
+        Destination {
+        override val isLoggedArea = false
+    }
+
+    @Serializable
     data object SearchBusiness : Destination {
         override val isLoggedArea = true
         override val title = "Buscar prestadores"

@@ -8,5 +8,6 @@ data class SearchBusinessState(
     val businessList: List<BusinessEntity> = emptyList(),
     val searchValue: String? = null,
     val showLoading: Boolean = false,
-    val showError: Boolean = false
+    val showError: Boolean = false,
+    val errorMessage: String? = null
 )

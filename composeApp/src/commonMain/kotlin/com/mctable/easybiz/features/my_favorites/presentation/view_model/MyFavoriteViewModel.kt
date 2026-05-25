@@ -47,7 +47,8 @@ class MyFavoriteViewModel(
                 onFailure = {
                     state = state.copy(
                         isLoading = false,
-                        isError = true
+                        isError = true,
+                        errorMessage = it.message
                     )
                 }
             )

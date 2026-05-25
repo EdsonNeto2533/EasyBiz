@@ -145,7 +145,9 @@ fun OrderChatPage(
             }
 
             AnimatedVisibility(state.isError) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(
+                    description = state.errorMessage ?: "Erro desconhecido"
+                ) {
                     onEvent(OrderChatEvent.Init(orderId))
                 }
             }

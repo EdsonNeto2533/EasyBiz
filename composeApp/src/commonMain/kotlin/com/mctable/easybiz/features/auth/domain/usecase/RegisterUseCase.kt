@@ -4,7 +4,12 @@ import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.repository.LoginRepository
 
 interface RegisterUseCase {
-    suspend fun execute(email: String, password: String, name: String): Result<LoginEntity>
+    suspend fun execute(
+        email: String,
+        password: String,
+        name: String,
+        registerToken: String
+    ): Result<LoginEntity>
 }
 
 class RegisterUseCaseImpl(
@@ -13,8 +18,9 @@ class RegisterUseCaseImpl(
     override suspend fun execute(
         email: String,
         password: String,
-        name: String
+        name: String,
+        registerToken: String
     ): Result<LoginEntity> {
-        return loginRepository.register(email, password, name)
+        return loginRepository.register(email, password, name, registerToken)
     }
 }

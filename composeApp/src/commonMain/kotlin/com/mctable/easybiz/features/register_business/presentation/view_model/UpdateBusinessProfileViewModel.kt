@@ -74,7 +74,7 @@ class UpdateBusinessProfileViewModel(
                     navigator.pop()
                 }
             }.onFailure {
-                state = state.copy(isLoading = false, isError = true)
+                state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
             }
         }
     }
@@ -86,7 +86,7 @@ class UpdateBusinessProfileViewModel(
                 navigator.pop()
             },
             onFailure = {
-                state = state.copy(isLoading = false, isError = true)
+                state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
             }
         )
     }

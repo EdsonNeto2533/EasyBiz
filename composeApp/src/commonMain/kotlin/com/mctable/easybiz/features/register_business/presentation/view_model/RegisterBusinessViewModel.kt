@@ -69,7 +69,7 @@ class RegisterBusinessViewModel(
                     navigator.navigate(Destination.UpdateBusiness(it.id), true)
                 },
                 onFailure = {
-                    state = state.copy(isLoading = false, isError = true)
+                    state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
                 }
             )
         }

@@ -175,7 +175,9 @@ fun BusinessDetailsPage(
             }
 
             AnimatedVisibility(state.showError) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(
+                    description = state.errorMessage ?: "Erro desconhecido",
+                ) {
                     onEvent.invoke(BusinessDetailsEvent.GetBusinessDetails(id))
                 }
             }

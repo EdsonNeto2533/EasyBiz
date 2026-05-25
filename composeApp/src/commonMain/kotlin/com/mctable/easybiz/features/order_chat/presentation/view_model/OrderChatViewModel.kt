@@ -70,7 +70,7 @@ class OrderChatViewModel(
                     )
                 },
                 onFailure = {
-                    state = state.copy(isLoading = false, isError = true)
+                    state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
                 }
             )
         }
@@ -92,7 +92,7 @@ class OrderChatViewModel(
                     )
                 },
                 onFailure = {
-                    state = state.copy(isLoading = false, isError = true)
+                    state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
                 }
             )
         }
@@ -132,7 +132,7 @@ class OrderChatViewModel(
     private fun observeMessages() {
         viewModelScope.launch {
             observeOrderMessagesUseCase.execute(state.orderId).collect { messageEntity ->
-                if(messageEntity.mine){
+                if (messageEntity.mine) {
                     userName = messageEntity.senderName
                 }
                 if (state.messages.none { it.id == messageEntity.id }) {

@@ -129,7 +129,9 @@ fun SearchBusinessPage(
             }
 
             AnimatedVisibility(state.showError) {
-                ErrorDialogMolecule {
+                ErrorDialogMolecule(
+                    description = state.errorMessage ?: "Erro desconhecido"
+                ) {
                     onEvent.invoke(SearchBusinessEvent.SearchBusiness)
                 }
             }

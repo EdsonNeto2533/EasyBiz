@@ -9,5 +9,6 @@ data class UpdateBusinessProfileState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val success: Boolean = false,
-    val enableButton: Boolean = false
+    val enableButton: Boolean = false,
+    val errorMessage: String? = null
 )

@@ -25,7 +25,8 @@ data class LoginState(
     val showErrorDialog: Boolean = false,
     val showLoadingDialog: Boolean = false,
     val showPermissionDeniedScreen: Boolean = false,
-    val showPermissionDeniedForeverScreen: Boolean = false
+    val showPermissionDeniedForeverScreen: Boolean = false,
+    val errorMessage: String? = null
 )
 
 sealed class OperationType {

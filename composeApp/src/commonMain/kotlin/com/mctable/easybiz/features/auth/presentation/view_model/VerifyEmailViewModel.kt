@@ -1,0 +1,95 @@
+package com.mctable.easybiz.features.auth.presentation.view_model
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
+import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
+import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
+import com.mctable.easybiz.features.auth.presentation.event.VerifyEmailEvent
+import com.mctable.easybiz.features.auth.presentation.state.VerifyEmailState
+import kotlinx.coroutines.launch
+
+class VerifyEmailViewModel(
+    private val verifyEmailUseCase: VerifyEmailUseCase,
+    private val navigator: Navigator,
+    private val registerUseCase: RegisterUseCase,
+) : ViewModel() {
+    var state by mutableStateOf(initialVerifyEmailState())
+        private set
+
+    fun onAction(action: VerifyEmailEvent) {
+        when (action) {
+            VerifyEmailEvent.HideErrorDialog -> state = state.copy(showErrorDialog = false)
+            is VerifyEmailEvent.OnCodeTyped -> state =
+                state.copy(
+                    code = action.code,
+                    enableButton = isValidCode(action.code)
+                )
+
+            is VerifyEmailEvent.ConfirmCode -> confirmCode(
+                action.email,
+                action.name,
+                action.password
+            )
+
+            VerifyEmailEvent.OnBackClick -> navigator.navigate(Destination.Login, true)
+        }
+    }
+
+    private fun confirmCode(email: String, name: String, password: String) {
+        viewModelScope.launch {
+            state = state.copy(showLoadingDialog = true)
+            state.code?.let { code ->
+                verifyEmailUseCase.execute(email, code).fold(
+                    onSuccess = { response ->
+                        handleSendCodeSuccess(email, name, password, response.registerToken)
+                    },
+                    onFailure = ::handleSendCodeError
+                )
+            }
+        }
+    }
+
+    private suspend fun handleSendCodeSuccess(
+        email: String,
+        name: String,
+        password: String,
+        registerToken: String
+    ) {
+        registerUseCase.execute(email, password, name, registerToken)
+            .fold(::handleLoginSuccess, ::handleSendCodeError)
+    }
+
+    private fun handleLoginSuccess(loginEntity: LoginEntity) {
+        state = state.copy(showLoadingDialog = false)
+        navigator.navigate(Destination.SearchBusiness, true)
+    }
+
+    private fun handleSendCodeError(failure: Throwable) {
+        state = state.copy(
+            showErrorDialog = true,
+            showLoadingDialog = false,
+            errorMessage = failure.message
+        )
+    }
+
+
+    private fun initialVerifyEmailState() = VerifyEmailState(
+        title = "Informe seu código para confirmação",
+        subTitle = "Precisamos que informe o código recebido em seu email",
+        inputLabel = "Código",
+        inputPlaceholder = "0000000",
+        emailErrorText = "Insira um código válido",
+        buttonText = "Confirmar"
+    )
+
+    private fun isValidCode(code: String?): Boolean {
+        return code?.length == 6
+    }
+
+}

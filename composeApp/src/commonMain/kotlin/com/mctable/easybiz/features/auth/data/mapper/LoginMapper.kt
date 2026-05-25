@@ -1,6 +1,7 @@
 package com.mctable.easybiz.features.auth.data.mapper
 
 import com.mctable.easybiz.features.auth.data.model.LoginResponseModel
+import com.mctable.easybiz.features.auth.data.model.VerifyEmailResponseModel
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import kotlinx.serialization.json.Json
 
@@ -18,5 +19,13 @@ object LoginMapper {
             ignoreUnknownKeys = true
         }
         return json.decodeFromString<LoginResponseModel>(jsonString)
+    }
+
+    fun parseVerifyResponse(jsonString: String): VerifyEmailResponseModel {
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        return json.decodeFromString<VerifyEmailResponseModel>(jsonString)
+
     }
 }

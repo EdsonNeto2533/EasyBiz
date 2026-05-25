@@ -12,5 +12,6 @@ data class OrderChatState(
     val orderId: String = "",
     val isLastPage: Boolean = false,
     val currentPage: Int = 0,
-    val showTyping: Boolean = false
+    val showTyping: Boolean = false,
+    val errorMessage: String? = null
 )
