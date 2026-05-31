@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderPageEntity
 import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
 import com.mctable.easybiz.features.my_orders.domain.usecase.GetMyOrdersUseCase
 import com.mctable.easybiz.features.my_orders.domain.usecase.UpdateOrderStatusUseCase
@@ -23,11 +24,22 @@ class MyOrderViewModel(
     var state by mutableStateOf(MyOrderState())
         private set
 
+    private val pageSize = 20
+
     fun onEvent(event: MyOrderEvent) {
         when (event) {
-            is MyOrderEvent.GetMyOrders -> loadMyOrders(event.paper, event.businessId)
+            is MyOrderEvent.GetMyOrders -> {
+                state = state.copy(
+                    paper = event.paper,
+                    businessId = event.businessId,
+                    isLoading = true,
+                    orders = emptyList(),
+                    currentPage = 0
+                )
+                fetchOrders()
+            }
             MyOrderEvent.OnBackPressed -> navigator.pop()
-            is MyOrderEvent.LoadNextPage -> handleNextPage(event.paper, event.businessId)
+            MyOrderEvent.LoadNextPage -> handleLoadNextPage()
             is MyOrderEvent.OnOrderClick -> navigator.navigate(Destination.Chat(event.orderId))
             is MyOrderEvent.OnUpdateStatusClick -> handleUpdateStatusClick(event.orderId, event.currentStatus)
             MyOrderEvent.OnDismissBottomSheet -> state = state.copy(showStatusBottomSheet = false)
@@ -35,52 +47,53 @@ class MyOrderViewModel(
         }
     }
 
-    private fun loadMyOrders(
-        paper: String? = null,
-        businessId: String? = null
-    ) {
-        state = state.copy(isLoading = true, isError = false, currentPage = 0, orders = emptyList())
-        fetchOrders(paper, businessId)
+    private fun handleLoadNextPage() {
+        if (state.isPaginationLoading || state.currentPage + 1 >= state.totalPages) return
+        state = state.copy(isPaginationLoading = true)
+        fetchOrders(isNextPage = true)
     }
 
-    private fun handleNextPage(
-        paper: String? = null,
-        businessId: String? = null
-    ) {
-        if (!state.isLastPage && !state.isLoading) {
-            state = state.copy(currentPage = state.currentPage + 1)
-            fetchOrders(paper, businessId)
-        }
-    }
-
-    private fun fetchOrders(
-        paper: String?,
-        businessId: String?
-    ) {
-        state = state.copy(isLoading = true)
+    private fun fetchOrders(isNextPage: Boolean = false) {
         viewModelScope.launch {
-            getMyOrdersUseCase.execute(
-                state.currentPage,
-                20,
-                paper = paper,
-                businessId = businessId
-            ).fold(
-                onSuccess = { page ->
-                    state = state.copy(
-                        orders = state.orders + page.content,
-                        isLastPage = page.isLast,
-                        isLoading = false
-                    )
-                },
-                onFailure = {
-                    state = state.copy(
-                        isLoading = false,
-                        isError = true,
-                        errorMessage = it.message
-                    )
-                }
-            )
+            try {
+                val pageToFetch = if (isNextPage) state.currentPage + 1 else 0
+                getMyOrdersUseCase.execute(
+                    pageToFetch,
+                    pageSize,
+                    paper = state.paper,
+                    businessId = state.businessId
+                ).fold(
+                    onSuccess = { page -> handleOrdersList(page, isNextPage) },
+                    onFailure = ::handleOrdersError
+                )
+            } catch (e: Exception) {
+                handleOrdersError(e)
+            }
         }
+    }
+
+    private fun handleOrdersList(page: MyOrderPageEntity, isNextPage: Boolean) {
+        val newList = if (isNextPage) {
+            state.orders + page.content
+        } else {
+            page.content
+        }
+        state = state.copy(
+            orders = newList,
+            isLoading = false,
+            isPaginationLoading = false,
+            currentPage = page.number,
+            totalPages = page.totalPages
+        )
+    }
+
+    private fun handleOrdersError(e: Throwable) {
+        state = state.copy(
+            isError = true,
+            isLoading = false,
+            isPaginationLoading = false,
+            errorMessage = e.message
+        )
     }
 
     private fun handleUpdateStatusClick(orderId: String, currentStatus: OrderStatus) {
@@ -89,7 +102,7 @@ class MyOrderViewModel(
             OrderStatus.ACEITO -> listOf(OrderStatus.CONCLUIDO, OrderStatus.RECUSADO)
             else -> emptyList()
         }
-        
+
         if (options.isNotEmpty()) {
             state = state.copy(
                 selectedOrderId = orderId,
@@ -104,9 +117,7 @@ class MyOrderViewModel(
         viewModelScope.launch {
             updateOrderStatusUseCase.execute(orderId, newStatus).fold(
                 onSuccess = {
-                    // Refresh current page/list
-                    // For simplicity, reload first page
-                    loadMyOrders() 
+                    onEvent(MyOrderEvent.GetMyOrders(state.paper, state.businessId))
                 },
                 onFailure = {
                     state = state.copy(isLoading = false, isError = true)

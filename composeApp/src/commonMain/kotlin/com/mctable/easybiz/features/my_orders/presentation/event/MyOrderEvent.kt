@@ -9,10 +9,7 @@ sealed class MyOrderEvent {
     ) : MyOrderEvent()
 
     data object OnBackPressed : MyOrderEvent()
-    data class LoadNextPage(
-        val paper: String?,
-        val businessId: String?
-    ) : MyOrderEvent()
+    data object LoadNextPage : MyOrderEvent()
 
     data class OnOrderClick(val orderId: String) : MyOrderEvent()
     data class OnUpdateStatusClick(val orderId: String, val currentStatus: OrderStatus) : MyOrderEvent()

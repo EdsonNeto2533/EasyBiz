@@ -8,9 +8,12 @@ data class MyOrderState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val currentPage: Int = 0,
-    val isLastPage: Boolean = false,
+    val totalPages: Int = 1,
+    val isPaginationLoading: Boolean = false,
     val selectedOrderId: String? = null,
     val showStatusBottomSheet: Boolean = false,
     val availableStatusOptions: List<OrderStatus> = emptyList(),
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val paper: String? = null,
+    val businessId: String? = null
 )
