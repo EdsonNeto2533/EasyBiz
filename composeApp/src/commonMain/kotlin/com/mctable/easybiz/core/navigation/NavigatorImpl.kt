@@ -44,8 +44,10 @@ class NavigatorImpl() : Navigator {
         destination: Destination,
         inclusive: Boolean
     ) {
-        navController?.navigate(destination){
-            popUpTo(destination)
+        navController?.navigate(destination) {
+            popUpTo(0) {
+                this.inclusive = true
+            }
         }
     }
 }

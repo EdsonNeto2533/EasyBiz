@@ -152,6 +152,18 @@ fun UserDataPage(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onEvent(UserDataEvent.TurnOnEditMode) }
                 )
+                Spacer(modifier = Modifier.height(Dimens.spacingLg))
+                ButtonAtom(
+                    text = "Logout",
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onEvent(UserDataEvent.Logout) }
+                )
+                Spacer(modifier = Modifier.height(Dimens.spacingLg))
+                ButtonAtom(
+                    text = "Excluir Conta",
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onEvent(UserDataEvent.DeleteAccount) }
+                )
             } else {
                 ButtonAtom(
                     text = "Salvar Alterações",

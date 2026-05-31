@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.core.navigation.UserData
 import com.mctable.easybiz.core.navigation.userChannel
+import com.mctable.easybiz.features.auth.domain.usecase.DeleteAccountUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.LogoutUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.GetUserDataUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserDataUseCase
 import com.mctable.easybiz.features.user_data.domain.usecase.UpdateUserPhotoUseCase
@@ -19,6 +22,8 @@ class UserDataViewModel(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val updateUserDataUseCase: UpdateUserDataUseCase,
     private val updateUserPhotoUseCase: UpdateUserPhotoUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
+    private val logoutUseCase: LogoutUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -33,6 +38,36 @@ class UserDataViewModel(
             is UserDataEvent.OnImageLoaded -> onImageLoaded(event.bytes)
             UserDataEvent.UpdateUserData -> updateUserData()
             UserDataEvent.OnBackPressed -> navigator.pop()
+            UserDataEvent.DeleteAccount -> deleteAccount()
+            UserDataEvent.Logout -> logout()
+        }
+    }
+
+    private fun deleteAccount() {
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            deleteAccountUseCase.execute().fold(
+                onSuccess = {
+                    navigator.popUpTo(Destination.Login)
+                },
+                onFailure = { error ->
+                    state = state.copy(error = error.message, isLoading = false)
+                }
+            )
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            logoutUseCase.execute().fold(
+                onSuccess = {
+                    navigator.popUpTo(Destination.Login)
+                },
+                onFailure = { error ->
+                    state = state.copy(error = error.message, isLoading = false)
+                }
+            )
         }
     }
 

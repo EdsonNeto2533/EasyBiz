@@ -7,4 +7,6 @@ sealed interface UserDataEvent {
     data class OnImageLoaded(val bytes: ByteArray) : UserDataEvent
     data object UpdateUserData : UserDataEvent
     data object OnBackPressed : UserDataEvent
+    data object DeleteAccount : UserDataEvent
+    data object Logout : UserDataEvent
 }
