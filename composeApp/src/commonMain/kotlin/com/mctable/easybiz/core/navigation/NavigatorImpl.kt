@@ -39,4 +39,15 @@ class NavigatorImpl() : Navigator {
 
         controller?.popBackStack(destination, inclusive)
     }
+
+    override fun popUpTo(
+        destination: Destination,
+        inclusive: Boolean
+    ) {
+        navController?.navigate(destination) {
+            popUpTo(0) {
+                this.inclusive = true
+            }
+        }
+    }
 }

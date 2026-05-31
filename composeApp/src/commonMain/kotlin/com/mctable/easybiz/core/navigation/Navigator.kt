@@ -14,4 +14,9 @@ interface Navigator {
         destination: Destination,
         inclusive: Boolean = false
     ): Result<Unit>
+
+    fun popUpTo(
+        destination: Destination,
+        inclusive: Boolean = false
+    )
 }

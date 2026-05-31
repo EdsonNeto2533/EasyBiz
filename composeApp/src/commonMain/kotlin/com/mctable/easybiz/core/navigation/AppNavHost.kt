@@ -12,9 +12,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.mctable.easybiz.features.auth.presentation.ui.page.ForgetPasswordPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
+import com.mctable.easybiz.features.auth.presentation.ui.page.ResetPasswordPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.VerifyEmailPage
+import com.mctable.easybiz.features.auth.presentation.view_model.ForgetPasswordViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
+import com.mctable.easybiz.features.auth.presentation.view_model.ResetPasswordViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.VerifyEmailViewModel
 import com.mctable.easybiz.features.business_details.presentation.ui.page.BusinessDetailsPage
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
@@ -187,6 +191,27 @@ fun AppNavHost() {
                 )
 
             }
+
+            composable<Destination.ForgetPassword> {
+                val viewModel = koinViewModel<ForgetPasswordViewModel>()
+
+                ForgetPasswordPage(
+                    state = viewModel.state,
+                    onAction = { event -> viewModel.onAction(event) }
+                )
+            }
+
+            composable<Destination.ResetPassword> {
+                val route = it.toRoute<Destination.ResetPassword>()
+                val viewModel = koinViewModel<ResetPasswordViewModel>()
+
+                ResetPasswordPage(
+                    email = route.email,
+                    state = viewModel.state,
+                    onAction = { event -> viewModel.onAction(event) }
+                )
+            }
+
         }
     }
 }

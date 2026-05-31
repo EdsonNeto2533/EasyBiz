@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +41,6 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.theme.Neutral100
-import com.mctable.easybiz.core.ds.theme.Neutral200
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
@@ -204,6 +204,21 @@ fun LoginPage(
                         onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                     }
                 )
+
+                if (state.operationType is OperationType.Login) {
+                    Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                    Text(
+                        text = state.forgotPasswordLabel,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onEvent.invoke(LoginEvent.ForgetPasswordClick)
+                            },
+                        textAlign = TextAlign.End
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(Dimens.spacing3xl))
             }

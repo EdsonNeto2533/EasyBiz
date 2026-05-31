@@ -19,5 +19,6 @@ data class MyOrderPageEntity(
     val content: List<MyOrderEntity>,
     val totalElements: Int,
     val totalPages: Int,
-    val isLast: Boolean
+    val size: Int,
+    val number: Int
 )

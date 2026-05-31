@@ -22,5 +22,6 @@ data class MyOrderPageResponseModel(
     val content: List<MyOrderResponseModel>,
     val totalElements: Int,
     val totalPages: Int,
-    @SerialName("last") val isLast: Boolean
+    val size: Int,
+    val number: Int
 )

@@ -34,7 +34,8 @@ object MyOrderMapper {
             content = model.content.map { toEntity(it) },
             totalElements = model.totalElements,
             totalPages = model.totalPages,
-            isLast = model.isLast
+            size = model.size,
+            number = model.number
         )
     }
 }

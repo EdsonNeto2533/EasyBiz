@@ -92,7 +92,7 @@ fun BusinessDetailsPage(
                     imageUrl = business?.logoUrl,
                     contentDescription = business?.name,
                     size = Dimens.avatarSizeXl,
-                    showOnlineIndicator = business?.active == true
+                    showOnlineIndicator = false
                 )
             }
 
