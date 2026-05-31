@@ -3,14 +3,16 @@ package com.mctable.easybiz.features.search_business.data.datasource
 import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.networking.EasyBizNetworking
 import com.mctable.easybiz.features.search_business.data.mapper.BusinessMapper
-import com.mctable.easybiz.features.search_business.data.model.BusinessResponseModel
+import com.mctable.easybiz.features.search_business.data.model.SearchBusinessPagedResponseModel
 
 interface SearchBusinessDatasource {
     suspend fun searchBusiness(
         latitude: Double,
         longitude: Double,
-        name: String?
-    ): Result<List<BusinessResponseModel>>
+        name: String?,
+        page: Int,
+        size: Int
+    ): Result<SearchBusinessPagedResponseModel>
 
     suspend fun addFavorite(businessId: String): Result<Unit>
 }
@@ -23,11 +25,15 @@ class SearchBusinessDatasourceImpl(
     override suspend fun searchBusiness(
         latitude: Double,
         longitude: Double,
-        name: String?
-    ): Result<List<BusinessResponseModel>> {
+        name: String?,
+        page: Int,
+        size: Int
+    ): Result<SearchBusinessPagedResponseModel> {
         val params = mutableMapOf(
             "lat" to latitude.toString(),
             "lon" to longitude.toString(),
+            "page" to page.toString(),
+            "size" to size.toString()
         )
 
         name?.let {
@@ -37,7 +43,7 @@ class SearchBusinessDatasourceImpl(
             host = appEnv.host,
             path = "/negocios/busca",
             responseMapper = { jsonString ->
-                BusinessMapper.parseResponse(jsonString)
+                BusinessMapper.parsePagedResponse(jsonString)
             },
             params = params
         )

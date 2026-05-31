@@ -1,7 +1,9 @@
 package com.mctable.easybiz.features.search_business.data.mapper
 
 import com.mctable.easybiz.features.search_business.data.model.BusinessResponseModel
+import com.mctable.easybiz.features.search_business.data.model.SearchBusinessPagedResponseModel
 import com.mctable.easybiz.features.search_business.domain.entity.BusinessEntity
+import com.mctable.easybiz.features.search_business.domain.entity.SearchBusinessPagedEntity
 import kotlinx.serialization.json.Json
 
 object BusinessMapper {
@@ -24,10 +26,18 @@ object BusinessMapper {
         )
     }
 
-    fun parseResponse(jsonString: String): List<BusinessResponseModel> {
+    fun toDomain(response: SearchBusinessPagedResponseModel) = SearchBusinessPagedEntity(
+        content = toDomain(response.content),
+        totalElements = response.totalElements,
+        totalPages = response.totalPages,
+        size = response.size,
+        number = response.number
+    )
+
+    fun parsePagedResponse(jsonString: String): SearchBusinessPagedResponseModel {
         val json = Json {
             ignoreUnknownKeys = true
         }
-        return json.decodeFromString<List<BusinessResponseModel>>(jsonString)
+        return json.decodeFromString<SearchBusinessPagedResponseModel>(jsonString)
     }
 }
