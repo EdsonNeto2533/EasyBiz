@@ -41,7 +41,6 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.theme.Neutral100
-import com.mctable.easybiz.core.ds.theme.Neutral200
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState

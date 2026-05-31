@@ -9,7 +9,6 @@ import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
-import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.presentation.event.LoginEvent
 import com.mctable.easybiz.features.auth.presentation.state.LoginState
