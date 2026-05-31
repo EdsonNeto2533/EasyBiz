@@ -4,8 +4,12 @@ import com.mctable.easybiz.features.auth.data.datasource.LoginRemoteDataSource
 import com.mctable.easybiz.features.auth.data.datasource.LoginRemoteDataSourceImpl
 import com.mctable.easybiz.features.auth.data.repository.LoginRepositoryImpl
 import com.mctable.easybiz.features.auth.domain.repository.LoginRepository
+import com.mctable.easybiz.features.auth.domain.usecase.DeleteAccountUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.DeleteAccountUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCaseImpl
+import com.mctable.easybiz.features.auth.domain.usecase.LogoutUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.LogoutUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
@@ -55,6 +59,19 @@ val authModule = module {
 
     factory<SendCodeUseCase> {
         SendCodeUseCaseImpl(
+            repository = get()
+        )
+    }
+
+    factory<LogoutUseCase> {
+        LogoutUseCaseImpl(
+            repository = get(),
+            storage = get()
+        )
+    }
+
+    factory<DeleteAccountUseCase> {
+        DeleteAccountUseCaseImpl(
             repository = get()
         )
     }

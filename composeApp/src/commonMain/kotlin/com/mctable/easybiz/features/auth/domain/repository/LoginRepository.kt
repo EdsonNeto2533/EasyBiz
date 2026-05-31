@@ -14,4 +14,6 @@ interface LoginRepository {
 
     suspend fun verifyEmail(email: String, code: String): Result<VerifyEmailResponseModel>
     suspend fun sendCode(email: String): Result<Unit>
+    suspend fun logout(refreshToken: String): Result<Unit>
+    suspend fun deleteAccount(): Result<Unit>
 }

@@ -17,12 +17,7 @@ class LoginRepositoryImpl(
 
     override suspend fun login(email: String, password: String): Result<LoginEntity> = runCatching {
         return remoteDataSource.login(email, password).mapCatching { responseModel ->
-            easyBizStorage.setString("token", responseModel.token)
-            updateUserData(responseModel, email)
-            responseModel.userId?.let {
-                easyBizStorage.setString("userId", responseModel.userId)
-            }
-
+            saveSession(responseModel, email)
             LoginMapper.toDomain(responseModel)
         }
     }
@@ -34,11 +29,7 @@ class LoginRepositoryImpl(
         registerToken: String
     ): Result<LoginEntity> = runCatching {
         return remoteDataSource.register(email, password, name, registerToken).map { responseModel ->
-            easyBizStorage.setString("token", responseModel.token)
-            updateUserData(responseModel, email)
-            responseModel.userId?.let {
-                easyBizStorage.setString("userId", responseModel.userId)
-            }
+            saveSession(responseModel, email)
             LoginMapper.toDomain(responseModel)
         }
     }
@@ -51,7 +42,36 @@ class LoginRepositoryImpl(
         return remoteDataSource.sendCode(email)
     }
 
+    override suspend fun logout(refreshToken: String): Result<Unit> {
+        return remoteDataSource.logout(refreshToken).onSuccess {
+            clearSession()
+        }
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        return remoteDataSource.deleteAccount().onSuccess {
+            clearSession()
+        }
+    }
+
+    private suspend fun saveSession(responseModel: LoginResponseModel, email: String) {
+        easyBizStorage.setString("token", responseModel.token)
+        responseModel.refreshToken?.let {
+            easyBizStorage.setString("refreshToken", it)
+        }
+        responseModel.userId?.let {
+            easyBizStorage.setString("userId", it)
+        }
+        updateUserData(responseModel, email)
+    }
+
+    private suspend fun clearSession() {
+        easyBizStorage.removeValue("token")
+        easyBizStorage.removeValue("refreshToken")
+        easyBizStorage.removeValue("userId")
+    }
+
     private suspend fun updateUserData(userData: LoginResponseModel, email: String) = runCatching {
-        userChannel.send(UserData(userData.name, email, userData.photoUrl))
+        userChannel.send(UserData(userData.name ?: "", email, userData.photoUrl))
     }
 }
