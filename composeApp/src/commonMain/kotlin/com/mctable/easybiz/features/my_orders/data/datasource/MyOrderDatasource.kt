@@ -53,7 +53,7 @@ class MyOrderDatasourceImpl(
             OrderStatus.ACEITO -> "/pedidos/$orderId/aceitar"
             OrderStatus.CONCLUIDO -> "/pedidos/$orderId/concluir"
             OrderStatus.CANCELADO -> "/pedidos/$orderId/cancelar"
-            OrderStatus.RECUSADO -> "/pedidos/$orderId/recursar"
+            OrderStatus.RECUSADO -> "/pedidos/$orderId/recusar"
             else -> throw IllegalArgumentException("Invalid status update")
         }
 
