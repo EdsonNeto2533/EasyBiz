@@ -20,7 +20,9 @@ import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCaseImpl
+import com.mctable.easybiz.features.auth.presentation.view_model.ForgetPasswordViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
+import com.mctable.easybiz.features.auth.presentation.view_model.ResetPasswordViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.VerifyEmailViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -29,6 +31,9 @@ import org.koin.dsl.module
 val authModule = module {
     viewModel { LoginViewModel(get(), get(), get()) }
     viewModelOf(::VerifyEmailViewModel)
+    viewModelOf(::ForgetPasswordViewModel)
+    viewModelOf(::ResetPasswordViewModel)
+
     single<LoginRemoteDataSource> {
         LoginRemoteDataSourceImpl(
             networking = get(),

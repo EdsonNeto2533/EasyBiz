@@ -101,7 +101,7 @@ class LoginViewModel(
     }
 
     private fun onForgetPasswordClick() {
-        TODO("Not yet implemented")
+        navigator.navigate(Destination.ForgetPassword)
     }
 
     private fun onLoginClick() {

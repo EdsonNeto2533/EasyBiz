@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -204,6 +205,21 @@ fun LoginPage(
                         onEvent.invoke(LoginEvent.OnPasswordTyped(password))
                     }
                 )
+
+                if (state.operationType is OperationType.Login) {
+                    Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                    Text(
+                        text = state.forgotPasswordLabel,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onEvent.invoke(LoginEvent.ForgetPasswordClick)
+                            },
+                        textAlign = TextAlign.End
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(Dimens.spacing3xl))
             }

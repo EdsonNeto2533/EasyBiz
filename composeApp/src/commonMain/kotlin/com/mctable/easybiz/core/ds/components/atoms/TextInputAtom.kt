@@ -1,6 +1,5 @@
 package com.mctable.easybiz.core.ds.components.atoms
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,12 +48,17 @@ fun TextInputAtom(
     showError: Boolean = false,
     errorMessage: String? = null,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    imeAction: ImeAction = ImeAction.Next
+    imeAction: ImeAction = ImeAction.Next,
+    visualTransformation: VisualTransformation? = null
 ) {
     var text by remember(initialValue) { mutableStateOf(initialValue) }
     var isFocused by remember { mutableStateOf(false) }
-    val visualTransformation =
-        if (mask != null) MaskVisualTransformation(mask) else VisualTransformation.None
+
+    val currentVisualTransformation = when {
+        visualTransformation != null -> visualTransformation
+        mask != null -> MaskVisualTransformation(mask)
+        else -> VisualTransformation.None
+    }
 
     Column(modifier = modifier) {
         if (label.isNotEmpty()) {
@@ -115,7 +119,7 @@ fun TextInputAtom(
             ),
             textStyle = MaterialTheme.typography.bodyLarge,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
-            visualTransformation = visualTransformation,
+            visualTransformation = currentVisualTransformation,
             singleLine = true,
             isError = showError,
             supportingText = {

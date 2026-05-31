@@ -26,6 +26,16 @@ sealed interface Destination {
     }
 
     @Serializable
+    data object ForgetPassword : Destination {
+        override val isLoggedArea = false
+    }
+
+    @Serializable
+    data class ResetPassword(val email: String) : Destination {
+        override val isLoggedArea = false
+    }
+
+    @Serializable
     data object SearchBusiness : Destination {
         override val isLoggedArea = true
         override val title = "Buscar prestadores"
