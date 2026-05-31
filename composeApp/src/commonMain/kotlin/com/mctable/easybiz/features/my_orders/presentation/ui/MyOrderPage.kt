@@ -1,17 +1,21 @@
 package com.mctable.easybiz.features.my_orders.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,17 +63,14 @@ fun MyOrderPage(
 
     val shouldLoadMore by remember {
         derivedStateOf {
-            val layoutInfo = listState.layoutInfo
-            val totalItemsNumber = layoutInfo.totalItemsCount
-            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
-
-            lastVisibleItemIndex > (totalItemsNumber - 5) && totalItemsNumber > 0
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleItemIndex >= state.orders.size - 2 && state.orders.isNotEmpty()
         }
     }
 
     LaunchedEffect(shouldLoadMore) {
-        if (shouldLoadMore && !state.isLastPage && !state.isLoading) {
-            onEvent(MyOrderEvent.LoadNextPage(paper, businessId))
+        if (shouldLoadMore) {
+            onEvent(MyOrderEvent.LoadNextPage)
         }
     }
 
@@ -96,7 +98,9 @@ fun MyOrderPage(
             } else {
                 LazyColumn(
                     state = listState,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.spacingMd),
+                    contentPadding = PaddingValues(bottom = Dimens.spacingMd)
                 ) {
                     items(state.orders.size) { index ->
                         val order = state.orders[index]
@@ -126,11 +130,26 @@ fun MyOrderPage(
                                 }
                             },
                             modifier = Modifier.padding(
-                                top = Dimens.spacingMd,
-                                start = Dimens.screenPaddingHorizontal,
-                                end = Dimens.screenPaddingHorizontal
+                                horizontal = Dimens.screenPaddingHorizontal
                             )
                         )
+                    }
+
+                    if (state.isPaginationLoading) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(Dimens.spacingMd),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp),
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
                     }
                 }
             }
