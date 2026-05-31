@@ -7,6 +7,7 @@ import com.mctable.easybiz.features.auth.data.datasource.LoginRemoteDataSource
 import com.mctable.easybiz.features.auth.data.mapper.LoginMapper
 import com.mctable.easybiz.features.auth.data.model.LoginResponseModel
 import com.mctable.easybiz.features.auth.data.model.VerifyEmailResponseModel
+import com.mctable.easybiz.features.auth.data.request.ResetPasswordRequest
 import com.mctable.easybiz.features.auth.domain.entity.LoginEntity
 import com.mctable.easybiz.features.auth.domain.repository.LoginRepository
 
@@ -28,13 +29,17 @@ class LoginRepositoryImpl(
         name: String,
         registerToken: String
     ): Result<LoginEntity> = runCatching {
-        return remoteDataSource.register(email, password, name, registerToken).map { responseModel ->
-            saveSession(responseModel, email)
-            LoginMapper.toDomain(responseModel)
-        }
+        return remoteDataSource.register(email, password, name, registerToken)
+            .map { responseModel ->
+                saveSession(responseModel, email)
+                LoginMapper.toDomain(responseModel)
+            }
     }
 
-    override suspend fun verifyEmail(email: String, code: String): Result<VerifyEmailResponseModel> = runCatching {
+    override suspend fun verifyEmail(
+        email: String,
+        code: String
+    ): Result<VerifyEmailResponseModel> = runCatching {
         return remoteDataSource.verifyEmail(email, code)
     }
 
@@ -42,16 +47,24 @@ class LoginRepositoryImpl(
         return remoteDataSource.sendCode(email)
     }
 
-    override suspend fun logout(refreshToken: String): Result<Unit> {
+    override suspend fun logout(refreshToken: String): Result<Unit> = runCatching {
         return remoteDataSource.logout(refreshToken).onSuccess {
             clearSession()
         }
     }
 
-    override suspend fun deleteAccount(): Result<Unit> {
+    override suspend fun deleteAccount(): Result<Unit> = runCatching {
         return remoteDataSource.deleteAccount().onSuccess {
             clearSession()
         }
+    }
+
+    override suspend fun forgetPassword(email: String): Result<Unit> = runCatching {
+        return remoteDataSource.forgetPassword(email)
+    }
+
+    override suspend fun resetPassword(request: ResetPasswordRequest): Result<Unit> = runCatching {
+        return remoteDataSource.resetPassword(request)
     }
 
     private suspend fun saveSession(responseModel: LoginResponseModel, email: String) {

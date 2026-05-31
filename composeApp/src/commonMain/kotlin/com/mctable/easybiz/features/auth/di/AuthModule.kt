@@ -6,12 +6,16 @@ import com.mctable.easybiz.features.auth.data.repository.LoginRepositoryImpl
 import com.mctable.easybiz.features.auth.domain.repository.LoginRepository
 import com.mctable.easybiz.features.auth.domain.usecase.DeleteAccountUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.DeleteAccountUseCaseImpl
+import com.mctable.easybiz.features.auth.domain.usecase.ForgetPasswordUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.ForgetPasswordUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.LoginUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.LogoutUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.LogoutUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.RegisterUseCaseImpl
+import com.mctable.easybiz.features.auth.domain.usecase.ResetPasswordUseCase
+import com.mctable.easybiz.features.auth.domain.usecase.ResetPasswordUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCase
 import com.mctable.easybiz.features.auth.domain.usecase.SendCodeUseCaseImpl
 import com.mctable.easybiz.features.auth.domain.usecase.VerifyEmailUseCase
@@ -72,6 +76,18 @@ val authModule = module {
 
     factory<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(
+            repository = get()
+        )
+    }
+
+    factory<ForgetPasswordUseCase> {
+        ForgetPasswordUseCaseImpl(
+            repository = get()
+        )
+    }
+
+    factory<ResetPasswordUseCase> {
+        ResetPasswordUseCaseImpl(
             repository = get()
         )
     }
