@@ -7,6 +7,7 @@ import com.mctable.easybiz.features.my_favorites.data.model.MyFavoriteResponseMo
 
 interface MyFavoriteDatasource {
     suspend fun getMyFavorites(): Result<List<MyFavoriteResponseModel>>
+    suspend fun removeFavorite(businessId: String): Result<Unit>
 }
 
 class MyFavoriteDatasourceImpl(
@@ -20,6 +21,14 @@ class MyFavoriteDatasourceImpl(
             responseMapper = { jsonString ->
                 MyFavoriteMapper.parseListResponse(jsonString)
             }
+        )
+    }
+
+    override suspend fun removeFavorite(businessId: String): Result<Unit> {
+        return networking.delete(
+            host = appEnv.host,
+            path = "/favoritos/$businessId",
+            responseMapper = { }
         )
     }
 }

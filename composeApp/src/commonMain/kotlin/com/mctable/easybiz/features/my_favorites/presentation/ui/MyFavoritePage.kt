@@ -71,6 +71,9 @@ fun MyFavoritePage(
                                 favorite = favorite,
                                 onClick = {
                                     onEvent(MyFavoriteEvent.OnBusinessClicked(favorite.businessId))
+                                },
+                                onRemove = {
+                                    onEvent(MyFavoriteEvent.OnRemoveFavorite(favorite.businessId))
                                 }
                             )
                         }

@@ -13,4 +13,8 @@ class MyFavoriteRepositoryImpl(
             list.map { MyFavoriteMapper.toEntity(it) }
         }
     }
+
+    override suspend fun removeFavorite(businessId: String): Result<Unit> {
+        return datasource.removeFavorite(businessId)
+    }
 }

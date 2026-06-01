@@ -4,4 +4,5 @@ import com.mctable.easybiz.features.my_favorites.domain.entity.MyFavoriteEntity
 
 interface MyFavoriteRepository {
     suspend fun getMyFavorites(): Result<List<MyFavoriteEntity>>
+    suspend fun removeFavorite(businessId: String): Result<Unit>
 }
