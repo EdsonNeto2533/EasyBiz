@@ -66,7 +66,8 @@ class OrderChatViewModel(
                     state = state.copy(
                         messages = page.messages,
                         isLastPage = page.isLast,
-                        isLoading = false
+                        isLoading = false,
+                        currentPage = 0
                     )
                 },
                 onFailure = {
@@ -77,9 +78,9 @@ class OrderChatViewModel(
     }
 
     private fun loadMoreMessages() {
-        if (state.isLastPage || state.isLoading) return
+        if (state.isLastPage || state.isLoading || state.isPaginationLoading) return
 
-        state = state.copy(isLoading = true)
+        state = state.copy(isPaginationLoading = true)
         viewModelScope.launch {
             val nextPage = state.currentPage + 1
             getOrderMessagesUseCase.execute(state.orderId, nextPage, 20).fold(
@@ -88,11 +89,11 @@ class OrderChatViewModel(
                         messages = state.messages + page.messages,
                         isLastPage = page.isLast,
                         currentPage = nextPage,
-                        isLoading = false
+                        isPaginationLoading = false
                     )
                 },
                 onFailure = {
-                    state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
+                    state = state.copy(isPaginationLoading = false)
                 }
             )
         }

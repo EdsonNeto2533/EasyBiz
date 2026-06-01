@@ -58,20 +58,21 @@ fun BusinessDetailsPage(
         },
 
         bottomBar = {
-            Column {
-                ButtonAtom(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = Dimens.screenPaddingHorizontal,
-                        ),
-                    text = state.startChatLabel,
-                    onClick = {
-                        onEvent(BusinessDetailsEvent.CreateOrder)
-                    }
-                )
-                Box(modifier = Modifier.height(12.dp))
-            }
+            if (state.businessDetails?.isMine == false)
+                Column {
+                    ButtonAtom(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = Dimens.screenPaddingHorizontal,
+                            ),
+                        text = state.startChatLabel,
+                        onClick = {
+                            onEvent(BusinessDetailsEvent.CreateOrder)
+                        }
+                    )
+                    Box(modifier = Modifier.height(12.dp))
+                }
         }
 
     ) { padding ->
@@ -210,7 +211,8 @@ fun BusinessDetailsPagePreview() {
             description = "Somos um profissional de mecânica com plus de 4 anos no mercado fazendo coisas e mais coisas",
             minimalValue = 100.0,
             yearsOfExperience = 5,
-            totalRatings = 10
+            totalRatings = 10,
+            false
         )
     )
 

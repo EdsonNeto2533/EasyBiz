@@ -124,7 +124,7 @@ fun SearchBusinessPage(
             } else {
                 LazyColumn(
                     state = listState,
-                    contentPadding = PaddingValues(horizontal = Dimens.screenPaddingHorizontal, vertical = Dimens.spacingMd),
+                    contentPadding = PaddingValues(horizontal = Dimens.screenPaddingHorizontal),
                     verticalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
                 ) {
                     items(state.businessList.size) { index ->

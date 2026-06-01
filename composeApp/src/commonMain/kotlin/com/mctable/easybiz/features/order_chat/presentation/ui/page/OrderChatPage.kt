@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,16 +69,13 @@ fun OrderChatPage(
 
     val shouldLoadMore by remember {
         derivedStateOf {
-            val layoutInfo = listState.layoutInfo
-            val totalItemsNumber = layoutInfo.totalItemsCount
-            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
-
-            lastVisibleItemIndex > (totalItemsNumber - 5) && totalItemsNumber > 0
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleItemIndex >= state.messages.size - 2 && state.messages.isNotEmpty()
         }
     }
 
     LaunchedEffect(shouldLoadMore) {
-        if (shouldLoadMore && !state.isLastPage && !state.isLoading) {
+        if (shouldLoadMore) {
             onEvent(OrderChatEvent.OnLoadMoreMessages)
         }
     }
@@ -137,6 +135,23 @@ fun OrderChatPage(
             ) {
                 items(state.messages, key = { it.id }) { message ->
                     ChatMessageBubble(message = message)
+                }
+
+                if (state.isPaginationLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Dimens.spacingMd),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 }
             }
 
@@ -311,31 +326,18 @@ fun OrderChatPagePreview() {
                 true,
             ),
             OrderChatMessageEntity(
-                id = "1",
-                orderId = "1",
-                senderId = "user1",
-                senderName = "João Silva",
-                content = "Olá, gostaria de saber o status do pedido",
-                sentAt = "2026-04-03T17:32:16.331Z",
-                isRead = true,
-                readAt = null,
-                senderPhotoUrl = null,
-                true
-            ),
-            OrderChatMessageEntity(
                 id = "2",
                 orderId = "1",
                 senderId = "user2",
-                senderName = "Marcos Elétrica",
-                content = "Claro! Já estou a caminho.",
-                sentAt = "2026-04-03T17:35:10.331Z",
+                senderName = "Maria Oliveira",
+                content = "Oi, tudo bem?",
+                sentAt = "2026-04-03T17:33:16.331Z",
                 isRead = true,
                 readAt = null,
                 senderPhotoUrl = null,
-                false
+                false,
             )
-        ),
-        showTyping = true
+        )
     )
 
     EasyBizTheme {

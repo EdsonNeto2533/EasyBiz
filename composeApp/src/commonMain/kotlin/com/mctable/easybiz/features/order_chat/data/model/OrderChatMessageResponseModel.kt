@@ -21,5 +21,6 @@ data class OrderChatPageResponseModel(
     val content: List<OrderChatMessageResponseModel>,
     val totalElements: Int,
     val totalPages: Int,
-    val last: Boolean
+    val size: Int,
+    val number: Int
 )

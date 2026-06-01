@@ -16,4 +16,5 @@ data class BusinessDetailsEntity(
     val minimalValue: Double?,
     val yearsOfExperience: Int?,
     val totalRatings: Int?,
+    val isMine: Boolean
 )
