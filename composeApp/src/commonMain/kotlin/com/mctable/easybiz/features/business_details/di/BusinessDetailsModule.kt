@@ -9,6 +9,7 @@ import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderU
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCaseImpl
 import com.mctable.easybiz.features.business_details.presentation.view_model.BusinessDetailsViewModel
+import com.mctable.easybiz.features.reviews.domain.usecase.GetBusinessReviewsUseCase
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -29,5 +30,5 @@ val businessDetailsModule = module {
         CreateOrderUseCaseImpl(get())
     }
 
-    viewModel { BusinessDetailsViewModel(get(), get(), get()) }
+    viewModel { BusinessDetailsViewModel(get(), get(), get<GetBusinessReviewsUseCase>(), get()) }
 }

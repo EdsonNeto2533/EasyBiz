@@ -15,4 +15,5 @@ sealed class MyOrderEvent {
     data class OnUpdateStatusClick(val orderId: String, val currentStatus: OrderStatus) : MyOrderEvent()
     data object OnDismissBottomSheet : MyOrderEvent()
     data class OnStatusSelected(val orderId: String, val newStatus: OrderStatus) : MyOrderEvent()
+    data class OnReviewOrder(val orderId: String, val businessId: String) : MyOrderEvent()
 }

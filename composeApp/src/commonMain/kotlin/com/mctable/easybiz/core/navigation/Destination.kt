@@ -84,6 +84,12 @@ sealed interface Destination {
     }
 
     @Serializable
+    data class Reviews(val orderId: String, val businessId: String) : Destination {
+        override val isLoggedArea = true
+        override val title = "Avaliações"
+    }
+
+    @Serializable
     data object Profile : Destination {
         override val isLoggedArea = true
         override val title = "Meu Perfil"
