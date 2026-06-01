@@ -1,5 +1,6 @@
 package com.mctable.easybiz.features.business_details.data.repository
 
+import com.mctable.easybiz.core.local_storage.EasyBizStorage
 import com.mctable.easybiz.features.business_details.data.datasource.BusinessDetailsDatasource
 import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.data.mapper.BusinessDetailsMapper
@@ -7,12 +8,14 @@ import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetai
 import com.mctable.easybiz.features.business_details.domain.repository.BusinessDetailsRepository
 
 class BusinessDetailsRepositoryImpl(
-    private val datasource: BusinessDetailsDatasource
+    private val datasource: BusinessDetailsDatasource,
+    private val easyBizStorage: EasyBizStorage
 ) : BusinessDetailsRepository {
     override suspend fun getBusinessDetails(id: String): Result<BusinessDetailsEntity> =
         runCatching {
+            val userId = easyBizStorage.getString("userId")
             return datasource.getBusinessDetails(id).map {
-                BusinessDetailsMapper.toEntity(it)
+                BusinessDetailsMapper.toEntity(it, userId ?: "")
             }
         }
 

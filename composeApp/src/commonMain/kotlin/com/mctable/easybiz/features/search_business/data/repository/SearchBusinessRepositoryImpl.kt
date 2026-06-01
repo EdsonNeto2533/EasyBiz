@@ -15,7 +15,7 @@ class SearchBusinessRepositoryImpl(
         name: String?,
         page: Int,
         size: Int
-    ): Result<SearchBusinessPagedEntity> {
+    ): Result<SearchBusinessPagedEntity> = runCatching {
         return businessDatasource.searchBusiness(
             latitude,
             longitude,

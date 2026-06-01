@@ -7,6 +7,7 @@ import com.mctable.easybiz.features.order_chat.domain.entity.OrderChatMessageEnt
 data class OrderChatState(
     val messages: List<OrderChatMessageEntity> = emptyList(),
     val isLoading: Boolean = false,
+    val isPaginationLoading: Boolean = false,
     val isError: Boolean = false,
     val inputText: String = "",
     val orderId: String = "",
