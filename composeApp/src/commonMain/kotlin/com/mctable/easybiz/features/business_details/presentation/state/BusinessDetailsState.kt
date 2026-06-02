@@ -1,9 +1,11 @@
 package com.mctable.easybiz.features.business_details.presentation.state
 
 import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetailsEntity
+import com.mctable.easybiz.features.reviews.domain.entity.ReviewEntity
 
 data class BusinessDetailsState(
     val businessDetails: BusinessDetailsEntity? = null,
+    val reviews: List<ReviewEntity> = emptyList(),
     val showLoading: Boolean = false,
     val showError: Boolean = false,
     val pageTitle: String = "",

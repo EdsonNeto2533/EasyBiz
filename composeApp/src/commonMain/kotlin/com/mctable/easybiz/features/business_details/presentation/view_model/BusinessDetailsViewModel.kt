@@ -10,6 +10,7 @@ import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderUseCase
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
+import com.mctable.easybiz.features.reviews.domain.usecase.GetBusinessReviewsUseCase
 import com.mctable.easybiz.features.business_details.presentation.event.BusinessDetailsEvent
 import com.mctable.easybiz.features.business_details.presentation.state.BusinessDetailsState
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ import kotlin.time.Duration.Companion.hours
 class BusinessDetailsViewModel(
     private val getBusinessDetailsUseCase: GetBusinessDetailsUseCase,
     private val createOrderUseCase: CreateOrderUseCase,
+    private val getBusinessReviewsUseCase: GetBusinessReviewsUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -51,6 +53,7 @@ class BusinessDetailsViewModel(
                         businessDetails = details,
                         showLoading = false
                     )
+                    loadReviews(id)
                 },
                 onFailure = {
                     state = state.copy(
@@ -59,6 +62,15 @@ class BusinessDetailsViewModel(
                         errorMessage = it.message
                     )
                 }
+            )
+        }
+    }
+
+    private fun loadReviews(businessId: String) {
+        viewModelScope.launch {
+            getBusinessReviewsUseCase.execute(businessId).fold(
+                onSuccess = { reviews -> state = state.copy(reviews = reviews) },
+                onFailure = { }
             )
         }
     }

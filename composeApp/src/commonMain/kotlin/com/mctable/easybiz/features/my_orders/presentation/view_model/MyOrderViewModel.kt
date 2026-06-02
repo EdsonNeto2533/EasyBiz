@@ -44,6 +44,7 @@ class MyOrderViewModel(
             is MyOrderEvent.OnUpdateStatusClick -> handleUpdateStatusClick(event.orderId, event.currentStatus)
             MyOrderEvent.OnDismissBottomSheet -> state = state.copy(showStatusBottomSheet = false)
             is MyOrderEvent.OnStatusSelected -> handleStatusSelected(event.orderId, event.newStatus)
+            is MyOrderEvent.OnReviewOrder -> navigator.navigate(Destination.Reviews(event.orderId, event.businessId))
         }
     }
 

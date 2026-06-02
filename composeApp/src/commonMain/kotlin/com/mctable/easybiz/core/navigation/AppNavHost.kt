@@ -36,6 +36,8 @@ import com.mctable.easybiz.features.register_business.presentation.view_model.Re
 import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import com.mctable.easybiz.features.search_business.presentation.ui.SearchBusinessPage
 import com.mctable.easybiz.features.search_business.presentation.view_model.SearchBusinessViewModel
+import com.mctable.easybiz.features.reviews.presentation.ui.ReviewPage
+import com.mctable.easybiz.features.reviews.presentation.view_model.ReviewViewModel
 import com.mctable.easybiz.features.user_data.presentation.ui.page.UserDataPage
 import com.mctable.easybiz.features.user_data.presentation.view_model.UserDataViewModel
 import kotlinx.coroutines.launch
@@ -175,6 +177,19 @@ fun AppNavHost() {
                 UserDataPage(
                     state = viewModel.state,
                     onEvent = { event -> viewModel.onEvent(event) }
+                )
+            }
+
+            composable<Destination.Reviews> {
+                val route = it.toRoute<Destination.Reviews>()
+                val viewModel = koinViewModel<ReviewViewModel>()
+                viewModel.setOrderId(route.orderId)
+
+                ReviewPage(
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) },
+                    orderId = route.orderId,
+                    businessId = route.businessId
                 )
             }
 

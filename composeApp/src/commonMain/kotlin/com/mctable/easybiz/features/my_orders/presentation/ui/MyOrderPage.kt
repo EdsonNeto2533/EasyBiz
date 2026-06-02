@@ -40,6 +40,9 @@ import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
+import com.mctable.easybiz.core.ds.theme.ErrorRed
+import com.mctable.easybiz.core.ds.theme.SuccessGreen
+import com.mctable.easybiz.core.ds.theme.WarningYellow
 import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.my_orders.domain.entity.MyOrderEntity
 import com.mctable.easybiz.features.my_orders.domain.enums.OrderStatus
@@ -114,24 +117,70 @@ fun MyOrderPage(
                                 }
                             },
                             extraContent = {
-                                if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
-                                    TextButton(
-                                        onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = Dimens.cardPadding)
-                                    ) {
-                                        Text(
-                                            "Atualizar status",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = Dimens.cardPadding)
+                                        .padding(bottom = Dimens.spacingSm)
+                                ) {
+                                    HorizontalDivider(
+                                        color = MaterialTheme.colorScheme.outlineVariant,
+                                        thickness = Dimens.dividerThickness
+                                    )
+                                    Spacer(Modifier.height(Dimens.spacingSm))
+
+                                    Text(
+                                        text = "Cliente: ${order.clientName}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(Modifier.height(Dimens.spacingXs))
+                                    Text(
+                                        text = order.description,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 2
+                                    )
+                                    Spacer(Modifier.height(Dimens.spacingXs))
+                                    Text(
+                                        text = "Data: ${formatOrderDate(order.desiredDate)}",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(Modifier.height(Dimens.spacingXs))
+                                    Text(
+                                        text = order.status.name,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = statusColor(order.status)
+                                    )
+
+                                    if (businessId != null && (order.status == OrderStatus.ABERTO || order.status == OrderStatus.ACEITO)) {
+                                        TextButton(
+                                            onClick = { onEvent(MyOrderEvent.OnUpdateStatusClick(order.id, order.status)) },
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            Text(
+                                                "Atualizar status",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                    }
+                                    if (businessId == null && order.status == OrderStatus.CONCLUIDO) {
+                                        TextButton(
+                                            onClick = { onEvent(MyOrderEvent.OnReviewOrder(order.id, order.businessId)) },
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            Text(
+                                                "Avaliar prestador",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
                                     }
                                 }
                             },
-                            modifier = Modifier.padding(
-                                horizontal = Dimens.screenPaddingHorizontal
-                            )
+                            modifier = Modifier.padding(horizontal = Dimens.screenPaddingHorizontal)
                         )
                     }
 
@@ -217,6 +266,25 @@ fun MyOrderPage(
             }
         }
     }
+}
+
+private fun formatOrderDate(isoDate: String): String {
+    return try {
+        val datePart = isoDate.substringBefore("T")
+        val parts = datePart.split("-")
+        "${parts[2]}/${parts[1]}/${parts[0]}"
+    } catch (e: Exception) {
+        isoDate
+    }
+}
+
+@Composable
+private fun statusColor(status: OrderStatus) = when (status) {
+    OrderStatus.CONCLUIDO -> SuccessGreen
+    OrderStatus.ACEITO -> SuccessGreen
+    OrderStatus.RECUSADO -> ErrorRed
+    OrderStatus.CANCELADO -> ErrorRed
+    OrderStatus.ABERTO -> WarningYellow
 }
 
 @Preview

@@ -29,6 +29,7 @@ import com.mctable.easybiz.features.business_details.domain.entity.BusinessDetai
 import com.mctable.easybiz.features.business_details.presentation.event.BusinessDetailsEvent
 import com.mctable.easybiz.features.business_details.presentation.state.BusinessDetailsState
 import com.mctable.easybiz.features.business_details.presentation.ui.molecules.BadgeCardMolecule
+import com.mctable.easybiz.features.reviews.presentation.ui.components.ReviewCard
 
 
 @Composable
@@ -168,6 +169,27 @@ fun BusinessDetailsPage(
                 title = state.descriptionLabel,
                 subtitle = business?.description ?: ""
             )
+
+            if (state.reviews.isNotEmpty()) {
+                HorizontalDivider(
+                    thickness = Dimens.dividerThickness,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+
+                Spacer(Modifier.height(Dimens.spacingXxl))
+
+                SectionHeaderAtom(
+                    title = "Avaliações",
+                    subtitle = "${state.reviews.size} avaliação(ões)"
+                )
+
+                Spacer(Modifier.height(Dimens.spacingMd))
+
+                state.reviews.forEach { review ->
+                    ReviewCard(review = review)
+                    Spacer(Modifier.height(Dimens.spacingMd))
+                }
+            }
 
             Spacer(Modifier.height(Dimens.spacing4xl))
 
