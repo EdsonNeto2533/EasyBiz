@@ -14,8 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.mctable.easybiz.core.ds.components.atoms.RatingAtom
 import com.mctable.easybiz.core.ds.theme.Dimens
+import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.features.reviews.domain.entity.ReviewEntity
 
 @Composable
@@ -55,5 +57,23 @@ fun ReviewCard(review: ReviewEntity) {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ReviewCardPreview() {
+    EasyBizTheme {
+        ReviewCard(
+            review = ReviewEntity(
+                id = "1",
+                reviewerName = "João Silva",
+                rating = 4,
+                comment = "Ótimo atendimento e serviço de qualidade. Recomendo!",
+                evaluatedName = "Limpeza Residencial",
+                createdAt = "2024-03-20",
+                orderId = "order_123"
+            )
+        )
     }
 }

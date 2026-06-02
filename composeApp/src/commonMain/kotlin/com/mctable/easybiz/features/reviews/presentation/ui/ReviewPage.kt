@@ -3,44 +3,33 @@ package com.mctable.easybiz.features.reviews.presentation.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
+import androidx.compose.ui.tooling.preview.Preview
 import com.mctable.easybiz.core.ds.components.molecules.EmptyStateMolecule
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.SuccessDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.Dimens
-import com.mctable.easybiz.core.ds.theme.Neutral200
-import com.mctable.easybiz.core.ds.theme.Neutral400
-import com.mctable.easybiz.core.ds.theme.Neutral50
-import com.mctable.easybiz.core.ds.theme.StarGold
+import com.mctable.easybiz.core.ds.theme.EasyBizTheme
 import com.mctable.easybiz.core.ds.utils.AppIcons
+import com.mctable.easybiz.features.reviews.domain.entity.ReviewEntity
 import com.mctable.easybiz.features.reviews.presentation.event.ReviewEvent
 import com.mctable.easybiz.features.reviews.presentation.state.ReviewState
+import com.mctable.easybiz.features.reviews.presentation.ui.components.AlreadyReviewedCard
 import com.mctable.easybiz.features.reviews.presentation.ui.components.ReviewCard
+import com.mctable.easybiz.features.reviews.presentation.ui.components.ReviewFormCard
 
 @Composable
 fun ReviewPage(
@@ -137,114 +126,36 @@ fun ReviewPage(
     }
 }
 
+@Preview
 @Composable
-private fun ReviewFormCard(
-    selectedRating: Int,
-    comment: String,
-    isSubmitting: Boolean,
-    onRatingSelected: (Int) -> Unit,
-    onCommentChanged: (String) -> Unit,
-    onSubmit: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation)
-    ) {
-        Column(modifier = Modifier.padding(Dimens.cardPadding)) {
-            Text(
-                text = "Avaliar prestador",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(Modifier.height(Dimens.spacingMd))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                (1..5).forEach { star ->
-                    IconButton(onClick = { onRatingSelected(star) }) {
-                        Icon(
-                            painter = AppIcons.star(),
-                            contentDescription = "Estrela $star",
-                            modifier = Modifier.size(Dimens.iconSizeXl),
-                            tint = if (star <= selectedRating) StarGold else Neutral400
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(Dimens.spacingMd))
-
-            OutlinedTextField(
-                value = comment,
-                onValueChange = onCommentChanged,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Deixe um comentário (opcional)",
-                        color = Neutral400,
-                        style = MaterialTheme.typography.bodyMedium
+private fun ReviewPagePreview() {
+    EasyBizTheme {
+        ReviewPage(
+            state = ReviewState(
+                reviews = listOf(
+                    ReviewEntity(
+                        id = "1",
+                        reviewerName = "João Silva",
+                        rating = 4,
+                        comment = "Ótimo atendimento!",
+                        evaluatedName = "Limpeza",
+                        createdAt = "2024-03-20",
+                        orderId = "1"
+                    ),
+                    ReviewEntity(
+                        id = "2",
+                        reviewerName = "Maria Souza",
+                        rating = 5,
+                        comment = "Excelente profissional.",
+                        evaluatedName = "Limpeza",
+                        createdAt = "2024-03-21",
+                        orderId = "2"
                     )
-                },
-                shape = MaterialTheme.shapes.medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Neutral50,
-                    unfocusedContainerColor = Neutral50,
-                    unfocusedBorderColor = Neutral200,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    cursorColor = MaterialTheme.colorScheme.primary
-                ),
-                minLines = 3,
-                maxLines = 5
-            )
-
-            Spacer(Modifier.height(Dimens.spacingLg))
-
-            ButtonAtom(
-                text = "Enviar avaliação",
-                isEnabled = selectedRating > 0,
-                isLoading = isSubmitting,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onSubmit
-            )
-        }
-    }
-}
-
-@Composable
-private fun AlreadyReviewedCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.cardElevation)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.cardPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "✅",
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(Modifier.height(Dimens.spacingSm))
-            Text(
-                text = "Você já avaliou este pedido",
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(Modifier.height(Dimens.spacingXs))
-            Text(
-                text = "Confira as avaliações abaixo",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+                )
+            ),
+            onEvent = {},
+            orderId = "order_123",
+            businessId = "biz_456"
+        )
     }
 }
