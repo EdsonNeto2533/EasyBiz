@@ -1,11 +1,14 @@
 package com.mctable.easybiz.core.navigation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,11 +36,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 data class UserData(
+    val id: String,
     val name: String?,
     val email: String,
     val photoUrl: String?
 )
 val userChannel: Channel<UserData> = Channel()
+var currentUserId: String = ""
 
 @Composable
 fun NavDrawer(
@@ -54,6 +59,7 @@ fun NavDrawer(
         mutableStateOf<String?>(null)
     }
     ObserveAsEvents(userChannel.receiveAsFlow()) { action ->
+        currentUserId = action.id
         userName = action.name ?: ""
         userImage = action.photoUrl
     }
@@ -69,7 +75,16 @@ fun NavDrawer(
 
                         Spacer(Modifier.height(Dimens.spacingXxl))
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(Dimens.spacingMd))
+                                .clickable {
+                                    scope.launch { drawerState.close() }
+                                    onDestinationClicked(Destination.Profile)
+                                }
+                                .padding(Dimens.spacingSm)
+                        ) {
                             AvatarAtom(
                                 imageUrl = userImage,
                                 contentDescription = userName,
@@ -84,9 +99,9 @@ fun NavDrawer(
                                 )
                                 Spacer(Modifier.height(Dimens.spacingXxs))
                                 Text(
-                                    "Cliente",
+                                    "Editar perfil",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }

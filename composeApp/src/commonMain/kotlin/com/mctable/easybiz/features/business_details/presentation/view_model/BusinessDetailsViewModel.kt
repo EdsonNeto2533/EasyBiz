@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
+import com.mctable.easybiz.core.navigation.currentUserId
 import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderUseCase
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
+import com.mctable.easybiz.features.business_media.domain.usecase.GetBusinessMediaUseCase
 import com.mctable.easybiz.features.reviews.domain.usecase.GetBusinessReviewsUseCase
 import com.mctable.easybiz.features.business_details.presentation.event.BusinessDetailsEvent
 import com.mctable.easybiz.features.business_details.presentation.state.BusinessDetailsState
@@ -21,6 +23,7 @@ class BusinessDetailsViewModel(
     private val getBusinessDetailsUseCase: GetBusinessDetailsUseCase,
     private val createOrderUseCase: CreateOrderUseCase,
     private val getBusinessReviewsUseCase: GetBusinessReviewsUseCase,
+    private val getBusinessMediaUseCase: GetBusinessMediaUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -32,6 +35,7 @@ class BusinessDetailsViewModel(
             is BusinessDetailsEvent.GetBusinessDetails -> handleGetBusinessDetails(event.id)
             BusinessDetailsEvent.CreateOrder -> handleCreateOrder()
             BusinessDetailsEvent.OnBackClick -> handleBackClick()
+            is BusinessDetailsEvent.EditBusiness -> navigator.navigate(Destination.UpdateBusiness(event.id))
         }
     }
 
@@ -51,9 +55,11 @@ class BusinessDetailsViewModel(
                         startChatLabel = "Iniciar chat",
                         descriptionLabel = "Sobre",
                         businessDetails = details,
+                        isOwner = details.userId == currentUserId,
                         showLoading = false
                     )
                     loadReviews(id)
+                    loadMedia(id)
                 },
                 onFailure = {
                     state = state.copy(
@@ -70,6 +76,15 @@ class BusinessDetailsViewModel(
         viewModelScope.launch {
             getBusinessReviewsUseCase.execute(businessId).fold(
                 onSuccess = { reviews -> state = state.copy(reviews = reviews) },
+                onFailure = { }
+            )
+        }
+    }
+
+    private fun loadMedia(businessId: String) {
+        viewModelScope.launch {
+            getBusinessMediaUseCase.execute(businessId).fold(
+                onSuccess = { media -> state = state.copy(mediaList = media) },
                 onFailure = { }
             )
         }

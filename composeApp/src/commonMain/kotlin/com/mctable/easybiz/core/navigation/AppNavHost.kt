@@ -30,6 +30,8 @@ import com.mctable.easybiz.features.my_orders.presentation.ui.MyOrderPage
 import com.mctable.easybiz.features.my_orders.presentation.view_model.MyOrderViewModel
 import com.mctable.easybiz.features.order_chat.presentation.ui.page.OrderChatPage
 import com.mctable.easybiz.features.order_chat.presentation.view_model.OrderChatViewModel
+import com.mctable.easybiz.features.business_media.presentation.ui.BusinessMediaPage
+import com.mctable.easybiz.features.business_media.presentation.view_model.BusinessMediaViewModel
 import com.mctable.easybiz.features.register_business.presentation.ui.RegisterBusinessPage
 import com.mctable.easybiz.features.register_business.presentation.ui.UpdateBusinessProfilePage
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
@@ -126,6 +128,17 @@ fun AppNavHost() {
                     id = route.id
                 )
 
+            }
+
+            composable<Destination.BusinessMedia> {
+                val route = it.toRoute<Destination.BusinessMedia>()
+                val viewModel = koinViewModel<BusinessMediaViewModel>()
+
+                BusinessMediaPage(
+                    businessId = route.id,
+                    state = viewModel.state,
+                    onEvent = { event -> viewModel.onEvent(event) }
+                )
             }
 
             composable<Destination.MyBusiness> {

@@ -2,17 +2,28 @@ package com.mctable.easybiz.features.business_details.presentation.ui.page
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
 import com.mctable.easybiz.core.ds.components.atoms.PillAtom
@@ -21,6 +32,9 @@ import com.mctable.easybiz.core.ds.components.atoms.RatingAtom
 import com.mctable.easybiz.core.ds.components.atoms.SectionHeaderAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.MediaViewerDialog
+import com.mctable.easybiz.core.ds.components.molecules.ProfilePhotoAction
+import com.mctable.easybiz.core.ds.components.molecules.ProfilePhotoViewerDialog
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
@@ -38,18 +52,20 @@ fun BusinessDetailsPage(
     onEvent: (BusinessDetailsEvent) -> Unit,
     id: String
 ) {
-
     val scrollState = rememberScrollState()
     val business = state.businessDetails
+
+    var viewerVisible by remember { mutableStateOf(false) }
+    var viewerIndex by remember { mutableStateOf(0) }
+    val mediaUrls = state.mediaList.filter { !it.isVideo }.map { it.url }
+    var logoViewerVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         onEvent.invoke(BusinessDetailsEvent.GetBusinessDetails(id))
     }
 
     Scaffold(
-
         containerColor = MaterialTheme.colorScheme.background,
-
         topBar = {
             TopAppBarOrganism(
                 title = state.pageTitle,
@@ -57,24 +73,18 @@ fun BusinessDetailsPage(
                 onBackClick = { onEvent(BusinessDetailsEvent.OnBackClick) }
             )
         },
-
         bottomBar = {
             Column {
                 ButtonAtom(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = Dimens.screenPaddingHorizontal,
-                        ),
+                        .padding(horizontal = Dimens.screenPaddingHorizontal),
                     text = state.startChatLabel,
-                    onClick = {
-                        onEvent(BusinessDetailsEvent.CreateOrder)
-                    }
+                    onClick = { onEvent(BusinessDetailsEvent.CreateOrder) }
                 )
                 Box(modifier = Modifier.height(12.dp))
             }
         }
-
     ) { padding ->
 
         Column(
@@ -88,7 +98,13 @@ fun BusinessDetailsPage(
 
             Spacer(Modifier.height(Dimens.spacingXxl))
 
-            Box(contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { logoViewerVisible = true }
+            ) {
                 AvatarAtom(
                     imageUrl = business?.logoUrl,
                     contentDescription = business?.name,
@@ -116,10 +132,7 @@ fun BusinessDetailsPage(
             Spacer(Modifier.height(Dimens.spacingSm))
 
             if (business?.active == true) {
-                PillAtom(
-                    pillType = PillType.Success,
-                    text = state.availableLabel
-                )
+                PillAtom(pillType = PillType.Success, text = state.availableLabel)
                 Spacer(Modifier.height(Dimens.spacingSm))
             }
 
@@ -162,12 +175,101 @@ fun BusinessDetailsPage(
                 subtitle = business?.completeAddress ?: ""
             )
 
+            if (!business?.telephone.isNullOrBlank()) {
+                Spacer(Modifier.height(Dimens.spacingXxl))
+                SectionHeaderAtom(
+                    title = "Telefone / WhatsApp",
+                    subtitle = business?.telephone ?: ""
+                )
+            }
+
+            if (!business?.workingHours.isNullOrBlank()) {
+                Spacer(Modifier.height(Dimens.spacingXxl))
+                SectionHeaderAtom(
+                    title = "Horário de atendimento",
+                    subtitle = business?.workingHours ?: ""
+                )
+            }
+
             Spacer(Modifier.height(Dimens.spacingXxl))
 
             SectionHeaderAtom(
                 title = state.descriptionLabel,
                 subtitle = business?.description ?: ""
             )
+
+            if (state.mediaList.isNotEmpty()) {
+                HorizontalDivider(
+                    thickness = Dimens.dividerThickness,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+
+                Spacer(Modifier.height(Dimens.spacingXxl))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Portfólio",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "${state.mediaList.size} foto(s)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Spacer(Modifier.height(Dimens.spacingMd))
+
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
+                ) {
+                    items(state.mediaList) { media ->
+                        Box(
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .clickable {
+                                    val photoIndex = mediaUrls.indexOf(media.url).takeIf { it >= 0 } ?: 0
+                                    viewerIndex = photoIndex
+                                    viewerVisible = true
+                                }
+                        ) {
+                            AsyncImage(
+                                model = media.url,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                            if (media.isVideo) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.5f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = AppIcons.send(),
+                                        contentDescription = "Vídeo",
+                                        tint = androidx.compose.ui.graphics.Color.White,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(Dimens.spacingXxl))
+            }
 
             if (state.reviews.isNotEmpty()) {
                 HorizontalDivider(
@@ -205,6 +307,38 @@ fun BusinessDetailsPage(
             }
         }
     }
+
+    if (viewerVisible && mediaUrls.isNotEmpty()) {
+        MediaViewerDialog(
+            urls = mediaUrls,
+            initialIndex = viewerIndex,
+            onDismiss = { viewerVisible = false }
+        )
+    }
+
+    if (logoViewerVisible) {
+        ProfilePhotoViewerDialog(
+            photoUrl = business?.logoUrl,
+            onDismiss = { logoViewerVisible = false },
+            actions = if (state.isOwner && business != null) listOf(
+                ProfilePhotoAction(
+                    icon = {
+                        Icon(
+                            painter = AppIcons.accountCircle(),
+                            contentDescription = null,
+                            tint = androidx.compose.ui.graphics.Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    label = "Editar perfil",
+                    onClick = {
+                        logoViewerVisible = false
+                        onEvent(BusinessDetailsEvent.EditBusiness(business.id))
+                    }
+                )
+            ) else emptyList()
+        )
+    }
 }
 
 @Composable
@@ -230,6 +364,8 @@ fun BusinessDetailsPagePreview() {
             averageRating = 4.9,
             logoUrl = null,
             description = "Somos um profissional de mecânica com plus de 4 anos no mercado fazendo coisas e mais coisas",
+            telephone = null,
+            workingHours = "Seg-Sex 8h-18h",
             minimalValue = 100.0,
             yearsOfExperience = 5,
             totalRatings = 10
@@ -237,7 +373,6 @@ fun BusinessDetailsPagePreview() {
     )
 
     EasyBizTheme {
-
         BusinessDetailsPage(
             state = state,
             onEvent = {},

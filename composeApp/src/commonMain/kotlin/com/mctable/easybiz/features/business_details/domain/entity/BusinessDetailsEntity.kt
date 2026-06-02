@@ -13,6 +13,8 @@ data class BusinessDetailsEntity(
     val averageRating: Double,
     val logoUrl: String?,
     val description: String?,
+    val telephone: String?,
+    val workingHours: String?,
     val minimalValue: Double?,
     val yearsOfExperience: Int?,
     val totalRatings: Int?,

@@ -10,6 +10,7 @@ import com.mctable.easybiz.features.register_business.domain.usecase.AddLogoUseC
 import com.mctable.easybiz.features.register_business.domain.usecase.AddLogoUseCaseImpl
 import com.mctable.easybiz.features.register_business.domain.usecase.CreateBusinessUseCaseImpl
 import com.mctable.easybiz.features.register_business.domain.usecase.UpdateBusinessProfileUseCaseImpl
+import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
 import com.mctable.easybiz.features.register_business.presentation.view_model.RegisterBusinessViewModel
 import com.mctable.easybiz.features.register_business.presentation.view_model.UpdateBusinessProfileViewModel
 import org.koin.core.module.dsl.viewModel
@@ -30,5 +31,5 @@ val registerBusinessModule = module {
     factory<AddLogoUseCase> { AddLogoUseCaseImpl(get()) }
 
     viewModel { RegisterBusinessViewModel(get(), get(), get()) }
-    viewModel { UpdateBusinessProfileViewModel( get(), get(), get()) }
+    viewModel { UpdateBusinessProfileViewModel(get(), get(), get(), get<GetBusinessDetailsUseCase>()) }
 }

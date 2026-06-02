@@ -85,6 +85,6 @@ class LoginRepositoryImpl(
     }
 
     private suspend fun updateUserData(userData: LoginResponseModel, email: String) = runCatching {
-        userChannel.send(UserData(userData.name ?: "", email, userData.photoUrl))
+        userChannel.send(UserData(userData.userId ?: "", userData.name ?: "", email, userData.photoUrl))
     }
 }
