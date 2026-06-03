@@ -8,12 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.my_favorites.domain.usecase.GetMyFavoritesUseCase
+import com.mctable.easybiz.features.my_favorites.domain.usecase.RemoveFavoriteUseCase
 import com.mctable.easybiz.features.my_favorites.presentation.event.MyFavoriteEvent
 import com.mctable.easybiz.features.my_favorites.presentation.state.MyFavoriteState
 import kotlinx.coroutines.launch
 
 class MyFavoriteViewModel(
     private val getMyFavoritesUseCase: GetMyFavoritesUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
 
@@ -31,6 +33,7 @@ class MyFavoriteViewModel(
             is MyFavoriteEvent.OnBusinessClicked -> {
                 navigator.navigate(Destination.BusinessDetails(event.businessId))
             }
+            is MyFavoriteEvent.OnRemoveFavorite -> removeFavorite(event.businessId)
         }
     }
 
@@ -41,6 +44,27 @@ class MyFavoriteViewModel(
                 onSuccess = { list ->
                     state = state.copy(
                         favoriteList = list,
+                        isLoading = false
+                    )
+                },
+                onFailure = {
+                    state = state.copy(
+                        isLoading = false,
+                        isError = true,
+                        errorMessage = it.message
+                    )
+                }
+            )
+        }
+    }
+
+    private fun removeFavorite(businessId: String) {
+        state = state.copy(isLoading = true, isError = false)
+        viewModelScope.launch {
+            removeFavoriteUseCase.execute(businessId).fold(
+                onSuccess = {
+                    state = state.copy(
+                        favoriteList = state.favoriteList.filter { it.businessId != businessId },
                         isLoading = false
                     )
                 },

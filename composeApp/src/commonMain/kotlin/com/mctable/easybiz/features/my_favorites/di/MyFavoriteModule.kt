@@ -6,6 +6,8 @@ import com.mctable.easybiz.features.my_favorites.data.repository.MyFavoriteRepos
 import com.mctable.easybiz.features.my_favorites.domain.repository.MyFavoriteRepository
 import com.mctable.easybiz.features.my_favorites.domain.usecase.GetMyFavoritesUseCase
 import com.mctable.easybiz.features.my_favorites.domain.usecase.GetMyFavoritesUseCaseImpl
+import com.mctable.easybiz.features.my_favorites.domain.usecase.RemoveFavoriteUseCase
+import com.mctable.easybiz.features.my_favorites.domain.usecase.RemoveFavoriteUseCaseImpl
 import com.mctable.easybiz.features.my_favorites.presentation.view_model.MyFavoriteViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -20,6 +22,7 @@ val myFavoriteModule = module {
     }
 
     factory<GetMyFavoritesUseCase> { GetMyFavoritesUseCaseImpl(get()) }
+    factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(get()) }
 
-    viewModel { MyFavoriteViewModel(get(), get()) }
+    viewModel { MyFavoriteViewModel(get(), get(), get()) }
 }
