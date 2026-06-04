@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mctable.easybiz.core.navigation.Destination
 import com.mctable.easybiz.core.navigation.Navigator
-import com.mctable.easybiz.core.navigation.currentUserId
 import com.mctable.easybiz.features.business_details.data.dto.CreateOrderRequest
 import com.mctable.easybiz.features.business_details.domain.usecase.CreateOrderUseCase
 import com.mctable.easybiz.features.business_details.domain.usecase.GetBusinessDetailsUseCase
@@ -55,7 +54,7 @@ class BusinessDetailsViewModel(
                         startChatLabel = "Iniciar chat",
                         descriptionLabel = "Sobre",
                         businessDetails = details,
-                        isOwner = details.userId == currentUserId,
+                        isOwner = details.isMine,
                         showLoading = false
                     )
                     loadReviews(id)

@@ -29,9 +29,9 @@ data class BusinessDetailsResponseModel(
     @SerialName("descricao")
     val description: String?,
     @SerialName("telefone")
-    val telefone: String?,
+    val telephone: String?,
     @SerialName("horarioFuncionamento")
-    val horarioFuncionamento: String?,
+    val workingHours: String?,
     @SerialName("precoMinimo")
     val minimalValue: Double?,
     @SerialName("anosExperiencia")

@@ -9,7 +9,7 @@ data class BusinessMediaResponseModel(
     @SerialName("url")
     val url: String,
     @SerialName("tipo")
-    val tipo: String,
+    val type: String,
     @SerialName("criadoEm")
-    val criadoEm: String? = null
+    val createdAt: String? = null
 )

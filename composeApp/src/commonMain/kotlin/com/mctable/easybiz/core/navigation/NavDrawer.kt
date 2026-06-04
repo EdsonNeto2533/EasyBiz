@@ -42,7 +42,6 @@ data class UserData(
     val photoUrl: String?
 )
 val userChannel: Channel<UserData> = Channel()
-var currentUserId: String = ""
 
 @Composable
 fun NavDrawer(
@@ -59,7 +58,6 @@ fun NavDrawer(
         mutableStateOf<String?>(null)
     }
     ObserveAsEvents(userChannel.receiveAsFlow()) { action ->
-        currentUserId = action.id
         userName = action.name ?: ""
         userImage = action.photoUrl
     }

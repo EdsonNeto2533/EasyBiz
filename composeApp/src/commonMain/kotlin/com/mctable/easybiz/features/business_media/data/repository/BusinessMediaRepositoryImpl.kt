@@ -10,11 +10,25 @@ class BusinessMediaRepositoryImpl(
 ) : BusinessMediaRepository {
 
     override suspend fun getMedia(businessId: String): Result<List<BusinessMediaEntity>> =
-        datasource.getMedia(businessId).map { list -> list.map { BusinessMediaMapper.toEntity(it) } }
+        runCatching {
+            val result = datasource.getMedia(businessId)
+                .map { list -> list.map { BusinessMediaMapper.toEntity(it) } }
 
-    override suspend fun addMedia(businessId: String, fileBytes: ByteArray, mimeType: String, fileName: String): Result<Unit> =
+            return result
+        }
+
+
+    override suspend fun addMedia(
+        businessId: String,
+        fileBytes: ByteArray,
+        mimeType: String,
+        fileName: String
+    ): Result<Unit> = runCatching {
         datasource.addMedia(businessId, fileBytes, mimeType, fileName)
+    }
 
     override suspend fun deleteMedia(businessId: String, mediaId: String): Result<Unit> =
-        datasource.deleteMedia(businessId, mediaId)
+        runCatching {
+            datasource.deleteMedia(businessId, mediaId)
+        }
 }

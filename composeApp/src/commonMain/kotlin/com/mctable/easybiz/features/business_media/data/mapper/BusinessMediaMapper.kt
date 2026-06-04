@@ -13,7 +13,7 @@ object BusinessMediaMapper {
     fun toEntity(model: BusinessMediaResponseModel) = BusinessMediaEntity(
         id = model.id,
         url = model.url,
-        tipo = model.tipo,
-        criadoEm = model.criadoEm
+        type = model.type,
+        createdAt = model.createdAt
     )
 }
