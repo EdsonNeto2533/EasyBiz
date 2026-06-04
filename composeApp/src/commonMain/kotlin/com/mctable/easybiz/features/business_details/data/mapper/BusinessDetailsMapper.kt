@@ -16,7 +16,7 @@ object BusinessDetailsMapper {
         return json.decodeFromString(jsonString)
     }
 
-    fun toEntity(model: BusinessDetailsResponseModel): BusinessDetailsEntity {
+    fun toEntity(model: BusinessDetailsResponseModel, userId: String): BusinessDetailsEntity {
         return BusinessDetailsEntity(
             id = model.id,
             name = model.name,
@@ -34,7 +34,8 @@ object BusinessDetailsMapper {
             workingHours = model.horarioFuncionamento,
             minimalValue = model.minimalValue,
             yearsOfExperience = model.yearsOfExperience,
-            totalRatings = model.totalRatings
+            totalRatings = model.totalRatings,
+            isMine = model.userId == userId
         )
     }
 }

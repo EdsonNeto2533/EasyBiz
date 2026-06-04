@@ -37,7 +37,7 @@ object OrderChatMapper {
             messages = model.content.map { toEntity(it, userId) },
             totalElements = model.totalElements,
             totalPages = model.totalPages,
-            isLast = model.last
+            isLast = model.number >= model.totalPages - 1
         )
     }
 }

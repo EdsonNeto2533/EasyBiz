@@ -10,13 +10,21 @@ class ReviewRepositoryImpl(
     private val datasource: ReviewDatasource
 ) : ReviewRepository {
 
-    override suspend fun getBusinessReviews(businessId: String): Result<List<ReviewEntity>> = runCatching {
-        return datasource.getBusinessReviews(businessId).map { list ->
-            list.map { ReviewMapper.toEntity(it) }
+    override suspend fun getBusinessReviews(businessId: String): Result<List<ReviewEntity>> =
+        runCatching {
+            return datasource.getBusinessReviews(businessId).map { list ->
+                list.map { ReviewMapper.toEntity(it) }
+            }
         }
-    }
 
-    override suspend fun submitReview(orderId: String, rating: Int, comment: String?): Result<Unit> {
-        return datasource.submitReview(orderId, SubmitReviewRequest(nota = rating, comentario = comment))
+    override suspend fun submitReview(
+        orderId: String,
+        rating: Int,
+        comment: String?
+    ): Result<Unit> = runCatching {
+        return datasource.submitReview(
+            orderId,
+            SubmitReviewRequest(nota = rating, comentario = comment)
+        )
     }
 }

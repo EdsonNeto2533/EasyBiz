@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +20,14 @@ import androidx.compose.ui.Modifier
 import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
 import com.mctable.easybiz.core.ds.components.atoms.RatingAtom
 import com.mctable.easybiz.core.ds.theme.Dimens
+import com.mctable.easybiz.core.ds.utils.AppIcons
 import com.mctable.easybiz.features.my_favorites.domain.entity.MyFavoriteEntity
 
 @Composable
 fun MyFavoriteCard(
     favorite: MyFavoriteEntity,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onRemove: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -67,6 +71,14 @@ fun MyFavoriteCard(
                 Spacer(Modifier.height(Dimens.spacingXs))
 
                 RatingAtom(rating = favorite.averageRating)
+            }
+
+            IconButton(onClick = onRemove) {
+                Icon(
+                    painter = AppIcons.star(),
+                    contentDescription = "Remover favorito",
+                    tint = MaterialTheme.colorScheme.error
+                )
             }
         }
     }

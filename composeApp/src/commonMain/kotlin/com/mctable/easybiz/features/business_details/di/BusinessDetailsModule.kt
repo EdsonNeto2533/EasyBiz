@@ -20,7 +20,7 @@ val businessDetailsModule = module {
     }
 
     single<BusinessDetailsRepository> {
-        BusinessDetailsRepositoryImpl(get())
+        BusinessDetailsRepositoryImpl(get(), get())
     }
 
     factory<GetBusinessDetailsUseCase> {

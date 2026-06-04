@@ -74,16 +74,21 @@ fun BusinessDetailsPage(
             )
         },
         bottomBar = {
-            Column {
-                ButtonAtom(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.screenPaddingHorizontal),
-                    text = state.startChatLabel,
-                    onClick = { onEvent(BusinessDetailsEvent.CreateOrder) }
-                )
-                Box(modifier = Modifier.height(12.dp))
-            }
+            if (state.businessDetails?.isMine == false)
+                Column {
+                    ButtonAtom(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = Dimens.screenPaddingHorizontal,
+                            ),
+                        text = state.startChatLabel,
+                        onClick = {
+                            onEvent(BusinessDetailsEvent.CreateOrder)
+                        }
+                    )
+                    Box(modifier = Modifier.height(12.dp))
+                }
         }
     ) { padding ->
 
@@ -368,7 +373,8 @@ fun BusinessDetailsPagePreview() {
             workingHours = "Seg-Sex 8h-18h",
             minimalValue = 100.0,
             yearsOfExperience = 5,
-            totalRatings = 10
+            totalRatings = 10,
+            false
         )
     )
 
