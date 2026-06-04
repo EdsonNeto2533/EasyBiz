@@ -36,6 +36,7 @@ class UserDataViewModel(
             UserDataEvent.TurnOnEditMode -> turnOnEditMode()
             is UserDataEvent.OnNameChanged -> onNameChanged(event.name)
             is UserDataEvent.OnImageLoaded -> onImageLoaded(event.bytes)
+            is UserDataEvent.UploadPhotoFromViewer -> uploadPhotoFromViewer(event.bytes)
             UserDataEvent.UpdateUserData -> updateUserData()
             UserDataEvent.OnBackPressed -> navigator.pop()
             UserDataEvent.DeleteAccount -> deleteAccount()
@@ -81,7 +82,7 @@ class UserDataViewModel(
                         updatedName = user.name,
                         isLoading = false
                     )
-                    userChannel.send(UserData(user.name, user.email, user.photoUrl))
+                    userChannel.send(UserData(user.id, user.name, user.email, user.photoUrl))
                 }
                 .onFailure { error ->
                     state = state.copy(
@@ -142,6 +143,19 @@ class UserDataViewModel(
                         error = error.message,
                         isLoading = false
                     )
+                }
+        }
+    }
+
+    private fun uploadPhotoFromViewer(bytes: ByteArray) {
+        state = state.copy(isLoading = true)
+        viewModelScope.launch {
+            updateUserPhotoUseCase.execute(bytes)
+                .onSuccess {
+                    loadUserData()
+                }
+                .onFailure { error ->
+                    state = state.copy(error = error.message, isLoading = false)
                 }
         }
     }

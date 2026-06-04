@@ -58,6 +58,12 @@ sealed interface Destination {
     }
 
     @Serializable
+    data class BusinessMedia(val id: String) : Destination {
+        override val isLoggedArea = true
+        override val title = "Portfólio"
+    }
+
+    @Serializable
     data object MyBusiness : Destination {
         override val isLoggedArea = true
         override val title = "Meus negocios"

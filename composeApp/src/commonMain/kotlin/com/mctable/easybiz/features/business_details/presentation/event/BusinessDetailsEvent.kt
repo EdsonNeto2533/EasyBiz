@@ -4,4 +4,5 @@ sealed class BusinessDetailsEvent {
     data class GetBusinessDetails(val id: String) : BusinessDetailsEvent()
     data object CreateOrder : BusinessDetailsEvent()
     data object OnBackClick : BusinessDetailsEvent()
+    data class EditBusiness(val id: String) : BusinessDetailsEvent()
 }

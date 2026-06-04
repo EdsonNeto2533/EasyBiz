@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
+import com.mctable.easybiz.core.ds.components.atoms.ButtonType
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
@@ -49,6 +51,10 @@ fun UpdateBusinessProfilePage(
     state: UpdateBusinessProfileState,
     onEvent: (UpdateBusinessProfileEvent) -> Unit
 ) {
+
+    LaunchedEffect(id) {
+        onEvent(UpdateBusinessProfileEvent.LoadBusiness(id))
+    }
 
     val scrollState = rememberScrollState()
 
@@ -124,15 +130,20 @@ fun UpdateBusinessProfilePage(
                 contentAlignment = Alignment.Center
             ) {
 
-                if (state.image != null) {
-                    AsyncImage(
+                when {
+                    state.image != null -> AsyncImage(
                         model = state.image,
                         contentDescription = "Business Logo",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
-                } else {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    state.logoUrl != null -> AsyncImage(
+                        model = state.logoUrl,
+                        contentDescription = "Business Logo",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    else -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             painter = AppIcons.accountCircle(),
                             contentDescription = null,
@@ -154,6 +165,7 @@ fun UpdateBusinessProfilePage(
             TextInputAtom(
                 label = "Descrição",
                 placeHolder = "Descreva seu serviço",
+                initialValue = state.description,
                 onChanged = {
                     onEvent(UpdateBusinessProfileEvent.DescriptionChanged(it))
                 }
@@ -162,9 +174,11 @@ fun UpdateBusinessProfilePage(
             Spacer(Modifier.height(Dimens.spacingLg))
 
             TextInputAtom(
-                label = "Telefone",
+                label = "Telefone / WhatsApp",
                 placeHolder = "(00) 00000-0000",
                 keyboardType = KeyboardType.Phone,
+                mask = "(##) #####-####",
+                initialValue = state.cellphone,
                 onChanged = {
                     onEvent(UpdateBusinessProfileEvent.CellphoneChanged(it))
                 }
@@ -176,6 +190,7 @@ fun UpdateBusinessProfilePage(
                 label = "Menor valor cobrado",
                 placeHolder = "Ex: 150",
                 keyboardType = KeyboardType.Number,
+                initialValue = state.minimalPrice,
                 onChanged = {
                     onEvent(UpdateBusinessProfileEvent.MinimalPriceChanged(it))
                 }
@@ -187,10 +202,31 @@ fun UpdateBusinessProfilePage(
                 label = "Anos de experiência",
                 placeHolder = "Ex: 10",
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done,
+                initialValue = state.yearsOfExperience,
                 onChanged = {
                     onEvent(UpdateBusinessProfileEvent.YearsOfExperienceChanged(it))
                 }
+            )
+
+            Spacer(Modifier.height(Dimens.spacingLg))
+
+            TextInputAtom(
+                label = "Horário de atendimento (opcional)",
+                placeHolder = "Ex: Seg-Sex 8h-18h, Sab 8h-13h",
+                imeAction = ImeAction.Done,
+                initialValue = state.workingHours,
+                onChanged = {
+                    onEvent(UpdateBusinessProfileEvent.WorkingHoursChanged(it))
+                }
+            )
+
+            Spacer(Modifier.height(Dimens.spacingXxl))
+
+            ButtonAtom(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Gerenciar portfólio de fotos",
+                buttonType = ButtonType.Secondary,
+                onClick = { onEvent(UpdateBusinessProfileEvent.NavigateToMedia(id)) }
             )
 
             Spacer(Modifier.height(Dimens.spacing4xl))

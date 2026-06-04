@@ -30,6 +30,8 @@ object BusinessDetailsMapper {
             averageRating = model.averageRating,
             logoUrl = model.logoUrl,
             description = model.description,
+            telephone = model.telephone,
+            workingHours = model.workingHours,
             minimalValue = model.minimalValue,
             yearsOfExperience = model.yearsOfExperience,
             totalRatings = model.totalRatings,

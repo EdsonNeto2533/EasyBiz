@@ -2,6 +2,7 @@ package com.mctable.easybiz.core.di
 
 import com.mctable.easybiz.features.auth.di.authModule
 import com.mctable.easybiz.features.business_details.di.businessDetailsModule
+import com.mctable.easybiz.features.business_media.di.businessMediaModule
 import com.mctable.easybiz.features.my_business.di.myBusinessModule
 import com.mctable.easybiz.features.my_favorites.di.myFavoriteModule
 import com.mctable.easybiz.features.my_orders.di.myOrderModule
@@ -24,6 +25,7 @@ fun initProjectKoin(config: KoinAppDeclaration? = null) {
             searchBusinessModule,
             businessDetailsModule,
             registerBusinessModule,
+            businessMediaModule,
             myBusinessModule,
             myFavoriteModule,
             myOrderModule,

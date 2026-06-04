@@ -1,7 +1,6 @@
 package com.mctable.easybiz.features.user_data.presentation.ui.page
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,16 +15,20 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.mctable.easybiz.core.ds.components.atoms.AvatarAtom
 import com.mctable.easybiz.core.ds.components.atoms.ButtonAtom
@@ -33,6 +36,8 @@ import com.mctable.easybiz.core.ds.components.atoms.ButtonType
 import com.mctable.easybiz.core.ds.components.atoms.TextInputAtom
 import com.mctable.easybiz.core.ds.components.molecules.ErrorDialogMolecule
 import com.mctable.easybiz.core.ds.components.molecules.LoadingDialogMolecule
+import com.mctable.easybiz.core.ds.components.molecules.ProfilePhotoAction
+import com.mctable.easybiz.core.ds.components.molecules.ProfilePhotoViewerDialog
 import com.mctable.easybiz.core.ds.components.molecules.TopAppBarOrganism
 import com.mctable.easybiz.core.ds.theme.Dimens
 import com.mctable.easybiz.core.ds.theme.EasyBizTheme
@@ -51,6 +56,7 @@ fun UserDataPage(
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    var photoViewerVisible by remember { mutableStateOf(false) }
 
     val singleImagePicker = rememberImagePickerLauncher(
         selectionMode = SelectionMode.Single,
@@ -58,6 +64,16 @@ fun UserDataPage(
         onResult = { byteArrays ->
             byteArrays.firstOrNull()?.let {
                 onEvent(UserDataEvent.OnImageLoaded(it))
+            }
+        }
+    )
+
+    val viewerImagePicker = rememberImagePickerLauncher(
+        selectionMode = SelectionMode.Single,
+        scope = scope,
+        onResult = { byteArrays ->
+            byteArrays.firstOrNull()?.let {
+                onEvent(UserDataEvent.UploadPhotoFromViewer(it))
             }
         }
     )
@@ -94,9 +110,7 @@ fun UserDataPage(
                 modifier = Modifier
                     .size(Dimens.avatarSizeXl)
                     .clip(CircleShape)
-                    .clickable(enabled = state.isEditMode) {
-                        singleImagePicker.launch()
-                    },
+                    .clickable { photoViewerVisible = true },
                 contentAlignment = Alignment.Center
             ) {
                 AvatarAtom(
@@ -104,30 +118,6 @@ fun UserDataPage(
                     contentDescription = "Foto de perfil",
                     size = Dimens.avatarSizeXl
                 )
-
-                if (state.isEditMode) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(CircleShape)
-                            .background(Color.Black.copy(alpha = 0.4f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                painter = AppIcons.accountCircle(),
-                                contentDescription = "Mudar foto",
-                                tint = Color.White,
-                                modifier = Modifier.size(Dimens.iconSizeLg)
-                            )
-                            Text(
-                                text = "Alterar",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        }
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(Dimens.spacing3xl))
@@ -200,6 +190,30 @@ fun UserDataPage(
                 onTryAgain = { onEvent(UserDataEvent.LoadUserData) }
             )
         }
+    }
+
+    if (photoViewerVisible) {
+        ProfilePhotoViewerDialog(
+            photoUrl = state.user?.photoUrl,
+            onDismiss = { photoViewerVisible = false },
+            actions = listOf(
+                ProfilePhotoAction(
+                    icon = {
+                        Icon(
+                            painter = AppIcons.accountCircle(),
+                            contentDescription = null,
+                            tint = androidx.compose.ui.graphics.Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    label = "Editar foto",
+                    onClick = {
+                        photoViewerVisible = false
+                        viewerImagePicker.launch()
+                    }
+                )
+            )
+        )
     }
 }
 

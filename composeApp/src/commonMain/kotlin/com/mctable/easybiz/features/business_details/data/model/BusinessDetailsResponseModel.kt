@@ -28,6 +28,10 @@ data class BusinessDetailsResponseModel(
     val logoUrl: String?,
     @SerialName("descricao")
     val description: String?,
+    @SerialName("telefone")
+    val telephone: String?,
+    @SerialName("horarioFuncionamento")
+    val workingHours: String?,
     @SerialName("precoMinimo")
     val minimalValue: Double?,
     @SerialName("anosExperiencia")
