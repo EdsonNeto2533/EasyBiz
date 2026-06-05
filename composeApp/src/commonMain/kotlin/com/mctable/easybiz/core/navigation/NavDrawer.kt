@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -48,6 +49,7 @@ fun NavDrawer(
     drawerState: DrawerState,
     currentDestination: Destination,
     onDestinationClicked: (Destination) -> Unit,
+    onLogoutClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -69,7 +71,11 @@ fun NavDrawer(
                 drawerContainerColor = MaterialTheme.colorScheme.surface
             ) {
                 if (currentDestination.isLoggedArea) {
-                    Column(modifier = Modifier.padding(Dimens.screenPaddingHorizontal)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(Dimens.screenPaddingHorizontal)
+                    ) {
 
                         Spacer(Modifier.height(Dimens.spacingXxl))
 
@@ -142,6 +148,42 @@ fun NavDrawer(
                                 modifier = Modifier.padding(vertical = Dimens.spacingXxs)
                             )
                         }
+
+                        Spacer(Modifier.weight(1f))
+
+                        HorizontalDivider(
+                            thickness = Dimens.dividerThickness,
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
+                        Spacer(Modifier.height(Dimens.spacingXxs))
+
+                        NavigationDrawerItem(
+                            label = {
+                                Text(
+                                    text = "Sair",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            icon = {
+                                Icon(
+                                    painter = AppIcons.logout(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            },
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                onLogoutClick()
+                            },
+                            colors = NavigationDrawerItemDefaults.colors(
+                                unselectedTextColor = MaterialTheme.colorScheme.error
+                            ),
+                            shape = MaterialTheme.shapes.medium,
+                            modifier = Modifier.padding(vertical = Dimens.spacingXxs)
+                        )
+
+                        Spacer(Modifier.height(Dimens.spacingMd))
                     }
                 }
             }

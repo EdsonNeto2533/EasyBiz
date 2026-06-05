@@ -8,6 +8,10 @@ sealed interface UserDataEvent {
     data class UploadPhotoFromViewer(val bytes: ByteArray) : UserDataEvent
     data object UpdateUserData : UserDataEvent
     data object OnBackPressed : UserDataEvent
-    data object DeleteAccount : UserDataEvent
+    data object ShowDeleteConfirmation : UserDataEvent
+    data object DismissDeleteConfirmation : UserDataEvent
+    data object AdvanceDeleteStep : UserDataEvent
+    data class OnDeleteConfirmationInputChanged(val input: String) : UserDataEvent
+    data object ConfirmDeleteAccount : UserDataEvent
     data object Logout : UserDataEvent
 }
