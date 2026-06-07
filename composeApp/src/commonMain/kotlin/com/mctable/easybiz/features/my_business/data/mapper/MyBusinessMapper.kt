@@ -21,7 +21,7 @@ object MyBusinessMapper {
             active = model.active,
             latitude = model.latitude,
             longitude = model.longitude,
-            completeAddress = model.completeAddress,
+            completeAddress = model.completeAddress  ?: "",
             averageRating = model.averageRating,
             logoUrl = model.logoUrl,
             distanceKm = model.distanceKm,

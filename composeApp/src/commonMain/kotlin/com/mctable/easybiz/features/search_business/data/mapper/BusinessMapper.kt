@@ -18,7 +18,7 @@ object BusinessMapper {
             active = it.active,
             latitude = it.latitude,
             longitude = it.longitude,
-            completeAddress = it.completeAddress,
+            completeAddress = it.completeAddress ?: "",
             averageRating = it.averageRating,
             logo = it.logo,
             distance = it.distance,

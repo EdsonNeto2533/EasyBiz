@@ -13,7 +13,7 @@ data class BusinessProfileResponseModel(
     @SerialName("ativo") val active: Boolean,
     val latitude: Double,
     val longitude: Double,
-    @SerialName("enderecoCompleto") val completeAddress: String,
+    @SerialName("enderecoCompleto") val completeAddress: String?,
     @SerialName("notaMedia") val averageRating: Double,
     val logoUrl: String? = null,
     @SerialName("distanciaKm") val distanceKm: Double? = null,
