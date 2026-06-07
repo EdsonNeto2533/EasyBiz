@@ -10,17 +10,22 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mctable.easybiz.MainActivity
+import com.mctable.easybiz.core.notification.domain.usecase.RegisterFcmTokenUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class EasyBizFirebaseMessagingService : FirebaseMessagingService() {
 
     private val deeplinkResolver: DeeplinkResolver by inject()
+    private val registerFcmTokenUseCase: RegisterFcmTokenUseCase by inject()
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // TODO: chamar o endpoint do backend para registrar o token
-        // POST /api/notifications/device-token
-        // body: { "token": token, "platform": "ANDROID" }
+        CoroutineScope(Dispatchers.IO).launch {
+            registerFcmTokenUseCase.execute(token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

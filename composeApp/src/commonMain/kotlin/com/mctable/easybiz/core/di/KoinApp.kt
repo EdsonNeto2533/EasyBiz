@@ -1,5 +1,6 @@
 package com.mctable.easybiz.core.di
 
+import com.mctable.easybiz.core.notification.di.notificationModule
 import com.mctable.easybiz.features.auth.di.authModule
 import com.mctable.easybiz.features.business_details.di.businessDetailsModule
 import com.mctable.easybiz.features.business_media.di.businessMediaModule
@@ -20,6 +21,7 @@ fun initProjectKoin(config: KoinAppDeclaration? = null) {
         includes(config)
         modules(
             coreModule,
+            notificationModule,
             authModule,
             platformModule(),
             searchBusinessModule,
