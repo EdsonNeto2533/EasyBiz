@@ -12,12 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.mctable.easybiz.features.auth.presentation.ui.page.ConfirmEmailPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.ForgetPasswordPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.LoginPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.ResetPasswordPage
 import com.mctable.easybiz.features.auth.presentation.ui.page.VerifyEmailPage
-import com.mctable.easybiz.features.auth.presentation.view_model.ConfirmEmailViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.ForgetPasswordViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.LoginViewModel
 import com.mctable.easybiz.features.auth.presentation.view_model.ResetPasswordViewModel
@@ -224,16 +222,6 @@ fun AppNavHost() {
 
             }
 
-            composable<Destination.ConfirmEmail> {
-                val route = it.toRoute<Destination.ConfirmEmail>()
-                val viewModel = koinViewModel<ConfirmEmailViewModel>()
-
-                ConfirmEmailPage(
-                    email = route.email,
-                    state = viewModel.state,
-                    onAction = { event -> viewModel.onAction(event) }
-                )
-            }
 
             composable<Destination.ForgetPassword> {
                 val viewModel = koinViewModel<ForgetPasswordViewModel>()
