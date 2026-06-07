@@ -1,5 +1,5 @@
 [versions]
-agp = "8.11.2"
+agp = "9.2.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
@@ -13,7 +13,7 @@ composeMultiplatform = "1.10.0"
 junit = "4.13.2"
 kotlin = "2.3.0"
 material3 = "1.10.0-alpha05"
-kotlinSerialization = "2.1.21"
+kotlinSerialization = "2.3.0"
 kotlinxSerializationCore = "1.8.1"
 koin = "4.1.1"
 coil = "3.3.0"
@@ -31,6 +31,8 @@ peekaboo = "0.5.2"
 kotlinx-datetime = "0.6.1"
 krossbow = "9.3.0"
 navigationEvent = "1.0.0"
+firebase-messaging = "24.0.0"
+google-services = "4.4.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -80,6 +82,7 @@ krossbow-stomp-core = { module = "org.hildan.krossbow:krossbow-stomp-core", vers
 krossbow-websocket-ktor = { module = "org.hildan.krossbow:krossbow-websocket-ktor", version.ref = "krossbow" }
 androidx-navigationevent = { module = "androidx.navigationevent:navigationevent", version.ref = "navigationEvent" }
 androidx-navigationevent-compose = { module = "androidx.navigationevent:navigationevent-compose", version.ref = "navigationEvent" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebase-messaging" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -89,6 +92,7 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 jetbrainsKotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 [bundles]
 koinCmp = ["koin-core"]

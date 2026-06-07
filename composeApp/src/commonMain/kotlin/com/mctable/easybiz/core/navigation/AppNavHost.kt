@@ -42,6 +42,8 @@ import com.mctable.easybiz.features.reviews.presentation.ui.ReviewPage
 import com.mctable.easybiz.features.reviews.presentation.view_model.ReviewViewModel
 import com.mctable.easybiz.features.user_data.presentation.ui.page.UserDataPage
 import com.mctable.easybiz.features.user_data.presentation.view_model.UserDataViewModel
+import androidx.compose.runtime.collectAsState
+import com.mctable.easybiz.core.notification.PendingDeeplinkHolder
 import kotlinx.coroutines.launch
 import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,6 +54,8 @@ fun AppNavHost() {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val drawerViewModel = koinViewModel<NavDrawerViewModel>()
+    val pendingDeeplinkHolder = getKoin().get<PendingDeeplinkHolder>()
+    val pendingDestination by pendingDeeplinkHolder.pending.collectAsState()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -60,6 +64,14 @@ fun AppNavHost() {
     LaunchedEffect(currentDestination) {
         if (!currentDestination.isLoggedArea) {
             drawerState.close()
+        }
+    }
+
+    LaunchedEffect(pendingDestination, currentDestination) {
+        val pending = pendingDestination ?: return@LaunchedEffect
+        if (currentDestination.isLoggedArea) {
+            navigator.navigate(pending)
+            pendingDeeplinkHolder.clear()
         }
     }
 

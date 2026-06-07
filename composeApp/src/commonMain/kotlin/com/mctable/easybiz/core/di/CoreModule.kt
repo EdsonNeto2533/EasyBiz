@@ -4,9 +4,10 @@ import com.mctable.easybiz.core.config.AppEnv
 import com.mctable.easybiz.core.config.AppEnvImpl
 import com.mctable.easybiz.core.location.LocationProvider
 import com.mctable.easybiz.core.location.LocationProviderImpl
-import com.mctable.easybiz.core.navigation.NavDrawerViewModel
 import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.core.navigation.NavigatorImpl
+import com.mctable.easybiz.core.notification.DeeplinkResolver
+import com.mctable.easybiz.core.notification.PendingDeeplinkHolder
 import com.mctable.easybiz.core.networking.EasyBizNetworking
 import com.mctable.easybiz.core.networking.EasyBizNetworkingImpl
 import com.mctable.easybiz.core.networking.EasyBizWebSocket
@@ -19,7 +20,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.websocket.ktor.KtorWebSocketClient
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -32,14 +32,15 @@ val coreModule = module {
     }
     single<Navigator> { NavigatorImpl() }
     single<AppEnv> { AppEnvImpl() }
+    single { PendingDeeplinkHolder() }
+    single { DeeplinkResolver(get()) }
     single<LocationProvider> {
         LocationProviderImpl()
     }
 
     single<EasyBizWebSocket> {
         EasyBizWebSocketImpl(
-            StompClient(
-                KtorWebSocketClient(
+            StompClient(KtorWebSocketClient(
                 HttpClient {
                     install(Logging) {
                         level = LogLevel.ALL
@@ -56,5 +57,4 @@ val coreModule = module {
             get()
         )
     }
-    viewModel { NavDrawerViewModel(get(), get()) }
 }

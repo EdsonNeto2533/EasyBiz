@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -41,6 +42,9 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.androidx.datastore.preferences)
+            implementation(libs.androidx.navigationevent)
+            implementation(libs.androidx.navigationevent.compose)
+            implementation(libs.firebase.messaging)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -70,8 +74,6 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.krossbow.stomp.core)
             implementation(libs.krossbow.websocket.ktor)
-            implementation(libs.androidx.navigationevent.compose)
-            implementation(libs.androidx.navigationevent)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
