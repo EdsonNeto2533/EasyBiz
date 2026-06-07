@@ -39,7 +39,19 @@ class UserDataViewModel(
             is UserDataEvent.UploadPhotoFromViewer -> uploadPhotoFromViewer(event.bytes)
             UserDataEvent.UpdateUserData -> updateUserData()
             UserDataEvent.OnBackPressed -> navigator.pop()
-            UserDataEvent.DeleteAccount -> deleteAccount()
+            UserDataEvent.ShowDeleteConfirmation -> state = state.copy(
+                showDeleteConfirmation = true,
+                deleteConfirmationStep = 1,
+                deleteConfirmationInput = ""
+            )
+            UserDataEvent.DismissDeleteConfirmation -> state = state.copy(
+                showDeleteConfirmation = false,
+                deleteConfirmationStep = 1,
+                deleteConfirmationInput = ""
+            )
+            UserDataEvent.AdvanceDeleteStep -> state = state.copy(deleteConfirmationStep = 2)
+            is UserDataEvent.OnDeleteConfirmationInputChanged -> state = state.copy(deleteConfirmationInput = event.input)
+            UserDataEvent.ConfirmDeleteAccount -> deleteAccount()
             UserDataEvent.Logout -> logout()
         }
     }

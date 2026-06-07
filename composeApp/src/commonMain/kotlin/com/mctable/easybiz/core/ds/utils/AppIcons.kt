@@ -7,6 +7,7 @@ import easybiz.composeapp.generated.resources.Res
 import easybiz.composeapp.generated.resources.account_circle
 import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
+import easybiz.composeapp.generated.resources.logout
 import easybiz.composeapp.generated.resources.credit_card
 import easybiz.composeapp.generated.resources.done_outline
 import easybiz.composeapp.generated.resources.location_on
@@ -84,5 +85,10 @@ object AppIcons {
     @Composable
     fun done(): Painter {
         return painterResource(Res.drawable.done_outline)
+    }
+
+    @Composable
+    fun logout(): Painter {
+        return painterResource(Res.drawable.logout)
     }
 }

@@ -8,5 +8,8 @@ data class UserDataState(
     val isEditMode: Boolean = false,
     val updatedName: String = "",
     val updatedImageBytes: ByteArray? = null,
-    val error: String? = null
+    val error: String? = null,
+    val showDeleteConfirmation: Boolean = false,
+    val deleteConfirmationStep: Int = 1,
+    val deleteConfirmationInput: String = "",
 )

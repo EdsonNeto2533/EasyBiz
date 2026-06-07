@@ -51,6 +51,7 @@ fun AppNavHost() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerViewModel = koinViewModel<NavDrawerViewModel>()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -74,7 +75,8 @@ fun AppNavHost() {
         currentDestination = currentDestination,
         onDestinationClicked = { destination ->
             navigator.navigate(destination)
-        }
+        },
+        onLogoutClick = { drawerViewModel.logout() }
     ) {
         NavHost(
             navController = navController,
@@ -219,6 +221,7 @@ fun AppNavHost() {
                 )
 
             }
+
 
             composable<Destination.ForgetPassword> {
                 val viewModel = koinViewModel<ForgetPasswordViewModel>()

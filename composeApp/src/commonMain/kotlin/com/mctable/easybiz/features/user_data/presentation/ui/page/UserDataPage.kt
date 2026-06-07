@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -154,15 +157,10 @@ fun UserDataPage(
                 )
                 Spacer(modifier = Modifier.height(Dimens.spacingLg))
                 ButtonAtom(
-                    text = "Logout",
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onEvent(UserDataEvent.Logout) }
-                )
-                Spacer(modifier = Modifier.height(Dimens.spacingLg))
-                ButtonAtom(
                     text = "Excluir Conta",
+                    buttonType = ButtonType.Secondary,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onEvent(UserDataEvent.DeleteAccount) }
+                    onClick = { onEvent(UserDataEvent.ShowDeleteConfirmation) }
                 )
             } else {
                 ButtonAtom(
@@ -176,6 +174,102 @@ fun UserDataPage(
                     buttonType = ButtonType.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onEvent(UserDataEvent.TurnOnEditMode) }
+                )
+            }
+        }
+
+        if (state.showDeleteConfirmation) {
+            if (state.deleteConfirmationStep == 1) {
+                AlertDialog(
+                    onDismissRequest = { onEvent(UserDataEvent.DismissDeleteConfirmation) },
+                    title = {
+                        Text(
+                            text = "Excluir sua conta?",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    },
+                    text = {
+                        Column {
+                            Text(
+                                text = "Ao excluir sua conta, o seguinte será removido permanentemente:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "• Seus dados pessoais (nome, foto, e-mail)\n• Seu histórico de favoritos\n• Seu perfil de negócio (se houver)\n• Suas avaliações e comentários",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "Registros de pedidos e transações podem ser retidos por até 5 anos para cumprimento de obrigações legais (Art. 16, LGPD — Lei 13.709/2018).",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { onEvent(UserDataEvent.AdvanceDeleteStep) }) {
+                            Text(
+                                text = "Continuar",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { onEvent(UserDataEvent.DismissDeleteConfirmation) }) {
+                            Text("Cancelar")
+                        }
+                    }
+                )
+            } else {
+                AlertDialog(
+                    onDismissRequest = { onEvent(UserDataEvent.DismissDeleteConfirmation) },
+                    title = {
+                        Text(
+                            text = "Confirmar exclusão",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    },
+                    text = {
+                        Column {
+                            Text(
+                                text = "Esta ação é irreversível. Para confirmar, digite EXCLUIR no campo abaixo:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            OutlinedTextField(
+                                value = state.deleteConfirmationInput,
+                                onValueChange = { onEvent(UserDataEvent.OnDeleteConfirmationInputChanged(it)) },
+                                placeholder = { Text("EXCLUIR") },
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { onEvent(UserDataEvent.ConfirmDeleteAccount) },
+                            enabled = state.deleteConfirmationInput == "EXCLUIR"
+                        ) {
+                            Text(
+                                text = "Excluir permanentemente",
+                                color = if (state.deleteConfirmationInput == "EXCLUIR")
+                                    MaterialTheme.colorScheme.error
+                                else
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { onEvent(UserDataEvent.DismissDeleteConfirmation) }) {
+                            Text("Cancelar")
+                        }
+                    }
                 )
             }
         }
