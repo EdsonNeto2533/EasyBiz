@@ -12,5 +12,5 @@ data class CreateBusinessRequest(
     val latitude: Double,
     val longitude: Double,
     @SerialName("enderecoCompleto")
-    val completeAddress: String
+    val completeAddress: String?
 )

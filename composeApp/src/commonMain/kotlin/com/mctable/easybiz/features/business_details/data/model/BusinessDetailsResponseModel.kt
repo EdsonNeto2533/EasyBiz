@@ -21,7 +21,7 @@ data class BusinessDetailsResponseModel(
     @SerialName("longitude")
     val longitude: Double,
     @SerialName("enderecoCompleto")
-    val completeAddress: String,
+    val completeAddress: String?,
     @SerialName("notaMedia")
     val averageRating: Double,
     @SerialName("logoUrl")
