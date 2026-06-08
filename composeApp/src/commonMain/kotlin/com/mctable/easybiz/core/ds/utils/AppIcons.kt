@@ -9,6 +9,7 @@ import easybiz.composeapp.generated.resources.arrow_back
 import easybiz.composeapp.generated.resources.contact_mail
 import easybiz.composeapp.generated.resources.logout
 import easybiz.composeapp.generated.resources.credit_card
+import easybiz.composeapp.generated.resources.done_all
 import easybiz.composeapp.generated.resources.done_outline
 import easybiz.composeapp.generated.resources.location_on
 import easybiz.composeapp.generated.resources.menu
@@ -85,6 +86,11 @@ object AppIcons {
     @Composable
     fun done(): Painter {
         return painterResource(Res.drawable.done_outline)
+    }
+
+    @Composable
+    fun doneAll(): Painter {
+        return painterResource(Res.drawable.done_all)
     }
 
     @Composable

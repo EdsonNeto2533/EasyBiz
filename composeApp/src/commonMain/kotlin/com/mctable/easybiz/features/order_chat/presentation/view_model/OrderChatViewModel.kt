@@ -9,6 +9,7 @@ import com.mctable.easybiz.core.navigation.Navigator
 import com.mctable.easybiz.features.order_chat.domain.usecase.DisconnectChatUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.GetOrderMessagesUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.MarkMessageAsReadUseCase
+import com.mctable.easybiz.features.order_chat.domain.usecase.ObserveMessageReadStatusUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.ObserveOrderMessagesUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.ObserveTypingStatusUseCase
 import com.mctable.easybiz.features.order_chat.domain.usecase.SendOrderMessageUseCase
@@ -24,6 +25,7 @@ class OrderChatViewModel(
     private val sendTypingStatusUseCase: SendTypingStatusUseCase,
     private val observeTypingStatusUseCase: ObserveTypingStatusUseCase,
     private val markMessageAsReadUseCase: MarkMessageAsReadUseCase,
+    private val observeMessageReadStatusUseCase: ObserveMessageReadStatusUseCase,
     private val disconnectChatUseCase: DisconnectChatUseCase,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -40,6 +42,7 @@ class OrderChatViewModel(
                 loadMessages()
                 observeMessages()
                 observeTyping()
+                observeReadStatus()
             }
 
             OrderChatEvent.OnSendMessage -> sendMessage()
@@ -69,6 +72,7 @@ class OrderChatViewModel(
                         isLoading = false,
                         currentPage = 0
                     )
+                    page.messages.filter { !it.mine && !it.isRead }.forEach { markAsRead(it.id) }
                 },
                 onFailure = {
                     state = state.copy(isLoading = false, isError = true, errorMessage = it.message)
@@ -140,6 +144,7 @@ class OrderChatViewModel(
                     state = state.copy(
                         messages = listOf(messageEntity) + state.messages
                     )
+                    if (!messageEntity.mine) markAsRead(messageEntity.id)
                 }
             }
         }
@@ -149,6 +154,19 @@ class OrderChatViewModel(
         viewModelScope.launch {
             observeTypingStatusUseCase.execute(state.orderId).collect { typingDto ->
                 state = state.copy(showTyping = typingDto.isTyping)
+            }
+        }
+    }
+
+    private fun observeReadStatus() {
+        viewModelScope.launch {
+            observeMessageReadStatusUseCase.execute(state.orderId).collect { raw ->
+                val messageId = raw.trim().removeSurrounding("\"")
+                state = state.copy(
+                    messages = state.messages.map { msg ->
+                        if (msg.id == messageId) msg.copy(isRead = true) else msg
+                    }
+                )
             }
         }
     }

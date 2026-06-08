@@ -229,19 +229,33 @@ fun ChatMessageBubble(message: OrderChatMessageEntity) {
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 10.sp
                         )
-                        if (isMine && message.isRead) {
+                        if (isMine) {
                             Spacer(Modifier.width(Dimens.spacingXs))
-                            Icon(
-                                painter = AppIcons.done(),
-                                contentDescription = null,
-                                tint = SuccessGreen,
-                                modifier = Modifier.size(12.dp)
-                            )
+                            ReadStatusIcon(isRead = message.isRead)
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ReadStatusIcon(isRead: Boolean) {
+    if (isRead) {
+        Icon(
+            painter = AppIcons.doneAll(),
+            contentDescription = null,
+            tint = SuccessGreen,
+            modifier = Modifier.size(14.dp)
+        )
+    } else {
+        Icon(
+            painter = AppIcons.done(),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(12.dp)
+        )
     }
 }
 

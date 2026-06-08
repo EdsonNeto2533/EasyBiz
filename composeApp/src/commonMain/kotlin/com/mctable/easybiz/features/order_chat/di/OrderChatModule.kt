@@ -31,14 +31,15 @@ val orderChatModule = module {
 
     viewModel {
         OrderChatViewModel(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
+            get(), // GetOrderMessagesUseCase
+            get(), // SendOrderMessageUseCase
+            get(), // ObserveOrderMessagesUseCase
+            get(), // SendTypingStatusUseCase
+            get(), // ObserveTypingStatusUseCase
+            get(), // MarkMessageAsReadUseCase
+            get(), // ObserveMessageReadStatusUseCase
+            get(), // DisconnectChatUseCase
+            get()  // Navigator
         )
     }
 }
