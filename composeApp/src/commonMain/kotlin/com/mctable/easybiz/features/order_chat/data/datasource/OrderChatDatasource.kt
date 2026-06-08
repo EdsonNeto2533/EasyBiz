@@ -10,6 +10,7 @@ import com.mctable.easybiz.features.order_chat.data.model.OrderChatMessageRespon
 import com.mctable.easybiz.features.order_chat.data.model.OrderChatPageResponseModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.serialization.json.Json
 import org.hildan.krossbow.stomp.sendText
 import org.hildan.krossbow.stomp.subscribeText
@@ -80,8 +81,7 @@ class OrderChatDatasourceImpl(
         content: String
     ): Result<Unit> = runCatching {
         val payload = """{"conteudo": "$content"}"""
-        val session = orderChatWebSocketManager.getSession()
-        session.sendText("/app/chat/$orderId", payload)
+        withReconnect { session -> session.sendText("/app/chat/$orderId", payload) }
         return Result.success(Unit)
     }
 
@@ -92,8 +92,7 @@ class OrderChatDatasourceImpl(
         isTyping: Boolean
     ): Result<Unit> = runCatching {
         val payload = json.encodeToString(TypingStatusDto(userName = userName, isTyping = isTyping))
-        val session = orderChatWebSocketManager.getSession()
-        session.sendText("/app/chat/$orderId/digitando", payload)
+        withReconnect { session -> session.sendText("/app/chat/$orderId/digitando", payload) }
         return Result.success(Unit)
     }
 
@@ -101,43 +100,46 @@ class OrderChatDatasourceImpl(
         orderId: String,
         messageId: String
     ): Result<Unit> = runCatching {
-        val session = orderChatWebSocketManager.getSession()
-        session.sendText("/app/chat/$orderId/lida/$messageId", "")
+        withReconnect { session -> session.sendText("/app/chat/$orderId/lida/$messageId", "") }
         return Result.success(Unit)
     }
 
     override suspend fun observeMessages(orderId: String): Flow<OrderChatMessageResponseModel> =
         flow {
             val session = orderChatWebSocketManager.getSession()
-            val subscribeDestination = "/user/queue/chat/$orderId"
-            val subscription = session.subscribeText(subscribeDestination)
-
-            subscription.collect {
+            session.subscribeText("/user/queue/chat/$orderId").collect {
                 emit(json.decodeFromString(it))
             }
+        }.retryWhen { _, attempt ->
+            if (attempt < 3) { orderChatWebSocketManager.resetAndReconnect(); true } else false
         }
 
     override suspend fun observeTypingStatus(orderId: String): Flow<TypingStatusDto> =
         flow {
             val session = orderChatWebSocketManager.getSession()
-            val subscribeDestination = "/user/queue/chat/$orderId/digitando"
-            val subscription = session.subscribeText(subscribeDestination)
-
-            subscription.collect {
+            session.subscribeText("/user/queue/chat/$orderId/digitando").collect {
                 emit(json.decodeFromString(it))
             }
+        }.retryWhen { _, attempt ->
+            if (attempt < 3) { orderChatWebSocketManager.resetAndReconnect(); true } else false
         }
 
     override suspend fun observeMessageReadStatus(orderId: String): Flow<String> =
         flow {
             val session = orderChatWebSocketManager.getSession()
-            val subscribeDestination = "/user/queue/chat/$orderId/lida"
-            val subscription = session.subscribeText(subscribeDestination)
-
-            subscription.collect {
-                emit(it)
-            }
+            session.subscribeText("/user/queue/chat/$orderId/lida").collect { emit(it) }
+        }.retryWhen { _, attempt ->
+            if (attempt < 3) { orderChatWebSocketManager.resetAndReconnect(); true } else false
         }
+
+    // Tenta enviar; se a sessão estiver morta, reconecta uma vez e tenta de novo
+    private suspend fun <T> withReconnect(block: suspend (org.hildan.krossbow.stomp.StompSession) -> T): T {
+        return try {
+            block(orderChatWebSocketManager.getSession())
+        } catch (e: Exception) {
+            block(orderChatWebSocketManager.resetAndReconnect())
+        }
+    }
 
     override suspend fun disconnect(): Result<Unit> {
         return Result.success(orderChatWebSocketManager.disconnect())
